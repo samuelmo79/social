@@ -1,0 +1,48 @@
+version: '2'
+
+services:
+    nginx:
+      image: nginx
+      ports:
+        - "80:80"
+      links:
+        - php
+      volumes:
+        - "./:/var/www"
+        - "./docker/config/nginx/vhost/sf4_vhost:/etc/nginx/conf.d/030-sf4.conf:ro"
+    php:
+      env_file: 
+        - .env
+      build:
+        context: ./docker
+        args:
+          - http_proxy=${PROXY}
+          - https_proxy=${PROXY}
+      links:
+        - db
+      volumes:
+        - "./docker/config/php/php.ini:/usr/local/etc/php/conf.d/030-custom.ini:ro"
+        - "./:/var/www"
+      ports:
+        - "9000:9000"
+      environment:
+        - APP_ENV=${APP_ENV}
+        - APP_DEBUG=1
+        - APP_SECRET=${APP_SECRET}
+        - DATABASE_URL=${DATABASE_URL}
+        - http_proxy=${PROXY}
+        - https_proxy=${PROXY}
+      working_dir: "/var/www"
+
+    db:
+      image: mysql:5.6
+      command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password
+      ports:
+        - "3306:3306"
+      volumes:
+        - "./.data/db:/var/lib/mysql"
+      environment:
+        - "MYSQL_ROOT_PASSWORD=123"
+        - "MYSQL_USER=app"
+        - "MYSQL_PASSWORD=123"
+        - "MYSQL_DATABASE=app"

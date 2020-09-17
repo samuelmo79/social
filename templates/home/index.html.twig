@@ -1,0 +1,240 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Início{% endblock %}
+
+{% block body %}
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <div class="card card-outline card-primary mb-3">
+                <a href="#" class="sombra-1 card-link" data-toggle="modal" data-target="#post">
+                    <div class="card-body">
+                        {% if app.user.avatar == null %}
+                            {% if app.user.dadosPessoais.sexo == 'Masculino' %}
+                                <img class="rounded-circle img-borda-sm img-size-50"
+                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                     alt="Perfil">
+                            {% else %}
+                                <img class="rounded-circle img-borda-sm img-size-50"
+                                     src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                     alt="Perfil">
+                            {% endif %}
+                        {% else %}
+                            <img class="rounded-circle img-borda-sm img-size-50"
+                                 src="{{ asset('imagens/perfil/' ~ app.user.avatar) }}"
+                                 alt="Perfil">
+                        {% endif %}
+                        <!-- Postagem modal -->
+                        <span>
+                            O que vamos publicar hoje?
+                        </span>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Início Postagem Modal -->
+            <div class="modal fade" id="post" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary">
+                            <h5 class="modal-title" id="exampleModalLabel">Postagem</h5>
+                        </div>
+                        {{ form_start(form) }}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                {{ form_widget(form.conteudo) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.imageFile) }}
+                                {{ form_widget(form.imageFile) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_widget(form.privacidade) }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Postar</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            <!-- Fim Postagem Modal -->
+            <!-- Início Post -->
+            {% for postagem in post %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="post">
+                            <!-- Início Div usuário -->
+                            <div class="user-block">
+                                {% if postagem.autor.avatar == null %}
+                                    {% if postagem.autor.dadosPessoais.sexo == 'Masculino' %}
+                                        <img class="rounded-circle img-borda-sm"
+                                             src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                             alt="Perfil" width="32">
+                                    {% else %}
+                                        <img class="rounded-circle img-borda-sm"
+                                             src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                             alt="Perfil" width="32">
+                                    {% endif %}
+                                {% else %}
+                                    <img class="rounded-circle img-borda-sm"
+                                         src="{{ asset('imagens/perfil/' ~ postagem.autor.avatar) }}"
+                                         alt="Perfil" width="32">
+                                {% endif %}
+                                <span class="username">
+                                    <a href="#" class="card-link">
+                                        {{ postagem.autor.dadosPessoais.nome }} {{ postagem.autor.dadosPessoais.sobrenome }}
+                                    </a>
+                                    <a href="#" class="float-right btn-tool">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                </span>
+                                <span class="description">
+                                    {% if postagem.privacidade == 'Público' %}
+                                        <i class="fas fa-globe-americas"></i> Público -
+                                    {% else %}
+                                        <i class="fa fa-users"></i> Amigos -
+                                    {% endif %}
+                                    {{ postagem.dataCadastro|ago }}
+                                </span>
+                            </div>
+                            <!-- Fim Div usuário -->
+                            <p class="card-text">
+                                {{ postagem.conteudo }}
+                            </p>
+                            {% if postagem.imagem is not null %}
+                                <div class="img-container mb-3">
+                                    <img class="img-fluid m-lg-0" src="{{ asset('imagens/post/' ~ postagem.imagem) }}">
+                                </div>
+                            {% endif %}
+                            <p>
+                                <button type="button" class="btn btn-light btn-sm">
+                                    <i class="far fa-heart"></i> <span class="badge badge-light">4</span>
+                                </button>
+                                <button type="button" class="btn btn-light btn-sm">
+                                    <i class="far fa-comments mr-1"></i> Comentários <span class="badge badge-light">4</span>
+                                </button>
+                            </p>
+                            <form>
+                                <input class="form-control" placeholder="Faça um comentŕaio">
+                            </form>
+                            
+                            <!-- Início Comentários -->
+                            <div class="card-footer card-comments">
+                                <div class="card-comment">
+                                    {% if postagem.autor.avatar == null %}
+                                        {% if postagem.autor.dadosPessoais.sexo == 'Masculino' %}
+                                            <img class="rounded-circle img-borda-sm"
+                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                 alt="Perfil">
+                                        {% else %}
+                                            <img class="rounded-circle img-borda-sm"
+                                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                 alt="Perfil">
+                                        {% endif %}
+                                    {% else %}
+                                        <img class="rounded-circle img-borda-sm"
+                                             src="{{ asset('imagens/perfil/' ~ postagem.autor.avatar) }}"
+                                             alt="Perfil">
+                                    {% endif %}
+                                    <div class="comment-text">
+                                        <span class="username">
+                                          Maria Gonzales
+                                          <span class="text-muted float-right">8:03 PM Today</span>
+                                        </span>
+                                        It is a long established fact that a reader will be distracted
+                                        by the readable content of a page when looking at its layout.
+                                    </div>
+                                </div>
+                                <div class="card-comment">
+                                    {% if postagem.autor.avatar == null %}
+                                        {% if postagem.autor.dadosPessoais.sexo == 'Masculino' %}
+                                            <img class="rounded-circle img-borda-sm"
+                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                 alt="Perfil">
+                                        {% else %}
+                                            <img class="rounded-circle img-borda-sm"
+                                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                 alt="Perfil">
+                                        {% endif %}
+                                    {% else %}
+                                        <img class="rounded-circle img-borda-sm"
+                                             src="{{ asset('imagens/perfil/' ~ postagem.autor.avatar) }}"
+                                             alt="Perfil">
+                                    {% endif %}
+                                    <div class="comment-text">
+                                        <span class="username">
+                                          Maria Gonzales
+                                          <span class="text-muted float-right">8:03 PM Today</span>
+                                        </span>
+                                        It is a long established fact that a reader will be distracted
+                                        by the readable content of a page when looking at its layout.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fim Comentários -->
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-sm-12 mt-2">
+                            <div class="alert alert-primary" role="alert">
+                                Nenhum post encontrado.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <!-- Fim Post -->
+        </div>
+        <div class="col-md-4 d-xl-block d-none">
+            <!-- Início Eventos -->
+            <div class="card card-primary">
+                <div class="card-header">
+                    <i class="fa fa-calendar-alt"></i>
+                    Próximos Eventos
+                </div>
+                {% for evento in eventos %}
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="media mb-2">
+                                <div class="float-left mr-2">
+                                    <div class="card card-primary text-center date">
+                                        <div class="card-header mes">
+                                        <span class="panel-title strong">
+                                            {{ evento.dataEvento|date('M') }}
+                                        </span>
+                                        </div>
+                                        <div class="card-body dia text-primary">
+                                            {{ evento.dataEvento|date('d') }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-muted">
+                                    <h5>
+                                        <a href="#" class="card-link">
+                                            {{ evento.titulo }}
+                                        </a>
+                                    </h5>
+                                </div>
+                            </li>
+                        </ul>
+                        <a href="{{ path('evento_index') }}" class="btn btn-primary btn-block">Mais eventos »</a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-primary my-2 mx-2" role="alert">
+                        Nenhum evento encontrado
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- Fim Eventos -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

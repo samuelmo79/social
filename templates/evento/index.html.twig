@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Eventos{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body">
+            <a href="{{ path('evento_new') }}" class="btn btn-success btn-sm btn-icon-split float-right">
+                <span class="icon text-white-50">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                <span class="text">Novo evento</span>
+            </a>
+            <h3 class="card-title">Eventos</h3>
+            <div class="row mt-2">
+                {% for evento in eventos %}
+                    <div class="col-sm-4 col-md-4 d-flex mt-4">
+                        <div class="card">
+                            <div class="card-header bg-primary pt-5 pb-5">
+                            </div>
+                            <div class="card-body">
+                                {% if app.user.avatar == null %}
+                                    {% if app.user.dadosPessoais.sexo == 'Masculino' %}
+                                        <figure class="perfil">
+                                            <img class="perfil-avatar"
+                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                 alt="Perfil" width="32">
+                                        </figure>
+                                    {% else %}
+                                        <figure class="perfil">
+                                        <img class="perfil-avatar"
+                                             src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                             alt="Perfil" width="32">
+                                        </figure>
+                                    {% endif %}
+                                {% else %}
+                                    <figure class="perfil">
+                                        <img src="{{ asset('imagens/perfil/' ~ evento.user.avatar) }}"
+                                             class="perfil-avatar"
+                                             alt="Dono do Evento">
+                                    </figure>
+                                {% endif %}
+                                <h4 class="card-title mt-3">{{ evento.titulo }}</h4>
+                                <div class="text-muted small">
+                                    {% if evento.tipoEvento == "Público" %}
+                                        <p>
+                                            <i class="fa fa-globe-americas"></i> {{ evento.tipoEvento }}
+                                        </p>
+                                    {% else %}
+                                        <p>
+                                            <i class="fa fa-users"></i> {{ evento.tipoEvento }}
+                                        </p>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% autoescape %}
+                                        {% set Evento = evento.descricao|slice(0,50) ~ '...' %}
+                                        {{ (false ? Evento : Evento)|raw }}
+                                    {% endautoescape %}
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <small>{{ evento.dataEvento|date('d-m-Y') }} às {{ evento.dataEvento|date('H:m:s') }}</small>
+                                <a href="{{ path('evento_show', {'id': evento.id}) }}" class="btn btn-primary float-right btn-sm">
+                                    Ver Evento
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-sm-12">
+                        <div class="alert alert-primary" role="alert">
+                            Nenhum evento encontrado.
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
