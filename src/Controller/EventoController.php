@@ -48,6 +48,7 @@ class EventoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $evento->setUser($this->getUser());
             $entityManager->persist($evento);
             $entityManager->flush();
 
