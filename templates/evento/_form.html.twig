@@ -1,5 +1,58 @@
 {{ form_start(form, {"attr": {"novalidate": "novalidate"}}) }}
-    {{ form_widget(form) }}
+    <div class="form-group">
+        {{ form_label(form.titulo) }}
+        {{ form_widget(form.titulo) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.descricao) }}
+        {{ form_widget(form.descricao) }}
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            {{ form_label(form.tipoEvento) }}
+            {{ form_widget(form.tipoEvento) }}
+        </div>
+        <div class="form-group col-md-6">
+            {{ form_label(form.dataEvento) }}
+            {{ form_widget(form.dataEvento) }}
+        </div>
+    </div>
+    <h4 class="mt-5">Local do Evento</h4>
+    <hr>
+    <div class="form-row">
+        <div class="form-group col-md-8">
+            {{ form_label(form.rua) }}
+            {{ form_widget(form.rua) }}
+        </div>
+        <div class="form-group col-md-2">
+            {{ form_label(form.numero) }}
+            {{ form_widget(form.numero) }}
+        </div>
+        <div class="form-group col-md-2">
+            {{ form_label(form.complemento) }}
+            {{ form_widget(form.complemento) }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            {{ form_label(form.bairro) }}
+            {{ form_widget(form.bairro) }}
+        </div>
+        <div class="form-group col-md-4">
+            {{ form_label(form.estado) }}
+            {{ form_widget(form.estado) }}
+        </div>
+        <div class="form-group col-md-2">
+            {{ form_label(form.cep) }}
+            {{ form_widget(form.cep) }}
+        </div>
+    </div>
+    <h4 class="mt-5">Imagem do Evento</h4>
+    <hr>
+    <div class="form-group">
+        {{ form_label(form.imagem) }}
+        {{ form_widget(form.imagem) }}
+    </div>
     <button class="btn btn-primary btn-sm btn-icon-split">
             <span class="icon text-white-50">
               <i class="fas fa-save"></i>
@@ -7,3 +60,5 @@
         <span class="text">{{ button_label|default('Salvar') }}</span>
     </button>
 {{ form_end(form) }}
+<hr class="mt-5">
+<span class="small text-muted">* Campos de preenchimento obrigatório</span>
