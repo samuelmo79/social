@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventoRecadoRepository")
@@ -28,11 +30,13 @@ class EventoRecado
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Preencha esta informação!")
      */
     private $recado;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
      */
     private $dataRecado;
 
