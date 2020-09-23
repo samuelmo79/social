@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-3">
+                <div class="card-header bg-primary">
+                    <div class="text-center">
+
+                                <img class="img-fluid img-thumbnail rounded-circle img-size-100"
+                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                     alt="Perfil">
+  
+                    </div>
+                    <h3 class="text-center">
+                        {{ user.dadosPessoais.nome }} {{ user.dadosPessoais.sobrenome }}
+                    </h3>
+                    <h5 class="text-center small">
+                        {% if user.localizacao is not null %}
+                        {{ user.localizacao.bairro }}, {{ user.localizacao.estado }} - {{ user.localizacao.pais }}
+                            {% else %}
+                                <a href="#" class="btn btn-light btn-sm"><i class="fas fa-map-marker-alt"></i> Editar sua localização</a>
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <a href="#" class="btn btn-light btn-sm ml-2 float-right">Editar Perfil</a>
+                </div>
+                <div class="card-footer">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Sobre</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Atividades</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Grupos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Fotos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header p-2">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item"><a class="nav-link active" href="#atividades" data-toggle="tab">Atividades</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                    </ul>
+                </div><!-- /.card-header -->
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="active tab-pane" id="atividades">
+                            <!-- Início atividades -->
+                            Atividades
+                            <!-- Fim atividades -->
+                        </div>
+                        
+                        <div class="tab-pane" id="timeline">
+                            <!-- Início timeline -->
+                            Timeline
+                            <!-- Fim timeline -->
+                        </div>
+                        <div class="tab-pane" id="settings">
+                            <!-- Início setting -->
+                            Setting
+                            <!-- Fim setting -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

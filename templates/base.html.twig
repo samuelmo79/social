@@ -70,10 +70,10 @@
                         </div>
                     </div>
                     <h6 class="dropdown-header">Perfil</h6>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{{ path('perfil') }}">
                         <i class="fa fa-user text-muted mr-3"></i> Perfil
                     </a>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{{ path('editar_perfil') }}">
                         <i class="fa fa-user-edit text-muted mr-3"></i>Editar Perfil
                     </a>
                     <div class="dropdown-divider"></div>
@@ -99,7 +99,13 @@
                             @Nome de usuário
                         </div>
                         <div class="h7 text-muted">
-                            <a href="#" class="btn btn-primary btn-sm"><i class="fas fa-map-marker-alt"></i> Editar sua localização</a>
+                            {% if app.user.localizacao is not null %}
+                                {{ app.user.localizacao.bairro }}, {{ app.user.localizacao.estado }} - {{ app.user.localizacao.pais }}
+                            {% else %}
+                                <a href="#" class="btn btn-light btn-sm">
+                                    <i class="fas fa-map-marker-alt"></i> Editar sua localização
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                     <ul class="list-group list-group-flush">
