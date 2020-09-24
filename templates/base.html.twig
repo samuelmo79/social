@@ -96,13 +96,17 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="h5">
-                            @Nome de usuário
+                            @{{ app.user.dadosPessoais.nome }} {{ app.user.dadosPessoais.sobrenome }}
                         </div>
                         <div class="h7 text-muted">
-                            {% if app.user.localizacao is not null %}
+                            {% if app.user.localizacao and
+                                app.user.localizacao.bairro and
+                                app.user.localizacao.cidade and
+                                app.user.localizacao.estado and
+                                app.user.localizacao.pais is not null %}
                                 {{ app.user.localizacao.bairro }}, {{ app.user.localizacao.estado }} - {{ app.user.localizacao.pais }}
                             {% else %}
-                                <a href="#" class="btn btn-light btn-sm">
+                                <a href="{{ path('editar_perfil') }}" class="btn btn-light btn-sm">
                                     <i class="fas fa-map-marker-alt"></i> Editar sua localização
                                 </a>
                             {% endif %}
