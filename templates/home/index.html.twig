@@ -45,7 +45,7 @@
                             </div>
                             <div class="form-group">
                                 {{ form_label(form.imageFile) }}
-                                {{ form_widget(form.imageFile) }}
+                                {{ form_widget(form.imageFile, {'attr': {'class': 'custom-file-input'}}) }}
                             </div>
                             <div class="form-group">
                                 {{ form_widget(form.privacidade) }}
@@ -210,5 +210,10 @@
 {% endblock %}
 
 {% block javascripts %}
-
+    <script>
+        $('.custom-file-input').on('change',function(){
+            var fileName = this.files[0].name; ;
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
 {% endblock %}
