@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Evento;
 use App\Entity\Post;
+use App\Entity\PostComentario;
+use App\Form\PostComentarioType;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,8 +44,23 @@ class HomeController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
+        //Criando form de envio de comentário para cada post
+        $comentario = new PostComentario();
+        $formComentario = $this->createForm(PostComentarioType::class, $comentario);
+        $formComentario->handleRequest($request);
+
+        if ($formComentario->isSubmitted() && $formComentario->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $comentario->setUser($this->getUser());
+            $entityManager->persist($comentario);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('home');
+        }
+
         return $this->render('home/index.html.twig', [
             'form' => $form->createView(),
+            'formComentario' => $formComentario->createView(),
             'post' => $post,
             'eventos' => $eventos,
         ]);

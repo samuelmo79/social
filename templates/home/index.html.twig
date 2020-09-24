@@ -116,37 +116,11 @@
                                     <i class="far fa-comments mr-1"></i> Comentários <span class="badge badge-light">4</span>
                                 </button>
                             </p>
-                            <form>
-                                <input class="form-control" placeholder="Faça um comentŕaio">
-                            </form>
+                            {{ form_start(formComentario, {"attr": {"novalidate": "novalidate"}}) }}
+                            {{ form_end(formComentario) }}
                             
                             <!-- Início Comentários -->
                             <div class="card-footer card-comments">
-                                <div class="card-comment">
-                                    {% if postagem.autor.avatar == null %}
-                                        {% if postagem.autor.dadosPessoais.sexo == 'Masculino' %}
-                                            <img class="rounded-circle img-borda-sm"
-                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
-                                                 alt="Perfil">
-                                        {% else %}
-                                            <img class="rounded-circle img-borda-sm"
-                                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
-                                                 alt="Perfil">
-                                        {% endif %}
-                                    {% else %}
-                                        <img class="rounded-circle img-borda-sm"
-                                             src="{{ asset('imagens/perfil/' ~ postagem.autor.avatar) }}"
-                                             alt="Perfil">
-                                    {% endif %}
-                                    <div class="comment-text">
-                                        <span class="username">
-                                          Maria Gonzales
-                                          <span class="text-muted float-right">8:03 PM Today</span>
-                                        </span>
-                                        It is a long established fact that a reader will be distracted
-                                        by the readable content of a page when looking at its layout.
-                                    </div>
-                                </div>
                                 <div class="card-comment">
                                     {% if postagem.autor.avatar == null %}
                                         {% if postagem.autor.dadosPessoais.sexo == 'Masculino' %}
