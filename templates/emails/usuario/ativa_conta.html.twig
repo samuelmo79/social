@@ -1,0 +1,17 @@
+{% extends "emails/email_base.html.twig" %}
+
+{% block body %}
+    <tr>
+        <td>
+            <p>Olá {{ nome }}</p>
+            <p>
+                Seu cadastro foi efetuado com sucesso, para ativar a sua conta e se logar em nosso sistema, utilize o
+                link abaixo:
+            </p>
+
+            <p>
+                <a href="{{ absolute_url(path("ativa_conta", {"token": token})) }}">Ative a sua conta</a>
+            </p>
+        </td>
+    </tr>
+{% endblock %}
