@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
@@ -29,6 +30,7 @@ class PostComentario
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message="Esqueceu de comentar?")
      */
     private $comentario;
 
