@@ -126,6 +126,11 @@ class User implements UserInterface, \Serializable
      */
     private $postComentarios;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tokenPassword;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -512,6 +517,18 @@ class User implements UserInterface, \Serializable
             $this->password,
             $this->roles
             ) = unserialize($serialized, ['allowed_class' => false]);
+    }
+
+    public function getTokenPassword(): ?string
+    {
+        return $this->tokenPassword;
+    }
+
+    public function setTokenPassword(?string $tokenPassword): self
+    {
+        $this->tokenPassword = $tokenPassword;
+
+        return $this;
     }
 
     /**
