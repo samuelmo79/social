@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Notificacao;
 use App\Entity\User;
 use App\Form\EditarDadosPessoaisType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,8 +29,11 @@ class PerfilController extends AbstractController
      */
     public function index(UserInterface $user)
     {
+        $atividades = $this->em->getRepository(Notificacao::class)->getQueryNotificacao($this->getUser());
+
         return $this->render('perfil/index.html.twig', [
             'user' => $user,
+            'atividades' => $atividades,
         ]);
     }
 

@@ -63,7 +63,19 @@
                     <div class="tab-content">
                         <div class="active tab-pane" id="atividades">
                             <!-- Início atividades -->
-                            Atividades
+                            <div class="activity-feed">
+                                {% for log in atividades %}
+                                <div class="feed-item">
+                                    <div class="date">{{ log.dataNotificacao|date("d-m-Y H:m:s") }}</div>
+                                    <div class="text">
+                                        <strong>
+                                            {{ log.user.dadosPessoais.nome }} {{ log.user.dadosPessoais.sobrenome }}
+                                        </strong>
+                                        <span class="text-muted">{{ log.descricao }}</span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
                             <!-- Fim atividades -->
                         </div>
                         
