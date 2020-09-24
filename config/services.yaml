@@ -24,5 +24,11 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    App\Service\Email:
+        class: 'App\Service\Email'
+        public: true
+        autowire: true
+        arguments: ['@Swift_Mailer', '@Twig_Environment', '%env(resolve:CMS_EMAIL_FROM)%', '%env(resolve:CMS_EMAIL_FROM_NOME)%']
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
