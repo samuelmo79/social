@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -62,6 +64,16 @@ class Post
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
      */
     private $autor;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PostComentario", mappedBy="post")
+     */
+    private $postComentarios;
+
+    public function __construct()
+    {
+        $this->postComentarios = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -174,6 +186,37 @@ class Post
     public function setAutor(?User $autor): self
     {
         $this->autor = $autor;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PostComentario[]
+     */
+    public function getPostComentarios(): Collection
+    {
+        return $this->postComentarios;
+    }
+
+    public function addPostComentario(PostComentario $postComentario): self
+    {
+        if (!$this->postComentarios->contains($postComentario)) {
+            $this->postComentarios[] = $postComentario;
+            $postComentario->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostComentario(PostComentario $postComentario): self
+    {
+        if ($this->postComentarios->contains($postComentario)) {
+            $this->postComentarios->removeElement($postComentario);
+            // set the owning side to null (unless already changed)
+            if ($postComentario->getPost() === $this) {
+                $postComentario->setPost(null);
+            }
+        }
 
         return $this;
     }

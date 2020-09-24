@@ -121,12 +121,18 @@ class User implements UserInterface, \Serializable
      */
     private $localizacao;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PostComentario", mappedBy="user")
+     */
+    private $postComentarios;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         $this->eventoParticipantes = new ArrayCollection();
         $this->eventoRecados = new ArrayCollection();
         $this->eventos = new ArrayCollection();
+        $this->postComentarios = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -506,5 +512,36 @@ class User implements UserInterface, \Serializable
             $this->password,
             $this->roles
             ) = unserialize($serialized, ['allowed_class' => false]);
+    }
+
+    /**
+     * @return Collection|PostComentario[]
+     */
+    public function getPostComentarios(): Collection
+    {
+        return $this->postComentarios;
+    }
+
+    public function addPostComentario(PostComentario $postComentario): self
+    {
+        if (!$this->postComentarios->contains($postComentario)) {
+            $this->postComentarios[] = $postComentario;
+            $postComentario->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePostComentario(PostComentario $postComentario): self
+    {
+        if ($this->postComentarios->contains($postComentario)) {
+            $this->postComentarios->removeElement($postComentario);
+            // set the owning side to null (unless already changed)
+            if ($postComentario->getUser() === $this) {
+                $postComentario->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
