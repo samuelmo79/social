@@ -18,15 +18,21 @@
                         {{ app.user.dadosPessoais.nome }} {{ app.user.dadosPessoais.sobrenome }}
                     </h3>
                     <h5 class="text-center small">
-                        {% if user.localizacao is not null %}
-                            {{ user.localizacao.bairro }}, {{ user.localizacao.estado }} - {{ user.localizacao.pais }}
+                        {% if app.user.localizacao and
+                            app.user.localizacao.bairro and
+                            app.user.localizacao.cidade and
+                            app.user.localizacao.estado and
+                            app.user.localizacao.pais is not null %}
+                            {{ app.user.localizacao.bairro }}, {{ app.user.localizacao.estado }} - {{ app.user.localizacao.pais }}
                         {% else %}
-                            <a href="#" class="btn btn-light btn-sm"><i class="fas fa-map-marker-alt"></i> Editar sua localização</a>
+                            <a href="{{ path('editar_perfil') }}" class="btn btn-light btn-sm">
+                                <i class="fas fa-map-marker-alt"></i> Editar sua localização
+                            </a>
                         {% endif %}
                     </h5>
                 </div>
                 <div class="card-body">
-                    <a href="#" class="btn btn-light btn-sm ml-2 float-right">Editar Perfil</a>
+                    <a href="{{ path('perfil') }}" class="btn btn-light btn-sm ml-2 float-right">Ver Perfil</a>
                 </div>
                 <div class="card-footer">
                     <ul class="nav nav-pills">
