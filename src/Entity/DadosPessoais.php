@@ -92,7 +92,7 @@ class DadosPessoais
         return $this->dataNascimento;
     }
 
-    public function setDataNascimento(\DateTimeInterface $dataNascimento): self
+    public function setDataNascimento(?\DateTimeInterface $dataNascimento): self
     {
         $this->dataNascimento = $dataNascimento;
 
