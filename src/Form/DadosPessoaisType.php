@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class DadosPessoaisType extends AbstractType
 {
@@ -16,10 +17,16 @@ class DadosPessoaisType extends AbstractType
     {
         $builder
             ->add('nome', TextType::class, [
-                'label' => 'Nome *'
+                'label' => 'Nome *',
+                'constraints' => [
+                    new NotBlank(['message' => 'Este campo é obrigatório']),
+                ],
             ])
             ->add('sobrenome', TextType::class, [
-                'label' => 'Sobrenome *'
+                'label' => 'Sobrenome *',
+                'constraints' => [
+                    new NotBlank(['message' => 'Este campo é obrigatório']),
+                ],
             ])
             ->add('sexo', ChoiceType::class, [
                 'label' => 'Sexo *',
@@ -28,12 +35,18 @@ class DadosPessoaisType extends AbstractType
                     'Feminino' => 'Feminino',
                     'Masculino' => 'Masculino'
                 ],
-                'required' => true
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(['message' => 'Este campo é obrigatório']),
+                ],
             ])
             ->add('dataNascimento', DateType::class, [
                 'widget' => 'single_text',
                 'label' => 'Data Nascimento *',
-                'required' => true
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(['message' => 'Este campo é obrigatório']),
+                ],
             ])
         ;
     }
