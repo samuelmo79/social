@@ -19,25 +19,21 @@ class DadosPessoais
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Assert\NotBlank(message="Preencha esta informação!")
      */
     private $nome;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Assert\NotBlank(message="Preencha esta informação!")
      */
     private $sobrenome;
 
     /**
      * @ORM\Column(type="string", length=10)
-     * @Assert\NotBlank(message="Preencha esta informação!")
      */
     private $sexo;
 
     /**
      * @ORM\Column(type="date")
-     * @Assert\NotBlank(message="Preencha esta informação!")
      */
     private $dataNascimento;
 
