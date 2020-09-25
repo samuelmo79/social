@@ -174,7 +174,7 @@
                 {% for evento in eventos %}
                     <div class="card-body">
                         <ul class="list-group">
-                            <li class="media mb-2">
+                            <li class="media">
                                 <div class="float-left mr-2">
                                     <div class="card card-primary text-center date">
                                         <div class="card-header mes">
@@ -189,7 +189,7 @@
                                 </div>
                                 <div class="text-muted">
                                     <h5>
-                                        <a href="#" class="card-link">
+                                        <a href="{{ path('evento_show', {'id': evento.id}) }}" class="card-link">
                                             {{ evento.titulo }}
                                         </a>
                                     </h5>
