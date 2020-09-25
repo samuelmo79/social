@@ -40,6 +40,7 @@ class Evento
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(message="Este Campo não pode ser vazio!")
      */
     private $dataEvento;
 
@@ -173,7 +174,7 @@ class Evento
         return $this->dataEvento;
     }
 
-    public function setDataEvento(\DateTimeInterface $dataEvento): self
+    public function setDataEvento(?\DateTimeInterface $dataEvento): self
     {
         $this->dataEvento = $dataEvento;
 
