@@ -50,8 +50,8 @@
     <h4 class="mt-5">Imagem do Evento</h4>
     <hr>
     <div class="form-group">
-        {{ form_label(form.imagem) }}
-        {{ form_widget(form.imagem) }}
+        {{ form_label(form.imageFile) }}
+        {{ form_widget(form.imageFile, {'attr': {'class': 'custom-file-input'}}) }}
     </div>
     <button class="btn btn-primary btn-sm btn-icon-split">
             <span class="icon text-white-50">

@@ -19,23 +19,15 @@
                             <div class="card-header bg-primary pt-5 pb-5">
                             </div>
                             <div class="card-body">
-                                {% if app.user.avatar == null %}
-                                    {% if app.user.dadosPessoais.sexo == 'Masculino' %}
-                                        <figure class="perfil">
-                                            <img class="perfil-avatar"
-                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
-                                                 alt="Perfil" width="32">
-                                        </figure>
-                                    {% else %}
-                                        <figure class="perfil">
-                                        <img class="perfil-avatar"
-                                             src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
-                                             alt="Perfil" width="32">
-                                        </figure>
-                                    {% endif %}
+                                {% if evento.imagem == null %}
+                                    <figure class="perfil">
+                                        <img src="{{ asset('imagens/no-image.png') }}"
+                                             class="perfil-avatar"
+                                             alt="Dono do Evento">
+                                    </figure>
                                 {% else %}
                                     <figure class="perfil">
-                                        <img src="{{ asset('imagens/perfil/' ~ evento.user.avatar) }}"
+                                        <img src="{{ asset('imagens/evento/' ~ evento.imagem) }}"
                                              class="perfil-avatar"
                                              alt="Dono do Evento">
                                     </figure>
