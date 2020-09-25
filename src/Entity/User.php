@@ -131,6 +131,11 @@ class User implements UserInterface, \Serializable
      */
     private $tokenPassword;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notificacao", mappedBy="user")
+     */
+    private $notificacaos;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -138,6 +143,7 @@ class User implements UserInterface, \Serializable
         $this->eventoRecados = new ArrayCollection();
         $this->eventos = new ArrayCollection();
         $this->postComentarios = new ArrayCollection();
+        $this->notificacaos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -556,6 +562,37 @@ class User implements UserInterface, \Serializable
             // set the owning side to null (unless already changed)
             if ($postComentario->getUser() === $this) {
                 $postComentario->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notificacao[]
+     */
+    public function getNotificacaos(): Collection
+    {
+        return $this->notificacaos;
+    }
+
+    public function addNotificacao(Notificacao $notificacao): self
+    {
+        if (!$this->notificacaos->contains($notificacao)) {
+            $this->notificacaos[] = $notificacao;
+            $notificacao->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotificacao(Notificacao $notificacao): self
+    {
+        if ($this->notificacaos->contains($notificacao)) {
+            $this->notificacaos->removeElement($notificacao);
+            // set the owning side to null (unless already changed)
+            if ($notificacao->getUser() === $this) {
+                $notificacao->setUser(null);
             }
         }
 
