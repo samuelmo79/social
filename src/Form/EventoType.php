@@ -55,11 +55,13 @@ class EventoType extends AbstractType
                 'label' => 'CEP *'
             ])
             ->add('imageFile', VichImageType::class, [
-                'label' => 'Foto do perfil',
                 'required' => false,
                 'allow_delete' => false,
                 'download_label' => '',
                 'image_uri' => false,
+                'attr' => [
+                    'placeholder' => 'Escolha uma imagem para o evento'
+                ]
             ])
         ;
     }
