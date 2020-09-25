@@ -7,7 +7,13 @@
         <div class="col-md-12">
             <div class="card mb-3">
                 <div class="card-header bg-primary">
-                    <img src="{{ asset('imagens/perfil/avatar_homem.png') }}" width="120" class="rounded-circle img-borda-sm float-left mr-3">
+                    {% if evento.imagem == null %}
+                        <img src="{{ asset('imagens/no-image.png') }}"
+                             width="120" class="rounded-circle img-borda-sm float-left mr-3">
+                    {% else %}
+                        <img src="{{ asset('imagens/evento/' ~ evento.imagem) }}"
+                             width="120" class="rounded-circle img-borda-sm float-left mr-3">
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     <div class="btn-group float-right" role="group">
@@ -183,7 +189,21 @@
                 <div class="card-body">
                     {% for lista in listaParticipantes %}
                         <div class="media mb-3">
-                            <img src="{{ asset('imagens/perfil/' ~ lista.participante.avatar) }}" class="img-size-50 img-borda-sm mr-3" alt="Recado">
+                            {% if lista.participante.avatar == null %}
+                                {% if lista.participante.dadosPessoais.sexo == 'Masculino' %}
+                                    <img class="img-size-50 img-borda-sm mr-3"
+                                         src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                         alt="Perfil">
+                                {% else %}
+                                    <img class="img-size-50 img-borda-sm mr-3"
+                                         src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                         alt="Perfil">
+                                {% endif %}
+                            {% else %}
+                                <img class="img-size-50 img-borda-sm mr-3"
+                                     src="{{ asset('imagens/perfil/' ~ lista.participante.avatar) }}"
+                                     alt="Perfil">
+                            {% endif %}
                             <div class="media-body">
                             <span class="text-muted mt-0">
                                 <strong>{{ lista.participante.dadosPessoais.nome }} {{ lista.participante.dadosPessoais.sobrenome }}</strong>

@@ -12,3 +12,12 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('.custom-file-input').on('change',function(){
+            var fileName = this.files[0].name; ;
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+{% endblock %}

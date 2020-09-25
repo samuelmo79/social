@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class EventoType extends AbstractType
 {
@@ -53,7 +54,15 @@ class EventoType extends AbstractType
             ->add('cep', TextType::class, [
                 'label' => 'CEP *'
             ])
-            ->add('imagem')
+            ->add('imageFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => false,
+                'download_label' => '',
+                'image_uri' => false,
+                'attr' => [
+                    'placeholder' => 'Escolha uma imagem para o evento'
+                ]
+            ])
         ;
     }
 
