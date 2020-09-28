@@ -43,10 +43,7 @@ class HomeController extends AbstractController
 
             return $this->redirectToRoute('home');
         }
-        //TODO pegar comentarios para exibir na tela
-        $postComentarios = $this->em->getRepository(PostComentario::class)->findAll();
-        dump($postComentarios, $postComentarios[0]->getUser()->getEmail());
-        //Criando form de envio de comentário para cada post
+
         $comentario = new PostComentario();
         $formComentario = $this->createForm(PostComentarioType::class, $comentario);
         $formComentario->handleRequest($request);

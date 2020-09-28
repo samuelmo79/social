@@ -121,6 +121,7 @@
                             
                             <!-- Início Comentários -->
                             <!-- TODO -->
+                            {% for comentarios in postagem.postComentarios %}
                             <div class="card-footer card-comments">
                                 <div class="card-comment">
                                     {% if postagem.autor.avatar == null %}
@@ -138,16 +139,18 @@
                                              src="{{ asset('imagens/perfil/' ~ postagem.autor.avatar) }}"
                                              alt="Perfil">
                                     {% endif %}
+
                                     <div class="comment-text">
                                         <span class="username">
-                                          Maria Gonzales
+                                          {{ comentarios.user.dadosPessoais.nome }}
                                           <span class="text-muted float-right">8:03 PM Today</span>
                                         </span>
-                                        It is a long established fact that a reader will be distracted
-                                        by the readable content of a page when looking at its layout.
+                                        {{ comentarios.comentario }}
                                     </div>
+
                                 </div>
                             </div>
+                            {% endfor %}
                             <!-- Fim Comentários -->
                         </div>
                     </div>
