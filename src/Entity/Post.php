@@ -220,4 +220,9 @@ class Post
 
         return $this;
     }
+
+    public function getTotalComentarios()
+    {
+        return count($this->postComentarios);
+    }
 }

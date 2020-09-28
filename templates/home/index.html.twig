@@ -109,11 +109,12 @@
                                 </div>
                             {% endif %}
                             <p>
+                                <!-- TODO Curtidas -->
+{#                                <button type="button" class="btn btn-light btn-sm">#}
+{#                                    <i class="far fa-heart"></i> <span class="badge badge-light">4</span>#}
+{#                                </button>#}
                                 <button type="button" class="btn btn-light btn-sm">
-                                    <i class="far fa-heart"></i> <span class="badge badge-light">4</span>
-                                </button>
-                                <button type="button" class="btn btn-light btn-sm">
-                                    <i class="far fa-comments mr-1"></i> Comentários <span class="badge badge-light">4</span>
+                                    <i class="far fa-comments mr-1"></i> Comentários <span class="badge badge-light">{{ postagem.getTotalComentarios }}</span>
                                 </button>
                             </p>
                             {{ form_start(formComentario, {"attr": {"novalidate": "novalidate"}}) }}
