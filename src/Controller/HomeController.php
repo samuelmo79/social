@@ -44,24 +44,27 @@ class HomeController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        $comentario = new PostComentario();
-        $formComentario = $this->createForm(PostComentarioType::class, $comentario);
-        $formComentario->handleRequest($request);
-
-        if ($formComentario->isSubmitted() && $formComentario->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $comentario->setUser($this->getUser());
-            $entityManager->persist($comentario);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('home');
-        }
-
         return $this->render('home/index.html.twig', [
             'form' => $form->createView(),
-            'formComentario' => $formComentario->createView(),
             'post' => $post,
             'eventos' => $eventos,
         ]);
+    }
+
+    /**
+     * @Route("/novo_comentario", name="cadastra_comentario")
+     */
+    public function novo_comentario(Request $request)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $post = $this->em->getRepository(Post::class)
+            ->findOneBy(['id' => $request->get('postId')]);
+        $comentario = new PostComentario();
+        $comentario->setPost($post);
+        $comentario->setComentario($request->get('comentario'));
+        $comentario->setUser($this->getUser());
+        $entityManager->persist($comentario);
+        $entityManager->flush();
+        return $this->redirectToRoute('home');
     }
 }
