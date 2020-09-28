@@ -53,9 +53,15 @@
                             <div class="d-flex align-items-center">
                                 <div class="d-flex align-items-center">
                                     <div class="mr-2">
+                                        {% if app.user.avatar == null %}
                                         <img class="rounded-circle img-borda-white-sm"
                                              src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
                                              alt="Perfil" width="50">
+                                            {% else %}
+                                                <img class="rounded-circle img-borda-white-sm"
+                                                     src="{{ asset('imagens/perfil/' ~ app.user.avatar) }}"
+                                                     alt="Perfil" width="60" height="50">
+                                        {% endif %}
                                     </div>
                                     <div class="ml-2">
                                         <div class="h5 m-0">
