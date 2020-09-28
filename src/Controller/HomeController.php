@@ -29,7 +29,8 @@ class HomeController extends AbstractController
         $post = $this->em->getRepository(Post::class)
             ->findBy(array(), array('dataCadastro' => 'DESC'));
 
-        $eventos = $this->em->getRepository(Evento::class)->findAll();
+        $eventos = $this->em->getRepository(Evento::class)
+            ->findBy(array(), array('dataCadastro' => 'DESC'), 3);
 
         $cadastraPost = new Post();
         $form = $this->createForm(PostType::class, $cadastraPost);
