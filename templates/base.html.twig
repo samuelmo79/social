@@ -53,10 +53,14 @@
                             <div class="d-flex align-items-center">
                                 <div class="d-flex align-items-center">
                                     <div class="mr-2">
-                                        {% if app.user.avatar == null %}
+                                        {% if app.user.avatar == null and app.user.dadosPessoais.sexo == 'Feminino' %}
                                         <img class="rounded-circle img-borda-white-sm"
                                              src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
                                              alt="Perfil" width="50">
+                                            {% elseif app.user.avatar == null and app.user.dadosPessoais.sexo == 'Masculino' %}
+                                                <img class="rounded-circle img-borda-white-sm"
+                                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                     alt="Perfil" width="50">
                                             {% else %}
                                                 <img class="rounded-circle img-borda-white-sm"
                                                      src="{{ asset('imagens/perfil/' ~ app.user.avatar) }}"

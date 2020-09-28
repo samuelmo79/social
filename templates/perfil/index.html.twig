@@ -8,11 +8,19 @@
             <div class="card mb-3">
                 <div class="card-header bg-primary">
                     <div class="text-center">
-
-                                <img class="img-fluid img-thumbnail rounded-circle img-size-100"
-                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
-                                     alt="Perfil">
-  
+                        {% if app.user.avatar == null and app.user.dadosPessoais.sexo == 'Feminino' %}
+                            <img class="img-fluid img-thumbnail rounded-circle img-size-100"
+                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                 alt="Perfil">
+                        {% elseif app.user.avatar == null and app.user.dadosPessoais.sexo == 'Masculino' %}
+                            <img class="img-fluid img-thumbnail rounded-circle img-size-100"
+                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                 alt="Perfil">
+                        {% else %}
+                            <img class="img-fluid img-thumbnail rounded-circle img-size-100"
+                                 src="{{ asset('imagens/perfil/' ~ app.user.avatar) }}"
+                                 alt="Perfil">
+                        {% endif %}
                     </div>
                     <h3 class="text-center">
                         {{ user.dadosPessoais.nome }} {{ user.dadosPessoais.sobrenome }}
@@ -32,7 +40,8 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <a href="{{ path('editar_perfil') }}" class="btn btn-light btn-sm ml-2 float-right">Editar Perfil</a>
+                    <a href="{{ path('editar_perfil') }}" class="btn btn-light btn-sm ml-2 float-right">Editar
+                        Perfil</a>
                 </div>
                 <div class="card-footer">
                     <ul class="nav nav-pills">
@@ -54,7 +63,8 @@
             <div class="card">
                 <div class="card-header p-2">
                     <ul class="nav nav-pills">
-                        <li class="nav-item"><a class="nav-link active" href="#atividades" data-toggle="tab">Atividades</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="#atividades"
+                                                data-toggle="tab">Atividades</a></li>
                         <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
                         <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
                     </ul>
@@ -65,20 +75,20 @@
                             <!-- Início atividades -->
                             <div class="activity-feed">
                                 {% for log in atividades %}
-                                <div class="feed-item">
-                                    <div class="date">{{ log.dataNotificacao|date("d-m-Y H:m:s") }}</div>
-                                    <div class="text">
-                                        <strong>
-                                            {{ log.user.dadosPessoais.nome }} {{ log.user.dadosPessoais.sobrenome }}
-                                        </strong>
-                                        <span class="text-muted">{{ log.descricao }}</span>
+                                    <div class="feed-item">
+                                        <div class="date">{{ log.dataNotificacao|date("d-m-Y H:m:s") }}</div>
+                                        <div class="text">
+                                            <strong>
+                                                {{ log.user.dadosPessoais.nome }} {{ log.user.dadosPessoais.sobrenome }}
+                                            </strong>
+                                            <span class="text-muted">{{ log.descricao }}</span>
+                                        </div>
                                     </div>
-                                </div>
                                 {% endfor %}
                             </div>
                             <!-- Fim atividades -->
                         </div>
-                        
+
                         <div class="tab-pane" id="timeline">
                             <!-- Início timeline -->
                             Timeline
