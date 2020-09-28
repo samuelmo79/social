@@ -109,17 +109,30 @@
                                 </div>
                             {% endif %}
                             <p>
+                                <!-- TODO Curtidas -->
+{#                                <button type="button" class="btn btn-light btn-sm">#}
+{#                                    <i class="far fa-heart"></i> <span class="badge badge-light">4</span>#}
+{#                                </button>#}
                                 <button type="button" class="btn btn-light btn-sm">
-                                    <i class="far fa-heart"></i> <span class="badge badge-light">4</span>
-                                </button>
-                                <button type="button" class="btn btn-light btn-sm">
-                                    <i class="far fa-comments mr-1"></i> Comentários <span class="badge badge-light">4</span>
+                                    <i class="far fa-comments mr-1"></i> Comentários <span class="badge badge-light">{{ postagem.getTotalComentarios }}</span>
                                 </button>
                             </p>
-                            {{ form_start(formComentario, {"attr": {"novalidate": "novalidate"}}) }}
-                            {{ form_end(formComentario) }}
-                            
+                            <form method="post" action="{{ path('cadastra_comentario') }}">
+                                <input type="hidden" id="postId" name="postId" value="{{ postagem.id }}">
+                                <label for="post_comentario_comentario" class="required">Comentario</label>
+                                <textarea id="post_comentario_comentario" name="comentario" required="required" class="form-control"></textarea>
+                                <div class="mt-5">
+                                    <button class="btn btn-primary btn-sm btn-icon-split">
+                                    <span class="icon text-white-50">
+                                      <i class="fas fa-save"></i>
+                                    </span>
+                                        <span class="text">{{ button_label|default('Salvar') }}</span>
+                                    </button>
+                                </div>
+                            </form>
                             <!-- Início Comentários -->
+                            <!-- TODO -->
+                            {% for comentarios in postagem.postComentarios %}
                             <div class="card-footer card-comments">
                                 <div class="card-comment">
                                     {% if postagem.autor.avatar == null %}
@@ -137,16 +150,18 @@
                                              src="{{ asset('imagens/perfil/' ~ postagem.autor.avatar) }}"
                                              alt="Perfil">
                                     {% endif %}
+
                                     <div class="comment-text">
                                         <span class="username">
-                                          Maria Gonzales
+                                          {{ comentarios.user.dadosPessoais.nome }}
                                           <span class="text-muted float-right">8:03 PM Today</span>
                                         </span>
-                                        It is a long established fact that a reader will be distracted
-                                        by the readable content of a page when looking at its layout.
+                                        {{ comentarios.comentario }}
                                     </div>
+
                                 </div>
                             </div>
+                            {% endfor %}
                             <!-- Fim Comentários -->
                         </div>
                     </div>
