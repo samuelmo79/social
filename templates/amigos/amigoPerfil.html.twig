@@ -8,15 +8,17 @@
             <div class="card">
                 <div class="card-header bg-primary">
                     <div class="text-center">
-                        {% if app.user.avatar == null %}
-                            {% if app.user.dadosPessoais.sexo == 'Masculino' %}
-                                <img class="img-circle sombra-2 perfil-user-img-white"
+                        {% if user.avatar == null %}
+                            {% if user.dadosPessoais.sexo == 'Masculino' %}
+                                <img class="img-fluid img-thumbnail rounded-circle"
                                      src="{{ asset('imagens/perfil/avatar_homem.png') }}"
-                                     alt="Perfil">
+                                     alt="Perfil"
+                                     width="100">
                             {% else %}
-                                <img class="img-circle sombra-2 perfil-user-img-white"
-                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
-                                     alt="Perfil">
+                                <img class="img-fluid img-thumbnail rounded-circle"
+                                     src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                     alt="Perfil"
+                                     width="100">
                             {% endif %}
                         {% else %}
                             <img class="img-fluid img-thumbnail rounded-circle"
@@ -29,7 +31,17 @@
                         {{ user.dadosPessoais.nome }} {{ user.dadosPessoais.sobrenome }}
                     </h3>
                     <h5 class="text-center small">
-                        {{ user.localizacao.bairro }}, {{ user.localizacao.estado }} - {{ user.localizacao.pais }}
+                        {% if user.localizacao and
+                            user.localizacao.bairro and
+                            user.localizacao.cidade and
+                            user.localizacao.estado and
+                            user.localizacao.pais is not null %}
+                            {{ user.localizacao.bairro }}, {{ user.localizacao.estado }} - {{ user.localizacao.pais }}
+                        {% else %}
+                            <a href="#" class="btn btn-light btn-sm">
+                                <i class="fas fa-map-marker-alt"></i> Localização não informada
+                            </a>
+                        {% endif %}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -125,6 +137,11 @@
                                         Localização
                                     </h3>
                                     <div class="card-body">
+                                        {% if user.localizacao == null %}
+                                            <div class="alert alert-danger" role="alert">
+                                                Localização não informada
+                                            </div>
+                                        {% else %}
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Bairro</label>
                                             <div class="col-sm-9">
@@ -149,6 +166,7 @@
                                                 <input type="text" class="form-control"  value="{{ user.localizacao.pais }}" disabled>
                                             </div>
                                         </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
