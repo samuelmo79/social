@@ -1,0 +1,15 @@
+{% extends 'email_base.html.twig' %}
+
+{% block body %}
+    <tr>
+        <td>
+            <p>Olá {{ nome }}</p>
+            <p>
+                Sua solicitação de redefinição de senha foi processada, para fazer a redefinição de sua senha clique no link abaixo:
+            </p>
+            <p>
+                <a href="{{ absolute_url(path("resetar_senha_token", {"token": token})) }}">Redefina a sua senha</a>
+            </p>
+        </td>
+    </tr>
+{% endblock %}
