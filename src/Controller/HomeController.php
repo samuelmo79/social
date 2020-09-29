@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Evento;
 use App\Entity\Post;
 use App\Entity\PostComentario;
+use App\Entity\User;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -66,9 +67,14 @@ class HomeController extends AbstractController
         $comentario = new PostComentario();
         $comentario->setPost($post);
         $comentario->setComentario($request->get('comentario'));
-        $comentario->setUser($this->getUser());
+
+        /** @var User $usuario */
+        $usuario = $this->getUser();
+        $comentario->setUser($usuario);
+
         $entityManager->persist($comentario);
         $entityManager->flush();
+
         return $this->redirectToRoute('home');
     }
 }
