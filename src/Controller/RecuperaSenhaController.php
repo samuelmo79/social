@@ -5,13 +5,11 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\EmailResetType;
 use App\Form\ResetaSenhaType;
+use App\Service\Email;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\Email;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 
 class RecuperaSenhaController extends AbstractController
 {
