@@ -40,7 +40,7 @@ class RecuperaSenhaController extends AbstractController
                 $this->addFlash("success", "Foi enviado para seu e-mail o link para redefinição de senha.");
             } else {
                 $this->addFlash("warning", "O email informado não está correto ou não está cadastrado.");
-                return $this->redirectToRoute('usuario_reseta_senha');
+                return $this->redirectToRoute('usuario_esqueceu_senha');
             }
         }
 
