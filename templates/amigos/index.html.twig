@@ -62,7 +62,13 @@
                                 </td>
                                 <td align="left">
                                 <span class="text-muted small">
-                                {{ amigos.localizacao.bairro }}, {{ amigos.localizacao.cidade }} - {{ amigos.localizacao.pais }}
+                                    {% if amigos.localizacao == null %}
+                                        <div class="text-danger">
+                                          Localização não informada
+                                        </div>
+                                    {% else %}
+                                        {{ amigos.localizacao.bairro }}, {{ amigos.localizacao.cidade }} - {{ amigos.localizacao.pais }}
+                                    {% endif %}
                                 </span>
                                 </td>
                                 <td style="width: 28%;">
