@@ -135,8 +135,8 @@
                             {% for comentarios in postagem.postComentarios %}
                             <div class="card-footer card-comments">
                                 <div class="card-comment">
-                                    {% if postagem.autor.avatar == null %}
-                                        {% if postagem.autor.dadosPessoais.sexo == 'Masculino' %}
+                                    {% if comentarios.user.avatar == null %}
+                                        {% if comentarios.user.dadosPessoais.sexo == 'Masculino' %}
                                             <img class="rounded-circle img-borda-sm"
                                                  src="{{ asset('imagens/perfil/avatar_homem.png') }}"
                                                  alt="Perfil">
@@ -147,7 +147,7 @@
                                         {% endif %}
                                     {% else %}
                                         <img class="rounded-circle img-borda-sm"
-                                             src="{{ asset('imagens/perfil/' ~ postagem.autor.avatar) }}"
+                                             src="{{ asset('imagens/perfil/' ~ comentarios.user.avatar) }}"
                                              alt="Perfil">
                                     {% endif %}
 

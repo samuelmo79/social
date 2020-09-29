@@ -8,11 +8,19 @@
             <div class="card mb-3">
                 <div class="card-header bg-primary">
                     <div class="text-center">
-
-                                <img class="img-fluid img-thumbnail rounded-circle img-size-100"
-                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
-                                     alt="Perfil">
-
+                        {% if app.user.avatar == null and app.user.dadosPessoais.sexo == 'Feminino' %}
+                            <img class="img-fluid img-thumbnail rounded-circle img-size-100"
+                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                 alt="Perfil">
+                        {% elseif app.user.avatar == null and app.user.dadosPessoais.sexo == 'Masculino' %}
+                            <img class="img-fluid img-thumbnail rounded-circle img-size-100"
+                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                 alt="Perfil">
+                        {% else %}
+                            <img class="img-fluid img-thumbnail rounded-circle img-size-100"
+                                 src="{{ asset('imagens/perfil/' ~ app.user.avatar) }}"
+                                 alt="Perfil">
+                        {% endif %}
                     </div>
                     <h3 class="text-center">
                         {{ app.user.dadosPessoais.nome }} {{ app.user.dadosPessoais.sobrenome }}
@@ -114,7 +122,8 @@
                              id="dadosPessoais" role="tabpanel"
                              aria-labelledby="dadosPessoais-tab">
                             <!-- Dados Pessoais -->
-                            <div class="tab-pane fade show active" id="v-pills-dadosPessoais" role="tabpanel" aria-labelledby="v-pills-dadosPessoais-tab">
+                            <div class="tab-pane fade show active" id="v-pills-dadosPessoais" role="tabpanel"
+                                 aria-labelledby="v-pills-dadosPessoais-tab">
                                 <div class="alert alert-secondary mt-3" role="alert">
                                     Dados Pessoais
                                 </div>
