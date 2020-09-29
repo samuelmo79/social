@@ -660,3 +660,19 @@ ul ul a {
 .search-query:focus + button {
     z-index: 3;
 }
+
+/* -----------------------------------------------
+                Form Post Comentário
+ ---------------------------------------------- */
+.textInput {
+    border-radius: 0;
+    height: 45px;
+    margin: 0 !important;
+}
+.border-radius-0{
+    border-radius:0;
+}
+.textInput:focus {
+    box-shadow: none;
+    outline: none
+}

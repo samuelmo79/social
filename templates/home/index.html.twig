@@ -60,6 +60,7 @@
                 </div>
             </div>
             <!-- Fim Postagem Modal -->
+            
             <!-- Início Post -->
             {% for postagem in post %}
                 <div class="card mb-3">
@@ -113,56 +114,81 @@
 {#                                <button type="button" class="btn btn-light btn-sm">#}
 {#                                    <i class="far fa-heart"></i> <span class="badge badge-light">4</span>#}
 {#                                </button>#}
-                                <button type="button" class="btn btn-light btn-sm">
+                                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#staticBackdrop_{{ postagem.id }}">
                                     <i class="far fa-comments mr-1"></i> Comentários <span class="badge badge-light">{{ postagem.getTotalComentarios }}</span>
                                 </button>
                             </p>
-                            <form method="post" action="{{ path('cadastra_comentario') }}">
-                                <input type="hidden" id="postId" name="postId" value="{{ postagem.id }}">
-                                <label for="post_comentario_comentario" class="required">Comentario</label>
-                                <textarea id="post_comentario_comentario" name="comentario" required="required" class="form-control"></textarea>
-                                <div class="mt-5">
-                                    <button class="btn btn-primary btn-sm btn-icon-split">
-                                    <span class="icon text-white-50">
-                                      <i class="fas fa-save"></i>
-                                    </span>
-                                        <span class="text">{{ button_label|default('Salvar') }}</span>
-                                    </button>
-                                </div>
-                            </form>
-                            <!-- Início Comentários -->
-                            <!-- TODO -->
-                            {% for comentarios in postagem.postComentarios %}
-                            <div class="card-footer card-comments">
-                                <div class="card-comment">
-                                    {% if comentarios.user.avatar == null %}
-                                        {% if comentarios.user.dadosPessoais.sexo == 'Masculino' %}
-                                            <img class="rounded-circle img-borda-sm"
-                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
-                                                 alt="Perfil">
-                                        {% else %}
-                                            <img class="rounded-circle img-borda-sm"
-                                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
-                                                 alt="Perfil">
-                                        {% endif %}
-                                    {% else %}
-                                        <img class="rounded-circle img-borda-sm"
-                                             src="{{ asset('imagens/perfil/' ~ comentarios.user.avatar) }}"
-                                             alt="Perfil">
-                                    {% endif %}
-
-                                    <div class="comment-text">
-                                        <span class="username">
-                                          {{ comentarios.user.dadosPessoais.nome }}
-                                          <span class="text-muted float-right">8:03 PM Today</span>
-                                        </span>
-                                        {{ comentarios.comentario }}
+                            
+                            <!-- Início Modal de Comentários -->
+                            <div class="modal fade" id="staticBackdrop_{{ postagem.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Comentários</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Início Comentários -->
+                                            <!-- TODO -->
+                                            {% for comentarios in postagem.postComentarios %}
+                                                <div class="card-footer card-comments">
+                                                    <div class="card-comment">
+                                                        {% if comentarios.user.avatar == null %}
+                                                            {% if comentarios.user.dadosPessoais.sexo == 'Masculino' %}
+                                                                <img class="rounded-circle img-borda-sm"
+                                                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                                     alt="Perfil">
+                                                            {% else %}
+                                                                <img class="rounded-circle img-borda-sm"
+                                                                     src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                                     alt="Perfil">
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <img class="rounded-circle img-borda-sm"
+                                                                 src="{{ asset('imagens/perfil/' ~ comentarios.user.avatar) }}"
+                                                                 alt="Perfil">
+                                                        {% endif %}
+                
+                                                        <div class="comment-text">
+                                                <span class="username">
+                                                    {{ comentarios.user.dadosPessoais.nome }}
+                                                    <span class="text-muted float-right">
+                                                        {{ comentarios.dataComentario|ago }}
+                                                    </span>
+                                                </span>
+                                                            {{ comentarios.comentario }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                            <!-- Fim Comentários -->
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="card-body">
+                                            <form method="post" action="{{ path('cadastra_comentario') }}">
+                                                <div class="form-group required">
+                                                    <div class="controls form-group d-flex w-100 ">
+                                                        <input class="input-md textinput textInput form-control"
+                                                               id="post_comentario_comentario"
+                                                               placeholder="Escreva um comentário"
+                                                               type="text"
+                                                               name="comentario" />
+                                                        <button type="submit" class="btn btn-primary border-radius-0  m-0 w-25">
+                                                            <span class="text">{{ button_label|default('Comentar') }}</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="postId" name="postId" value="{{ postagem.id }}">
+                                            </form>
+                                            </div>
+                                        </div>
                                     </div>
-
                                 </div>
                             </div>
-                            {% endfor %}
-                            <!-- Fim Comentários -->
+                            <!-- FIM Modal de Comentários -->
+                            
                         </div>
                     </div>
                 </div>
