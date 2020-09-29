@@ -7,6 +7,7 @@ use App\Enum\PrivacidadeEnum;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,8 +29,9 @@ class EventoType extends AbstractType
                     'required' => true,
                 ]
             ])
-            ->add('dataEvento', DateType::class, [
+            ->add('dataEvento', DateTimeType::class, [
                 'label' => 'Data/Hora do Evento *',
+                'empty_data' => '',
                 'widget' => 'single_text'
             ])
             ->add('tipoEvento', ChoiceType::class, [
