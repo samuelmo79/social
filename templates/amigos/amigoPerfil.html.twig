@@ -1,0 +1,179 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Amigos{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <div class="text-center">
+                        {% if user.avatar == null %}
+                            {% if user.dadosPessoais.sexo == 'Masculino' %}
+                                <img class="img-fluid img-thumbnail rounded-circle"
+                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                     alt="Perfil"
+                                     width="100">
+                            {% else %}
+                                <img class="img-fluid img-thumbnail rounded-circle"
+                                     src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                     alt="Perfil"
+                                     width="100">
+                            {% endif %}
+                        {% else %}
+                            <img class="img-fluid img-thumbnail rounded-circle"
+                                 src="{{ asset('imagens/perfil/' ~ user.avatar) }}"
+                                 alt="Perfil"
+                                 width="100">
+                        {% endif %}
+                    </div>
+                    <h3 class="text-center">
+                        {{ user.dadosPessoais.nome }} {{ user.dadosPessoais.sobrenome }}
+                    </h3>
+                    <h5 class="text-center small">
+                        {% if user.localizacao and
+                            user.localizacao.bairro and
+                            user.localizacao.cidade and
+                            user.localizacao.estado and
+                            user.localizacao.pais is not null %}
+                            {{ user.localizacao.bairro }}, {{ user.localizacao.estado }} - {{ user.localizacao.pais }}
+                        {% else %}
+                            <a href="#" class="btn btn-light btn-sm">
+                                <i class="fas fa-map-marker-alt"></i> Localização não informada
+                            </a>
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <button type="button" class="btn btn-light btn-sm float-right ml-2" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
+                        Deixar recado
+                    </button>
+                    
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary">
+                                    <h5 class="modal-title" id="exampleModalLabel">Mensagem</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        Para: {{ user.dadosPessoais.nome }}
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Recado:</label>
+                                            <textarea class="form-control" id="message-text"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-primary">Enviar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-group float-right" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-light btn-sm">Solicitar amizade</button>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active"
+                               id="pills-sobre-tab"
+                               data-toggle="pill"
+                               href="#pills-sobre"
+                               role="tab"
+                               aria-controls="pills-sobre"
+                               aria-selected="true">
+                                Sobre
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link"
+                               id="pills-localizacao-tab"
+                               data-toggle="pill"
+                               href="#pills-localizacao"
+                               role="tab"
+                               aria-controls="pills-localizacao"
+                               aria-selected="false">
+                                Localização
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-sobre" role="tabpanel" aria-labelledby="pills-sobre-tab">
+                                    <h3 class="card-title">
+                                        Informações básicas
+                                    </h3>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Nome</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="{{ user.dadosPessoais.nome }} {{ user.dadosPessoais.sobrenome }}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Data nascimento</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control"  value="{{ user.dadosPessoais.dataNascimento|date('d-m-Y') }}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Sexo</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control"  value="{{ user.dadosPessoais.sexo }}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="pills-localizacao" role="tabpanel" aria-labelledby="pills-localizacao-tab">
+                                    <h3 class="card-title">
+                                        Localização
+                                    </h3>
+                                    <div class="card-body">
+                                        {% if user.localizacao == null %}
+                                            <div class="alert alert-danger" role="alert">
+                                                Localização não informada
+                                            </div>
+                                        {% else %}
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Bairro</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="{{ user.localizacao.bairro }}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Cidade</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control"  value="{{ user.localizacao.cidade }}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Estado</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control"  value="{{ user.localizacao.estado }}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">País</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control"  value="{{ user.localizacao.pais }}" disabled>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

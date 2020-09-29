@@ -18,7 +18,7 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <a class="navbar-brand" href="{{ path('home') }}">Social</a>
     
         <button type="button" id="sidebarCollapse" class="btn btn-light d-block d-md-none">
@@ -27,14 +27,19 @@
     
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item {% if app.request.attributes.get('_route') == 'home' %} active {% endif %}">
-                    <a class="nav-link" href="{{ path('home') }}">
+                <li class="navlink-item {% if app.request.attributes.get('_route') == 'home' %} active {% endif %}">
+                    <a class="navlink-link" href="{{ path('home') }}">
                         Home
                     </a>
                 </li>
-                <li class="nav-item {% if app.request.attributes.get('_route') == 'evento_index' %} active {% endif %}">
-                    <a class="nav-link" href="{{ path('evento_index') }}">
+                <li class="navlink-item {% if app.request.attributes.get('_route') == 'evento_index' %} active {% endif %}">
+                    <a class="navlink-link" href="{{ path('evento_index') }}">
                         Evento
+                    </a>
+                </li>
+                <li class="navlink-item {% if app.request.attributes.get('_route') == 'amigos' %} active {% endif %}">
+                    <a class="navlink-link" href="{{ path('amigos') }}">
+                        Amigos
                     </a>
                 </li>
             </ul>

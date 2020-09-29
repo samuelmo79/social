@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Amigos{% endblock %}
+
+{% block titulo %}
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Amigos</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Amigos</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form action="#" method="post">
+                        <div id="custom-search-input">
+                            <div class="input-group">
+                                <input type="search"
+                                       class="search-query form-control"
+                                       placeholder="Pesquisar"
+                                       name="pesquisar_amigos">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body table-responsive p-0">
+                    <table class="table">
+                        <tbody>
+                        {% for amigos in user %}
+                            <tr>
+                                <td>
+                                    {% if amigos.avatar == null %}
+                                        {% if amigos.dadosPessoais.sexo == 'Masculino' %}
+                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                 alt="Perfil"
+                                                 width="50">
+                                        {% else %}
+                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                 alt="Perfil"
+                                                 width="50">
+                                        {% endif %}
+                                    {% else %}
+                                        <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                             src="{{ asset('imagens/perfil/' ~ amigos.avatar) }}"
+                                             alt="Perfil"
+                                             width="50">
+                                    {% endif %}
+                                    <a class="card-link" href="{{ path('amigos_perfil', {'id': amigos.id}) }}">
+                                        {{ amigos.dadosPessoais.nome }} {{ amigos.dadosPessoais.sobrenome }}<br>
+                                    </a>
+                                    <span class="small text-muted">{{ amigos.dataCadastro|date('d-m-Y') }}</span>
+                                </td>
+                                <td align="left">
+                                <span class="text-muted small">
+                                    {% if amigos.localizacao == null %}
+                                        <div class="text-danger">
+                                          Localização não informada
+                                        </div>
+                                    {% else %}
+                                        {{ amigos.localizacao.bairro }}, {{ amigos.localizacao.cidade }} - {{ amigos.localizacao.pais }}
+                                    {% endif %}
+                                </span>
+                                </td>
+                                <td style="width: 28%;">
+                                    <button type="button" class="btn btn-light btn-sm">Enviar solicitação</button>
+                                </td>
+                            </tr>
+                        {% else %}
+                            Nenhum usuário encontrado
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

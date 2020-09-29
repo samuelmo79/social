@@ -5,24 +5,22 @@ body {
 /* -----------------------------------------------
                     Navbar
  ---------------------------------------------- */
-.navbar {
-    -webkit-transition: all 300ms ease 0s;
-    -moz-transition: all 300ms ease 0s;
-    -o-transition: all 300ms ease 0s;
-    -ms-transition: all 300ms ease 0s;
-    transition: all 300ms ease 0s;
-}
-.nav-item.active .nav-link,
-.nav-item .nav-link:focus,
-.nav-item .nav-link:hover,
-.nav-item .nav-link:active {
+.navlink-item.active .navlink-link,
+.navlink-item .navlink-link:focus,
+.navlink-item .navlink-link:hover,
+.navlink-item .navlink-link:active {
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 0.1875rem;
+    color: rgba(0, 0, 0, 0.7);
 }
 
-.navbar .navbar-nav .nav-link {
+.navbar .navbar-nav .navlink-link {
     margin-left: 10px;
     padding: 0.5rem 0.7rem;
+    color: #495057;
+    border-color: #dee2e6 #dee2e6 #fff;
+    text-decoration: none;
+    color: #ffffff;
 }
 
 .navbar .navbar-brand {
@@ -123,6 +121,14 @@ body {
 
 .btn-icon-split.btn-lg .text, .btn-group-lg > .btn-icon-split.btn .text {
     padding: 0.5rem 1rem;
+}
+
+.btn-light {
+    border-color: #999999;
+}
+
+.btn-light:hover {
+    border-color: #999999;
 }
 
 .card-primary:not(.card-outline) > .card-header {
@@ -264,15 +270,15 @@ body {
     font-weight: 400;
 }
 
-.card-footer {
-    padding: 0.75rem 1.25rem;
-    background-color: rgba(0, 0, 0, 0.03);
-    border-top: 0 solid rgba(0, 0, 0, 0.125);
-}
+/*.card-footer {*/
+/*    padding: 0.75rem 1.25rem;*/
+/*    background-color: rgba(0, 0, 0, 0.03);*/
+/*    border-top: 0 solid rgba(0, 0, 0, 0.125);*/
+/*}*/
 
-.card-footer:last-child {
-    border-radius: 0 0 calc(0.25rem - 0) calc(0.25rem - 0);
-}
+/*.card-footer:last-child {*/
+/*    border-radius: 0 0 calc(0.25rem - 0) calc(0.25rem - 0);*/
+/*}*/
 
 .link-black {
     color: #6c757d;
@@ -612,4 +618,45 @@ ul ul a {
 
 .sidebar-wrapper .sidebar-header .user-info > span {
     display: block;
+}
+
+/* -----------------------------------------------
+                 Form Search Amigos
+ ---------------------------------------------- */
+#custom-search-input {
+    margin: 0;
+    padding: 0;
+}
+
+#custom-search-input .search-query {
+    padding-right: 3px;
+    padding-right: 4px \9;
+    padding-left: 15px;
+    padding-left: 4px \9;
+    /* IE7-8 doesn't have border-radius, so don't indent the padding */
+
+    margin-bottom: 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#custom-search-input button {
+    border: 0;
+    background: none;
+    /** belows styles are working good */
+    padding: 5px 0px;
+    margin-top: 2px;
+    position: relative;
+    left: -30px;
+    /* IE7-8 doesn't have border-radius, so don't indent the padding */
+    margin-bottom: 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    color:#4682B4;
+}
+
+.search-query:focus + button {
+    z-index: 3;
 }
