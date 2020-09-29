@@ -83,7 +83,7 @@
                                          alt="Perfil" width="32">
                                 {% endif %}
                                 <span class="username">
-                                    <a href="#" class="card-link">
+                                    <a href="{{ path('amigos_perfil', {'id': postagem.autor.id}) }}" class="card-link">
                                         {{ postagem.autor.dadosPessoais.nome }} {{ postagem.autor.dadosPessoais.sobrenome }}
                                     </a>
                                     <a href="#" class="float-right btn-tool">
