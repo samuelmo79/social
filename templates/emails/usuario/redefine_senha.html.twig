@@ -1,0 +1,33 @@
+{% extends 'email_base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-md-center">
+        <div class="col-sm-5">
+            <h2 class="card">
+                <div class="card-header text-center">
+                    Redefinição de Senha
+                </div>
+            </h2>
+            {{ form_start(form, {'attr': {'class': 'ui form', 'id': 'form_reset'}}) }}
+            <div class="ui stacked segment">
+                <div class="form-row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            {{ form_label(form.senhaPura) }}
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    {{ form_widget(form.senhaPura) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-block btn-primary my-3" type="submit">Salvar</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+
+    </div>
+{% endblock %}
