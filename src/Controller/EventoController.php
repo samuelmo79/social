@@ -29,6 +29,8 @@ class EventoController extends AbstractController
 
     /**
      * @Route("/", name="evento_index", methods={"GET"})
+     * @param EventoRepository $eventoRepository
+     * @return Response
      */
     public function index(EventoRepository $eventoRepository): Response
     {
@@ -39,6 +41,8 @@ class EventoController extends AbstractController
 
     /**
      * @Route("/new", name="evento_new", methods={"GET","POST"})
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -63,6 +67,10 @@ class EventoController extends AbstractController
 
     /**
      * @Route("/{id}", name="evento_show", methods={"GET", "POST"})
+     * @param Evento $evento
+     * @param Request $request
+     * @param $id
+     * @return Response
      */
     public function show(Evento $evento, Request $request, $id): Response
     {
@@ -108,6 +116,9 @@ class EventoController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="evento_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Evento $evento
+     * @return Response
      */
     public function edit(Request $request, Evento $evento): Response
     {
@@ -128,10 +139,13 @@ class EventoController extends AbstractController
 
     /**
      * @Route("/{id}", name="evento_delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Evento $evento
+     * @return Response
      */
     public function delete(Request $request, Evento $evento): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$evento->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $evento->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($evento);
             $entityManager->flush();
@@ -142,6 +156,8 @@ class EventoController extends AbstractController
 
     /**
      * @Route("/solicitar/{id}", name="participar")
+     * @param Evento $evento
+     * @return JsonResponse
      */
     public function solicitarPerticipacao(Evento $evento)
     {
@@ -151,6 +167,6 @@ class EventoController extends AbstractController
         $this->em->persist($eventoParticipante);
         $this->em->flush();
 
-        return new JsonResponse(['success' => true, 'evento' =>['id' => $evento->getId()]]);
+        return new JsonResponse(['success' => true, 'evento' => ['id' => $evento->getId()]]);
     }
 }

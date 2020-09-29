@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Evento;
 use App\Entity\Post;
 use App\Entity\PostComentario;
-use App\Form\PostComentarioType;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,6 +22,8 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/home", name="home")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function index(Request $request)
     {
@@ -54,6 +55,8 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/novo_comentario", name="cadastra_comentario")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function novo_comentario(Request $request)
     {

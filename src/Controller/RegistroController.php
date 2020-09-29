@@ -4,13 +4,13 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Security\SecurityAuthenticator;
 use App\Service\Email;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use App\Security\SecurityAuthenticator;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 
@@ -18,6 +18,10 @@ class RegistroController extends AbstractController
 {
     /**
      * @Route("/registro", name="registro", methods={"GET","POST"})
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $encoder
+     * @param Email $mailer
+     * @return Response
      */
     public function new(
         Request $request,
@@ -52,8 +56,10 @@ class RegistroController extends AbstractController
 
     /**
      * @Route("/ativa", name="ativa_conta")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function ativaConta(Request $request, SecurityAuthenticator $auth, GuardAuthenticatorHandler $guardAuthenticatorHandler)
+    public function ativaConta(Request $request)
     {
         $token = $request->query->get('token');
         if ($token != null) {
@@ -79,8 +85,7 @@ class RegistroController extends AbstractController
             'nome' => $user->getDadosPessoais()->getNome(),
             'token' => $user->getTokenPassword()
         ];
-        dump($assunto, $destinatario, $params);
-//        die();
+
         $mailer->enviar(
             $assunto,
             $destinatario,
