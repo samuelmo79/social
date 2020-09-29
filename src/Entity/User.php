@@ -136,6 +136,11 @@ class User implements UserInterface, \Serializable
      */
     private $notificacaos;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tokenResetPassword;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -595,6 +600,18 @@ class User implements UserInterface, \Serializable
                 $notificacao->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTokenResetPassword(): ?string
+    {
+        return $this->tokenResetPassword;
+    }
+
+    public function setTokenResetPassword(?string $tokenResetPassword): self
+    {
+        $this->tokenResetPassword = $tokenResetPassword;
 
         return $this;
     }
