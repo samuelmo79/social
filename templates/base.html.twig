@@ -38,7 +38,7 @@
                     </a>
                 </li>
             </ul>
-            <div class="btn-group d-none d-md-block ml-2">
+            <div class="btn-group ml-2">
                 <span type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {% if app.user.avatar == null %}
                         {% if app.user.dadosPessoais.sexo == 'Masculino' %}
@@ -62,47 +62,50 @@
                             <div class="d-flex align-items-center">
                                 <div class="d-flex align-items-center">
                                     <div class="mr-2">
-                                        {% if app.user.avatar == null %}
-                                            {% if app.user.dadosPessoais.sexo == 'Masculino' %}
-                                                <img class="rounded-circle img-borda-sm"
-                                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
-                                                     alt="Perfil" width="50">
-                                            {% else %}
-                                                <img class="rounded-circle img-borda-sm"
-                                                     src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
-                                                     alt="Perfil" width="50">
-                                            {% endif %}
+                                        {% if app.user.avatar == null and app.user.dadosPessoais.sexo == 'Feminino' %}
+                                            <img class="rounded-circle img-borda-white-sm"
+                                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                 alt="Perfil" width="50">
+                                        {% elseif app.user.avatar == null and app.user.dadosPessoais.sexo == 'Masculino' %}
+                                            <img class="rounded-circle img-borda-white-sm"
+                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                 alt="Perfil" width="50">
                                         {% else %}
                                             <img class="rounded-circle img-borda-white-sm"
                                                  src="{{ asset('imagens/perfil/' ~ app.user.avatar) }}"
                                                  alt="Perfil" width="50">
                                         {% endif %}
                                     </div>
-                                    <div class="h7">
-                                        {{ app.user.email }}
+                                    <div class="ml-2">
+                                        <div class="h5 m-0">
+                                            {{ app.user.dadosPessoais.nome }} {{ app.user.dadosPessoais.sobrenome }}
+                                        </div>
+                                        <div class="h7">
+                                            {{ app.user.email }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <h6 class="dropdown-header">Perfil</h6>
-                <a class="dropdown-item" href="{{ path('perfil') }}">
-                    <i class="fa fa-user text-muted mr-3"></i> Perfil
-                </a>
-                <a class="dropdown-item" href="{{ path('editar_perfil') }}">
-                    <i class="fa fa-user-edit text-muted mr-3"></i>Editar Perfil
-                </a>
-                <div class="dropdown-divider"></div>
-                {% if app.user.roles.0 == "ROLE_ADMIN" %}
-                    <a class="dropdown-item" href="#">
-                        <i class="fa fa-users text-muted mr-3"></i> Administrar usuários
+                    <h6 class="dropdown-header">Perfil</h6>
+                    <a class="dropdown-item" href="{{ path('perfil') }}">
+                        <i class="fa fa-user text-muted mr-3"></i> Perfil
+                    </a>
+                    <a class="dropdown-item" href="{{ path('editar_perfil') }}">
+                        <i class="fa fa-user-edit text-muted mr-3"></i>Editar Perfil
                     </a>
                     <div class="dropdown-divider"></div>
-                {% endif %}
-                <a class="dropdown-item" href="{{ path('sair') }}">
-                    <i class="fa fa-sign-out-alt text-muted mr-3"></i> Sair
-                </a>
+                    {% if app.user.roles.0 == "ROLE_ADMIN" %}
+                        <a class="dropdown-item" href="#">
+                            <i class="fa fa-users text-muted mr-3"></i> Administrar usuários
+                        </a>
+                        <div class="dropdown-divider"></div>
+                    {% endif %}
+                    <a class="dropdown-item" href="{{ path('sair') }}">
+                        <i class="fa fa-sign-out-alt text-muted mr-3"></i> Sair
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -173,7 +176,7 @@
     
         <!-- Conteúdo -->
         <div id="content">
-            <div class="container-fluid py-4 mt-4">
+            <div class="container-fluid pt-5 mt-4">
                 <div class="row">
                     <div class="col-md-3 d-xl-block d-none">
                         <div class="card">
@@ -211,16 +214,6 @@
                         {% block body %}{% endblock %}
                     </div>
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <div class="h6 text-muted">Seguidores</div>
-                        <div class="h5">5.2342</div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="h6 text-muted">Seguindo</div>
-                        <div class="h5">6758</div>
-                    </li>
-                </ul>
             </div>
         </div>
         <div class="overlay"></div>
