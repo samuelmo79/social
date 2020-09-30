@@ -676,3 +676,46 @@ ul ul a {
     box-shadow: none;
     outline: none
 }
+
+/* -----------------------------------------------
+               Comentários do posto
+ ---------------------------------------------- */
+
+.profileText {
+    border-radius: 7px;
+    padding: 10px;
+    position: relative;
+    background-color: #e0efff;
+    display: inline-block;
+    margin-left: 15px;
+    width: 100%;
+}
+.profileText::before {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: 20px;
+    transform: translateY(-50%);
+    width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #e0efff;
+    z-index: 1;
+}
+.commentBox ul li {
+    display: flex;
+    align-items: normal;
+}
+
+.commentBox ul li:nth-child(even) {
+    text-align: left;
+    margin: 20px 0;
+    justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+    .profileText::before {
+        top: 20px;
+    }
+}
