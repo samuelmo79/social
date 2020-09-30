@@ -101,7 +101,7 @@ class EventoController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', "Recado  envviado.");
-            return $this->redirectToRoute('evento_index');
+            return $this->redirectToRoute('evento_show', ['id' => $id]);
         }
 
         return $this->render('evento/show.html.twig', [
