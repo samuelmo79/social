@@ -34,6 +34,27 @@
                             {{ form_widget(form.dadosPessoais.dataNascimento) }}
                         </div>
                     </div>
+                    <div class="form-row">
+
+                        <div class="col form-group">
+                            {{ form_label(form.localizacao.pais) }}
+                            {{ form_widget(form.localizacao.pais) }}
+                        </div>
+                        <div class="col form-group">
+                            {{ form_label(form.localizacao.estado) }}
+                            {{ form_widget(form.localizacao.estado) }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col form-group">
+                            {{ form_label(form.localizacao.cidade) }}
+                            {{ form_widget(form.localizacao.cidade) }}
+                        </div>
+                        <div class="col form-group">
+                            {{ form_label(form.localizacao.bairro) }}
+                            {{ form_widget(form.localizacao.bairro) }}
+                        </div>
+                    </div>
                     <hr>
                     <div class="form-row">
                         <div class="col form-group">
