@@ -36,32 +36,32 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findByAmigos($pesquisarAmigos = null, $limite = 16, $ordem = "desc")
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $q = $this->createQueryBuilder("a")
+        ->where('a.ativo = :ativo')
+        ->setParameter('ativo', true);
 
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if(!empty($pesquisarAmigos)) {
+            $q
+                ->join('a.dadosPessoais', 'dadosPessoais')
+                ->where(
+                    $q->expr()->orX(
+                        $q->expr()->like('dadosPessoais.nome', ':nome'),
+                        $q->expr()->like('dadosPessoais.sobrenome', ':sobrenome')
+                    )
+                )
+                ->andWhere('a.ativo = :ativo')
+                ->setParameter('ativo', true)
+                ->setParameter('nome', '%' . $pesquisarAmigos . '%')
+                ->setParameter('sobrenome', '%' . $pesquisarAmigos . '%');
+        }
+
+        $q->setMaxResults($limite)
+            ->orderBy("a.dataCadastro", $ordem);
+
+        $query = $q->getQuery();
+
+        return $query->getResult();
     }
-    */
 }

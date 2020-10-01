@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AmigosController extends AbstractController
@@ -21,9 +22,12 @@ class AmigosController extends AbstractController
      * @Route("/amigos", name="amigos", methods={"GET"})
      * @Template("amigos/index.html.twig")
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = $this->em->getRepository(User::class)->findAll();
+        $pesquisarAmigos = $request->get('pesquisar_amigos');
+
+        $user = $this->em->getRepository(User::class)->findByAmigos($pesquisarAmigos);
+
         return [
             'user' => $user,
         ];
