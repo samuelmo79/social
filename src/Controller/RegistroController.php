@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Intl\Countries;
 
 
 class RegistroController extends AbstractController
@@ -31,6 +32,7 @@ class RegistroController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->getLocalizacao()->setPais(Countries::getName($user->getLocalizacao()->getPais()));
             $token = uniqid();
             $senhaEncriptada = $encoder->encodePassword($user, $user->getSenhaPura());
             $user->setPassword($senhaEncriptada);

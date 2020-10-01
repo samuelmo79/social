@@ -28,6 +28,7 @@ class UserType extends AbstractType
             ->add('dadosPessoais', DadosPessoaisType::class, [
                 'required' => true,
             ])
+            ->add('localizacao', LocalizacaoType::class)
         ;
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $form = $event->getForm();
