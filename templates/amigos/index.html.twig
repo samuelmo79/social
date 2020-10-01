@@ -23,15 +23,16 @@
         <div class="col-sm-12">
             <div class="card mb-4">
                 <div class="card-body">
-                    <form action="#" method="post">
+                    <form method="get" action="">
                         <div id="custom-search-input">
                             <div class="input-group">
                                 <input type="search"
                                        class="search-query form-control"
                                        placeholder="Pesquisar"
-                                       name="pesquisar_amigos">
+                                       name="pesquisar_amigos"
+                                       value="{{ app.request.get('pesquisar_amigos') }}">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="button">
+                                    <button class="btn btn-primary" type="submit">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </span>
@@ -68,7 +69,10 @@
                                     <a class="card-link" href="{{ path('amigos_perfil', {'id': amigos.id}) }}">
                                         {{ amigos.dadosPessoais.nome }} {{ amigos.dadosPessoais.sobrenome }}<br>
                                     </a>
-                                    <span class="small text-muted">{{ amigos.dataCadastro|date('d-m-Y') }}</span>
+                                    <span class="small text-muted">
+                                        <i class="fas fa-shield-alt text-secondary"></i>
+                                        {{ amigos.dataCadastro|date('Y') }}
+                                    </span>
                                 </td>
                                 <td align="left">
                                 <span class="text-muted small">
@@ -86,7 +90,9 @@
                                 </td>
                             </tr>
                         {% else %}
-                            Nenhum usuário encontrado
+                            <div class="alert alert-primary mt-4 mx-3" role="alert">
+                                Nenhum usuário encontrado
+                            </div>
                         {% endfor %}
                         </tbody>
                     </table>
