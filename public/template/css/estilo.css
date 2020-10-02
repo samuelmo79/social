@@ -1,3 +1,7 @@
+:root {
+    --light-blue: #e0efff;
+}
+
 body {
     background-color: #eeeeee;
 }
@@ -74,6 +78,16 @@ body {
 .bg-dark,
 .bg-dark > a {
     color: #ffffff !important;
+}
+
+.bg-light-blue {
+    background-color: #e0efff !important;
+}
+
+a.bg-light-blue:hover, a.bg-light-blue:focus,
+button.bg-light-blue:hover,
+button.bg-light-blue:focus {
+    background-color: #ffffff !important;
 }
 
 .btn-tool {
@@ -718,4 +732,90 @@ ul ul a {
     .profileText::before {
         top: 20px;
     }
+}
+
+/* -----------------------------------------------
+                  Notificações
+ ---------------------------------------------- */
+.dropdown-item.dropdown-notification:active, .dropdown-item.dropdown-notification.active {
+    color: #1d1e1f;
+    text-decoration: none;
+    background-color: #f7f7f9;
+}
+
+.dropdown-notification:hover .notification-read {
+    color: #34495E;
+}
+
+.dropdown-notification-all {
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #34495E;
+    color: white;
+}
+
+.dropdown-notification-all:hover {
+    background-color: #34495E;
+    color: white;
+}
+
+.notifications-container {
+    max-height: 300px;
+    overflow: auto;
+}
+
+.notification-dropdown-menu {
+    padding-bottom: 0;
+    min-width: 528px;
+}
+
+.notification-img {
+    width: 48px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.notifications-body {
+    display: inline-block;
+}
+
+.notification-texte {
+    text-align: left;
+    margin: 0;
+}
+
+.notification-read {
+    margin: 0;
+    height: 48px;
+    vertical-align: top;
+    line-height: 48px;
+    padding-left: 15px;
+    color: white;
+    float: right;
+}
+
+.notification-date {
+    text-align: left;
+    color: #2980b9;
+    margin: 0;
+}
+
+.notification-solo {
+    margin-top: 1rem;
+}
+
+.notification-unread {
+    text-decoration: none;
+    background-color: #f7f7f9;
+}
+
+.list-group-item:first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.list-group-item:last-child {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }

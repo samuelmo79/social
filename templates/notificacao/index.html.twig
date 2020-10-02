@@ -1,0 +1,47 @@
+<div class="dropdown nav-button notifications-button hidden-sm-down">
+    
+    <a class="btn btn-primary"
+       href="#"
+       id="notifications-dropdown"
+       data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false">
+        <i class="fa fa-bell"></i>
+        <span class="small"><span class="badge badge-light">4</span></span>
+    </a>
+    
+    <div class="dropdown-menu dropdown-menu-right notification-dropdown-menu" aria-labelledby="notifications-dropdown">
+        <h6 class="dropdown-header">Notificações</h6>
+        
+        <div class="notifications-container">
+            {% for notifica in notificacoes %}
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action bg-light-blue">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">
+                            {{ notifica.user.dadosPessoais.nome }} {{ notifica.user.dadosPessoais.sobrenome }}
+                        </h5>
+                        <small>{{ notifica.dataNotificacao|ago }}</small>
+                    </div>
+                    <p class="mb-1">{{ notifica.descricao}}</p>
+                </a>
+            </div>
+            {% else %}
+            <!-- Sem Notificações -->
+            <a class="dropdown-item dropdown-notification" href="#">
+                <p class="notification-solo text-center">Sem notificações</p>
+            </a>
+
+            <!-- Ver Todas as Notificações -->
+            <a class="dropdown-item dropdown-notification-all" href="{{ path('notificacao_mobile') }}">
+                Ver todas as notificações
+            </a>
+            {% endfor %}
+        </div>
+        
+        <!-- Ver Todas as Notificações -->
+        <a class="dropdown-item dropdown-notification-all" href="{{ path('notificacao_mobile') }}">
+            Ver todas as notificações
+        </a>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notificações{% endblock %}
+
+{% block body %}
+    <div class="text-muted mb-2">
+        Notificações
+    </div>
+    {% for notifica in notificacoes %}
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action bg-light-blue">
+                <div class="w-100 justify-content-between">
+                    <div class="mb-1">
+                        <div class="float-left">
+                            {% if notifica.user.avatar == null %}
+                                {% if notifica.user.dadosPessoais.sexo == 'Masculino' %}
+                                    <img class="rounded-circle img-borda-sm mr-2"
+                                         src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                         alt="Perfil" width="60">
+                                {% else %}
+                                    <img class="rounded-circle img-borda-sm mr-2"
+                                         src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                         alt="Perfil" width="60">
+                                {% endif %}
+                            {% else %}
+                                <img class="rounded-circle img-borda-sm mr-2"
+                                     src="{{ asset('imagens/perfil/' ~ notifica.user.avatar) }}"
+                                     alt="Perfil" width="60">
+                            {% endif %}
+                        </div>
+                        <div class="mt-1 pt-1">
+                            <strong>
+                            {{ notifica.user.dadosPessoais.nome }} {{ notifica.user.dadosPessoais.sobrenome }}
+                            </strong>
+                            {{ notifica.descricao}}
+                            <br>
+                            <small> Há {{ notifica.dataNotificacao|ago }}</small>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% else %}
+        <!-- Sem Notificações -->
+        <a id="notificationAucune" class="dropdown-item dropdown-notification" href="#">
+            <p class="notification-solo text-center">Sem notificações</p>
+        </a>
+        
+        <!-- Ver Todas as Notificações -->
+        <a class="dropdown-item dropdown-notification-all" href="#">
+            Ver todas as notificações
+        </a>
+    {% endfor %}
+{% endblock %}

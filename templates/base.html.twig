@@ -21,6 +21,18 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <a class="navbar-brand" href="{{ path('home') }}">Social</a>
     
+        <!-- Início Botão Notificações para Mobile -->
+        <div class="d-block d-md-none ml-auto mr-2">
+            <div class="dropdown nav-button notifications-button hidden-sm-down">
+                <a class="btn btn-primary"
+                   href="{{ path('notificacao_mobile') }}">
+                    <i class="fa fa-bell"></i>
+                    <span class="small"><span class="badge badge-light">4</span></span>
+                </a>
+            </div>
+        </div>
+        <!-- Fim Botão Notificações para Mobile -->
+    
         <button type="button" id="sidebarCollapse" class="btn btn-light d-block d-md-none">
             <i class="fas fa-align-left"></i>
         </button>
@@ -43,6 +55,13 @@
                     </a>
                 </li>
             </ul>
+            
+            <!-- Início Notificações -->
+            <div class="d-sm-none d-md-block">
+                {{ render(controller('App\\Controller\\NotificacaoController::index')) }}
+            </div>
+            <!-- Fim Notificações -->
+            
             <div class="btn-group ml-2">
                 <span type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {% if app.user.avatar == null %}
