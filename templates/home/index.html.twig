@@ -85,11 +85,30 @@
                                          alt="Perfil" width="32">
                                 {% endif %}
                                 <span class="username">
+                                    <div class="dropdown float-right">
+                                        <button class="btn btn-tool"
+                                                type="button"
+                                                id="dropdownMenuButton"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="#">
+                                                <span class="text-muted">
+                                                    <i class="fa fa-edit mr-3"></i>Editar
+                                                </span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <span class="text-danger">
+                                                <i class="fa fa-trash mr-3"></i> Deletar
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
                                     <a href="{{ path('amigos_perfil', {'id': postagem.autor.id}) }}" class="card-link">
                                         {{ postagem.autor.dadosPessoais.nome }} {{ postagem.autor.dadosPessoais.sobrenome }}
-                                    </a>
-                                    <a href="#" class="float-right btn-tool">
-                                        <i class="fas fa-ellipsis-v"></i>
                                     </a>
                                 </span>
                                 <span class="description">
