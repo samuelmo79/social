@@ -30,9 +30,10 @@
                     </div>
                 </a>
             </div>
-            
+
             <!-- Início Postagem Modal -->
-            <div class="modal fade" id="post" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="post" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header bg-primary">
@@ -60,7 +61,7 @@
                 </div>
             </div>
             <!-- Fim Postagem Modal -->
-            
+
             <!-- Início Post -->
             {% for postagem in post %}
                 <div class="card mb-3">
@@ -111,16 +112,55 @@
                             {% endif %}
                             <p>
                                 <!-- TODO Curtidas -->
-{#                                <button type="button" class="btn btn-light btn-sm">#}
-{#                                    <i class="far fa-heart"></i> <span class="badge badge-light">4</span>#}
-{#                                </button>#}
-                                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#staticBackdrop_{{ postagem.id }}">
-                                    <i class="far fa-comments mr-1"></i> Comentários <span class="badge badge-light">{{ postagem.getTotalComentarios }}</span>
+                                {#                                <button type="button" class="btn btn-light btn-sm">#}
+                                {#                                    <i class="far fa-heart"></i> <span class="badge badge-light">4</span>#}
+                                {#                                </button>#}
+                                <button type="button" class="btn btn-light" data-toggle="modal"
+                                        data-target="#staticBackdrop_{{ postagem.id }}">
+                                    <i class="far fa-comments mr-1"></i> Comentários <span
+                                            class="badge badge-light">{{ postagem.getTotalComentarios }}</span>
                                 </button>
                             </p>
-                            
+                            <!-- Início Comentários 1 -->
+                            <!-- TODO -->
+                            <span class="h7 text-muted">Últimos comentários</span>
+                            {% for comentarios in postagem.postComentarios|reverse|sort((a, b) => b.dataComentario <=> a.dataComentario) %}
+                                {% if loop.index <= 2 %}
+                                    <div class="card-footer card-comments">
+                                        <div class="card-comment">
+                                            {% if postagem.autor.avatar == null %}
+                                                {% if postagem.autor.dadosPessoais.sexo == 'Masculino' %}
+                                                    <img class="rounded-circle img-borda-sm"
+                                                         src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                         alt="Perfil">
+                                                {% else %}
+                                                    <img class="rounded-circle img-borda-sm"
+                                                         src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                         alt="Perfil">
+                                                {% endif %}
+                                            {% else %}
+                                                <img class="rounded-circle img-borda-sm"
+                                                     src="{{ asset('imagens/perfil/' ~ postagem.autor.avatar) }}"
+                                                     alt="Perfil">
+                                            {% endif %}
+
+                                            <div class="comment-text">
+                                        <span class="username">
+                                          {{ comentarios.user.dadosPessoais.nome }}
+                                          <span class="text-muted float-right">8:03 PM Today</span>
+                                        </span>
+                                                {{ comentarios.comentario }}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <!-- Fim Comentários 1 -->
+
                             <!-- Início Modal de Comentários -->
-                            <div class="modal fade" id="staticBackdrop_{{ postagem.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="staticBackdrop_{{ postagem.id }}" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-scrollable modal-xl">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -154,7 +194,8 @@
                                                                 {% endif %}
                                                             </div>
                                                             <div class="profileText">
-                                                                <a href="{{ path('amigos_perfil', {'id': comentarios.user.id}) }}" class="card-link">
+                                                                <a href="{{ path('amigos_perfil', {'id': comentarios.user.id}) }}"
+                                                                   class="card-link">
                                                                     {{ comentarios.user.dadosPessoais.nome }} {{ comentarios.user.dadosPessoais.sobrenome }}
                                                                 </a>
                                                                 <div class="badge badge-pill badge-primary text-white small float-right">
@@ -175,29 +216,31 @@
                                         </div>
                                         <div class="modal-footer">
                                             <div class="card-body">
-                                            <form method="post" action="{{ path('cadastra_comentario') }}">
-                                                <div class="form-group required">
-                                                    <div class="controls form-group d-flex w-100 ">
-                                                        <input class="input-md textinput textInput form-control"
-                                                               id="post_comentario_comentario"
-                                                               placeholder="Escreva um comentário"
-                                                               type="text"
-                                                               required="required"
-                                                               name="comentario" />
-                                                        <button type="submit" class="btn btn-primary border-radius-0  m-0 w-25">
-                                                            <span class="text">{{ button_label|default('Comentar') }}</span>
-                                                        </button>
+                                                <form method="post" action="{{ path('cadastra_comentario') }}">
+                                                    <div class="form-group required">
+                                                        <div class="controls form-group d-flex w-100 ">
+                                                            <input class="input-md textinput textInput form-control"
+                                                                   id="post_comentario_comentario"
+                                                                   placeholder="Escreva um comentário"
+                                                                   type="text"
+                                                                   required="required"
+                                                                   name="comentario"/>
+                                                            <button type="submit"
+                                                                    class="btn btn-primary border-radius-0  m-0 w-25">
+                                                                <span class="text">{{ button_label|default('Comentar') }}</span>
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <input type="hidden" id="postId" name="postId" value="{{ postagem.id }}">
-                                            </form>
+                                                    <input type="hidden" id="postId" name="postId"
+                                                           value="{{ postagem.id }}">
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- FIM Modal de Comentários -->
-                            
+
                         </div>
                     </div>
                 </div>
@@ -261,8 +304,9 @@
 
 {% block javascripts %}
     <script>
-        $('.custom-file-input').on('change',function(){
-            var fileName = this.files[0].name; ;
+        $('.custom-file-input').on('change', function () {
+            var fileName = this.files[0].name;
+            ;
             $(this).next('.custom-file-label').html(fileName);
         });
     </script>
