@@ -123,7 +123,9 @@
                             </p>
                             <!-- Início Comentários 1 -->
                             <!-- TODO -->
-                            <span class="h7 text-muted">Últimos comentários</span>
+                            {% if postagem.postComentarios is not empty %}
+                                <span class="h7 text-muted">Últimos comentários</span>
+                            {% endif %}
                             {% for comentarios in postagem.postComentarios|reverse|sort((a, b) => b.dataComentario <=> a.dataComentario) %}
                                 {% if loop.index <= 2 %}
                                     <div class="card-footer card-comments">
