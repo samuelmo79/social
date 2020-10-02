@@ -151,7 +151,7 @@
                                           {{ comentarios.user.dadosPessoais.nome }}
                                           <span class="text-muted float-right">8:03 PM Today</span>
                                         </span>
-                                                {{ comentarios.comentario }}
+                                                {{ comentarios.comentario|length < 110 ? comentarios.comentario : comentarios.comentario|slice(0, 110) ~ '...' }}
                                             </div>
 
                                         </div>
