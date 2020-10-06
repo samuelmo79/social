@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -38,9 +39,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findByAmigos($pesquisarAmigos = null, $limite = 16, $ordem = "desc")
     {
+        $subquery = $this->createQueryBuilder('sb');
+        $subquery->select('sb.id')
+            ->leftJoin('sb.solicitacaos','sol')
+        ;
+
         $q = $this->createQueryBuilder("a")
         ->where('a.ativo = :ativo')
         ->setParameter('ativo', true);
+
+        $q->andWhere(
+            $q->expr()->notIn('a.id', $subquery->getDQL())
+        );
 
         if(!empty($pesquisarAmigos)) {
             $q
@@ -61,7 +71,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->orderBy("a.dataCadastro", $ordem);
 
         $query = $q->getQuery();
-
+        dump($query->getSQL());
         return $query->getResult();
     }
 }
