@@ -4,11 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Solicitacao;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SolicitacaoController extends AbstractController
 {
+    protected $em;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+    }
+
     /**
      * @Route("/solicita_amizade/{id}", name="solicita_amizade")
      * @param User $solicitado
@@ -44,4 +52,16 @@ class SolicitacaoController extends AbstractController
         return $this->redirectToRoute('amigos');
     }
 
+    /**
+     * @Route("/solicitacoes", name="solicitacoes")
+     */
+    public function solicitacoes()
+    {
+        $solicitacoes = $this->em->getRepository(Solicitacao::class)
+            ->findBy(['solicitado' => $this->getUser()]);
+
+        return $this->render('solicitacao/index.html.twig', [
+            'solicitacoes' => $solicitacoes,
+        ]);
+    }
 }

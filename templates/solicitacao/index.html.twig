@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Solicitações{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-12">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <div class="card">
+                <div class="card-body table-responsive p-0">
+                    <table class="table">
+                        <tbody>
+                        {% for solicitacao in solicitacoes %}
+                            <tr>
+                                <td>
+                                    {% if solicitacao.solicitante.avatar == null %}
+                                        {% if solicitacao.solicitante.dadosPessoais.sexo == 'Masculino' %}
+                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                 alt="Perfil"
+                                                 width="50">
+                                        {% else %}
+                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                 alt="Perfil"
+                                                 width="50">
+                                        {% endif %}
+                                    {% else %}
+                                        <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                             src="{{ asset('imagens/perfil/' ~ solicitacao.solicitante.avatar) }}"
+                                             alt="Perfil"
+                                             width="50">
+                                    {% endif %}
+                                    <a class="card-link" href="{{ path('amigos_perfil', {'id': solicitacao.solicitante.id}) }}">
+                                        {{ solicitacao.solicitante.dadosPessoais.nome }} {{ solicitacao.solicitante.dadosPessoais.sobrenome }}<br>
+                                    </a>
+                                    <span class="small text-muted">
+                                        <i class="fas fa-shield-alt text-secondary"></i>
+                                        {{ solicitacao.solicitante.dataCadastro|date('Y') }}
+                                    </span>
+                                </td>
+                                <td align="left">
+                                <span class="text-muted small">
+                                    {% if solicitacao.solicitante.localizacao == null %}
+                                        <div class="text-danger">
+                                          Localização não informada
+                                        </div>
+                                    {% else %}
+                                        {{ solicitacao.solicitante.localizacao.bairro }}, {{ solicitacao.solicitante.localizacao.cidade }} - {{ solicitacao.solicitante.localizacao.pais }}
+                                    {% endif %}
+                                </span>
+                                </td>
+                                <td style="width: 28%;">
+                                    <a href="#" class="btn btn-primary btn-sm">Confirmar</a>
+                                    <a href="#" class="btn btn-danger btn-sm">Excluir</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <div class="alert alert-primary mt-4 mx-3" role="alert">
+                                Nenhum usuário encontrado
+                            </div>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
