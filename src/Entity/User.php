@@ -141,6 +141,17 @@ class User implements UserInterface, \Serializable
      */
     private $tokenResetPassword;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Solicitacao", mappedBy="solicitante", orphanRemoval=true)
+     */
+    private $solicitacaos;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Solicitacao", mappedBy="solicitado", orphanRemoval=true)
+     */
+    private $solicitados;
+
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -149,6 +160,7 @@ class User implements UserInterface, \Serializable
         $this->eventos = new ArrayCollection();
         $this->postComentarios = new ArrayCollection();
         $this->notificacaos = new ArrayCollection();
+        $this->solicitacaos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -615,4 +627,44 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    /**
+     * @return Collection|Solicitacao[]
+     */
+    public function getSolicitacaos(): Collection
+    {
+        return $this->solicitacaos;
+    }
+
+    /**
+     * @return Collection|Solicitacao[]
+     */
+    public function getSolicitados(): Collection
+    {
+        return $this->solicitados;
+    }
+
+    public function addSolicitacao(Solicitacao $solicitacao): self
+    {
+        if (!$this->solicitacaos->contains($solicitacao)) {
+            $this->solicitacaos[] = $solicitacao;
+            $solicitacao->setSolicitante($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSolicitacao(Solicitacao $solicitacao): self
+    {
+        if ($this->solicitacaos->contains($solicitacao)) {
+            $this->solicitacaos->removeElement($solicitacao);
+            // set the owning side to null (unless already changed)
+            if ($solicitacao->getSolicitante() === $this) {
+                $solicitacao->setSolicitante(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

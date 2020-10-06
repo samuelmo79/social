@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -36,11 +37,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    public function findByAmigos($pesquisarAmigos = null, $limite = 16, $ordem = "desc")
+    public function findByAmigos($pesquisarAmigos = null, $id)
     {
+        $subquery = $this->createQueryBuilder('sb');
+        $subquery->select('sb.id')
+            ->join('sb.solicitados','sol')
+        ;
+
         $q = $this->createQueryBuilder("a")
-        ->where('a.ativo = :ativo')
-        ->setParameter('ativo', true);
+            ->where('a.id <> :id')
+            ->andWhere('a.ativo = :ativo')
+            ->setParameter('ativo', true)
+            ->setParameter('id', $id);
+
+        $q->andWhere(
+            $q->expr()->notIn('a.id', $subquery->getDQL())
+        );
 
         if(!empty($pesquisarAmigos)) {
             $q
@@ -51,17 +63,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                         $q->expr()->like('dadosPessoais.sobrenome', ':sobrenome')
                     )
                 )
+                ->andWhere('a.id <> :id')
                 ->andWhere('a.ativo = :ativo')
+                ->setParameter('id', $id)
                 ->setParameter('ativo', true)
                 ->setParameter('nome', '%' . $pesquisarAmigos . '%')
                 ->setParameter('sobrenome', '%' . $pesquisarAmigos . '%');
         }
 
-        $q->setMaxResults($limite)
-            ->orderBy("a.dataCadastro", $ordem);
+        $q->orderBy("a.dataCadastro", 'DESC');
 
         $query = $q->getQuery();
-
+        dump($query->getSQL());
         return $query->getResult();
     }
 }
