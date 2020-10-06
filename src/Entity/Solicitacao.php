@@ -8,6 +8,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SolicitacaoRepository")
+ * @UniqueEntity(
+ *     fields={"solicitante", "solicitado", "tipo"},
+ *     message="Ja foi realizada solicitacao!"
+ * )
+ * @ORM\Table(name="solicitacao",uniqueConstraints={
+ *      @ORM\UniqueConstraint(
+ *          name="solicitante_solicitado_tipo",
+ *          columns={"solicitante_id", "solicitado_id", "tipo"}
+ * )}
+ * )
  */
 class Solicitacao
 {
