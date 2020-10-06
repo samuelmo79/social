@@ -23,22 +23,29 @@
         <div class="col-sm-12">
             <div class="card mb-4">
                 <div class="card-body">
-                    <form method="get" action="">
-                        <div id="custom-search-input">
-                            <div class="input-group">
-                                <input type="search"
-                                       class="search-query form-control"
-                                       placeholder="Pesquisar"
-                                       name="pesquisar_amigos"
-                                       value="{{ app.request.get('pesquisar_amigos') }}">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="submit">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <form class="card card-sm" method="get" action="">
+                                <div class="card-body row no-gutters align-items-center">
+                                    <div class="col-auto">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                    <div class="col">
+                                        <input class="form-control form-control-sm form-control-borderless"
+                                               type="search"
+                                               placeholder="Pesquisar"
+                                               name="pesquisar_amigos"
+                                               value="{{ app.request.get('pesquisar_amigos') }}">
+                                    </div>
+                                    <div class="col-auto">
+                                        <button class="btn btn-sm btn-success" type="submit">
+                                            Pesquisar
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
             <div class="card">

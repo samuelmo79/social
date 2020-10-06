@@ -623,42 +623,14 @@ ul ul a {
 /* -----------------------------------------------
                  Form Search Amigos
  ---------------------------------------------- */
-#custom-search-input {
-    margin: 0;
-    padding: 0;
+.form-control-borderless {
+    border: none;
 }
 
-#custom-search-input .search-query {
-    padding-right: 3px;
-    padding-right: 4px \9;
-    padding-left: 15px;
-    padding-left: 4px \9;
-    /* IE7-8 doesn't have border-radius, so don't indent the padding */
-
-    margin-bottom: 0;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-}
-
-#custom-search-input button {
-    border: 0;
-    background: none;
-    /** belows styles are working good */
-    padding: 5px 0px;
-    margin-top: 2px;
-    position: relative;
-    left: -30px;
-    /* IE7-8 doesn't have border-radius, so don't indent the padding */
-    margin-bottom: 0;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    color:#4682B4;
-}
-
-.search-query:focus + button {
-    z-index: 3;
+.form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
 }
 
 /* -----------------------------------------------

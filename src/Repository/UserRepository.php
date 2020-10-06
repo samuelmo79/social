@@ -36,11 +36,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    public function findByAmigos($pesquisarAmigos = null, $limite = 16, $ordem = "desc")
+    public function findByAmigos($pesquisarAmigos = null, $id)
     {
-        $q = $this->createQueryBuilder("a")
-        ->where('a.ativo = :ativo')
-        ->setParameter('ativo', true);
+        $q = $this->createQueryBuilder('a')
+            ->where('a.id <> :id')
+            ->andWhere('a.ativo = :ativo')
+            ->setParameter('id', $id)
+            ->setParameter('ativo', true)
+        ;
 
         if(!empty($pesquisarAmigos)) {
             $q
@@ -51,14 +54,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                         $q->expr()->like('dadosPessoais.sobrenome', ':sobrenome')
                     )
                 )
+                ->andWhere('a.id <> :id')
                 ->andWhere('a.ativo = :ativo')
+                ->setParameter('id', $id)
                 ->setParameter('ativo', true)
                 ->setParameter('nome', '%' . $pesquisarAmigos . '%')
                 ->setParameter('sobrenome', '%' . $pesquisarAmigos . '%');
         }
 
-        $q->setMaxResults($limite)
-            ->orderBy("a.dataCadastro", $ordem);
+        $q->orderBy("a.dataCadastro", 'DESC');
 
         $query = $q->getQuery();
 

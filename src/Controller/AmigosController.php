@@ -26,7 +26,8 @@ class AmigosController extends AbstractController
     {
         $pesquisarAmigos = $request->get('pesquisar_amigos');
 
-        $user = $this->em->getRepository(User::class)->findByAmigos($pesquisarAmigos);
+        $user = $this->em->getRepository(User::class)
+            ->findByAmigos($pesquisarAmigos, $this->getUser());
 
         return [
             'user' => $user,
