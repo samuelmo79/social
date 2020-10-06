@@ -51,7 +51,7 @@ class Solicitacao
     private $dataSolicitacao;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="solicitados")
      * @ORM\JoinColumn(nullable=false)
      */
     private $solicitado;

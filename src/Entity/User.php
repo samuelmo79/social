@@ -146,6 +146,11 @@ class User implements UserInterface, \Serializable
      */
     private $solicitacaos;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Solicitacao", mappedBy="solicitado", orphanRemoval=true)
+     */
+    private $solicitados;
+
 
     public function __construct()
     {
@@ -629,6 +634,14 @@ class User implements UserInterface, \Serializable
     public function getSolicitacaos(): Collection
     {
         return $this->solicitacaos;
+    }
+
+    /**
+     * @return Collection|Solicitacao[]
+     */
+    public function getSolicitados(): Collection
+    {
+        return $this->solicitados;
     }
 
     public function addSolicitacao(Solicitacao $solicitacao): self
