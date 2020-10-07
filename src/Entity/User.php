@@ -667,4 +667,15 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    public function getTotalSolicitacoes()
+    {
+        $solicitados = $this->solicitados->toArray();
+        $valor = 1;
+        $solicitacoesPendentes = array_filter($solicitados, function ($solicitados) use ($valor) {
+            return $solicitados->getStatus() == $valor;
+        });
+
+        return count($solicitacoesPendentes);
+    }
+
 }
