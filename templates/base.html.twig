@@ -44,7 +44,7 @@
                 </li>
                 <li class="navlink-item {% if app.request.attributes.get('_route') == 'solicitacoes' %} active {% endif %}">
                     <a class="navlink-link" href="{{ path('solicitacoes') }}">
-                        Solicitações <span class="badge badge-light">4</span>
+                        Solicitações <span class="badge badge-light">{{ app.user.totalSolicitacoes }}</span>
                     </a>
                 </li>
             </ul>
