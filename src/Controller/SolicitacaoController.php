@@ -66,4 +66,22 @@ class SolicitacaoController extends AbstractController
             'solicitacoes' => $solicitacoes,
         ]);
     }
+
+    /**
+     * @Route("/excluir_solicitacao/{id}", name="deleta_solicitacao")
+     * @param Solicitacao $solicitacao
+     */
+    public function excluirSolicitacao(Solicitacao $solicitacao)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        try {
+            $entityManager->remove($solicitacao);
+            $entityManager->flush();
+            $this->addFlash('success','Solicitação removida com sucesso!');
+        } catch (\Throwable $e) {
+            $this->addFlash('danger','Essa solicitação não pode ser atendida!');
+        }
+        return $this->redirectToRoute('solicitacoes');
+    }
 }
