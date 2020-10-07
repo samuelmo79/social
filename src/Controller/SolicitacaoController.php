@@ -11,6 +11,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/solicitacao")
+ */
 class SolicitacaoController extends AbstractController
 {
     protected $em;
@@ -21,7 +24,7 @@ class SolicitacaoController extends AbstractController
     }
 
     /**
-     * @Route("/solicita_amizade/{id}", name="solicita_amizade")
+     * @Route("/amizade/{id}", name="solicita_amizade")
      * @param User $solicitado
      * @return \Symfony\Component\HttpFoundation\Response
      */
