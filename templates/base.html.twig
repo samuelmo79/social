@@ -42,6 +42,11 @@
                         Amigos
                     </a>
                 </li>
+                <li class="navlink-item {% if app.request.attributes.get('_route') == 'solicitacoes' %} active {% endif %}">
+                    <a class="navlink-link" href="{{ path('solicitacoes') }}">
+                        Solicitações <span class="badge badge-light">4</span>
+                    </a>
+                </li>
             </ul>
             <div class="btn-group ml-2">
                 <span type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
