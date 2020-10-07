@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Solicitacao;
 use App\Entity\User;
+use App\Enum\StatusSolicitacaoEnum;
+use App\Enum\TipoSolicitacaoEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,8 +40,8 @@ class SolicitacaoController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $solicitacao->setSolicitado($solicitado);
             $solicitacao->setSolicitante($user);
-            $solicitacao->setTipo('Amizade');
-            $solicitacao->setStatus(1);
+            $solicitacao->setTipo(TipoSolicitacaoEnum::AMIZADE);
+            $solicitacao->setStatus(StatusSolicitacaoEnum::PENDENTE);
             $entityManager->persist($solicitacao);
             $entityManager->flush();
             $this->addFlash('success', 'Solicitação enviada !');
@@ -58,7 +60,7 @@ class SolicitacaoController extends AbstractController
     public function solicitacoes()
     {
         $solicitacoes = $this->em->getRepository(Solicitacao::class)
-            ->findBy(['solicitado' => $this->getUser(), 'status' => 1]);
+            ->findBy(['solicitado' => $this->getUser(), 'status' => StatusSolicitacaoEnum::PENDENTE]);
 
         return $this->render('solicitacao/index.html.twig', [
             'solicitacoes' => $solicitacoes,
