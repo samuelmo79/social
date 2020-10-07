@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Enum\StatusSolicitacaoEnum;
 use App\Enum\TipoSolicitacaoEnum;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -69,7 +70,9 @@ class SolicitacaoController extends AbstractController
 
     /**
      * @Route("/excluir_solicitacao/{id}", name="deleta_solicitacao")
+     * @Security("user.getId() == solicitacao.getSolicitado().getId()")
      * @param Solicitacao $solicitacao
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function excluirSolicitacao(Solicitacao $solicitacao)
     {
