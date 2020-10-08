@@ -41,6 +41,7 @@ class AmizadeController extends AbstractController
 
         $amizadeSolicitante = new Amizade();
         $amizadeSolicitado = new Amizade();
+        $solicitacao->setStatus(StatusSolicitacaoEnum::ACEITO);
 
         $amizadeSolicitante->setUsuario($solicitacao->getSolicitante());
         $amizadeSolicitante->setAmigo($solicitacao->getSolicitado());
@@ -52,17 +53,11 @@ class AmizadeController extends AbstractController
 
         $entityManager->persist($amizadeSolicitado);
         $entityManager->persist($amizadeSolicitante);
+        $entityManager->persist($solicitacao);
         $entityManager->flush();
 
-        dd($amizadeSolicitante, $amizadeSolicitado);
-
-        try {
-
-        } catch (Throwable $exception) {
-            die();
-        }
-
-
+        $this->addFlash('success','Solicitação de amizade aceita!');
+        return $this->redirectToRoute('solicitacoes');
     }
 
 }
