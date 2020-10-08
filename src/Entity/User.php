@@ -2,9 +2,13 @@
 
 namespace App\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Serializable;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -15,7 +19,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @Vich\Uploadable
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface, Serializable
 {
     /**
      * @ORM\Id()
@@ -151,6 +155,11 @@ class User implements UserInterface, \Serializable
      */
     private $solicitados;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Amizade", mappedBy="usuario", orphanRemoval=true)
+     */
+    private $amizades;
+
 
     public function __construct()
     {
@@ -161,6 +170,7 @@ class User implements UserInterface, \Serializable
         $this->postComentarios = new ArrayCollection();
         $this->notificacaos = new ArrayCollection();
         $this->solicitacaos = new ArrayCollection();
+        $this->amizades = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -314,7 +324,7 @@ class User implements UserInterface, \Serializable
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
      *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     * @param File|UploadedFile|null $imageFile
      */
     public function setImageFile(?File $imageFile = null): void
     {
@@ -323,7 +333,7 @@ class User implements UserInterface, \Serializable
         if (null !== $imageFile) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->dataAtualizacao = new \DateTimeImmutable();
+            $this->dataAtualizacao = new DateTimeImmutable();
         }
     }
 
@@ -344,36 +354,36 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getDataCadastro(): ?\DateTimeInterface
+    public function getDataCadastro(): ?DateTimeInterface
     {
         return $this->dataCadastro;
     }
 
-    public function setDataCadastro(\DateTimeInterface $dataCadastro): self
+    public function setDataCadastro(DateTimeInterface $dataCadastro): self
     {
         $this->dataCadastro = $dataCadastro;
 
         return $this;
     }
 
-    public function getDataAtualizacao(): ?\DateTimeInterface
+    public function getDataAtualizacao(): ?DateTimeInterface
     {
         return $this->dataAtualizacao;
     }
 
-    public function setDataAtualizacao(?\DateTimeInterface $dataAtualizacao): self
+    public function setDataAtualizacao(?DateTimeInterface $dataAtualizacao): self
     {
         $this->dataAtualizacao = $dataAtualizacao;
 
         return $this;
     }
 
-    public function getDataUltimoAcesso(): ?\DateTimeInterface
+    public function getDataUltimoAcesso(): ?DateTimeInterface
     {
         return $this->dataUltimoAcesso;
     }
 
-    public function setDataUltimoAcesso(?\DateTimeInterface $dataUltimoAcesso): self
+    public function setDataUltimoAcesso(?DateTimeInterface $dataUltimoAcesso): self
     {
         $this->dataUltimoAcesso = $dataUltimoAcesso;
 
@@ -676,6 +686,37 @@ class User implements UserInterface, \Serializable
         });
 
         return count($solicitacoesPendentes);
+    }
+
+    /**
+     * @return Collection|Amizade[]
+     */
+    public function getAmizades(): Collection
+    {
+        return $this->amizades;
+    }
+
+    public function addAmizade(Amizade $amizade): self
+    {
+        if (!$this->amizades->contains($amizade)) {
+            $this->amizades[] = $amizade;
+            $amizade->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAmizade(Amizade $amizade): self
+    {
+        if ($this->amizades->contains($amizade)) {
+            $this->amizades->removeElement($amizade);
+            // set the owning side to null (unless already changed)
+            if ($amizade->getUsuario() === $this) {
+                $amizade->setUsuario(null);
+            }
+        }
+
+        return $this;
     }
 
 }
