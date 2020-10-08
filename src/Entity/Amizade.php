@@ -5,9 +5,20 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AmizadeRepository")
+ * @UniqueEntity(
+ *     fields={"usuario", "amigo"},
+ *     message="Esse usuário já possui esse amigo"
+ * )
+ * @ORM\Table(name="amizade",uniqueConstraints={
+ *      @ORM\UniqueConstraint(
+ *          name="usuario_amigo",
+ *          columns={"usuario_id", "amigo_id"}
+ * )}
+ * )
  */
 class Amizade
 {
