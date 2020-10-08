@@ -60,7 +60,7 @@
                                 </span>
                                 </td>
                                 <td style="width: 28%;">
-                                    <a href="#" class="btn btn-primary btn-sm">Confirmar</a>
+                                    <a href="{{ path('aceita_solicitacao', {'id': solicitacao.id}) }}" class="btn btn-primary btn-sm">Confirmar</a>
                                     <a href="{{ path('deleta_solicitacao', {'id': solicitacao.id}) }}" class="btn btn-danger btn-sm">Excluir</a>
                                 </td>
                             </tr>
