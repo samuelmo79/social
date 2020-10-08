@@ -7,9 +7,13 @@ use App\Entity\User;
 use App\Enum\StatusSolicitacaoEnum;
 use App\Enum\TipoSolicitacaoEnum;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/solicitacao")
+ */
 class SolicitacaoController extends AbstractController
 {
     protected $em;
@@ -20,7 +24,7 @@ class SolicitacaoController extends AbstractController
     }
 
     /**
-     * @Route("/solicita_amizade/{id}", name="solicita_amizade")
+     * @Route("/amizade/{id}", name="solicita_amizade")
      * @param User $solicitado
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -65,5 +69,25 @@ class SolicitacaoController extends AbstractController
         return $this->render('solicitacao/index.html.twig', [
             'solicitacoes' => $solicitacoes,
         ]);
+    }
+
+    /**
+     * @Route("/excluir_solicitacao/{id}", name="deleta_solicitacao")
+     * @Security("user.getId() == solicitacao.getSolicitado().getId()")
+     * @param Solicitacao $solicitacao
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function excluirSolicitacao(Solicitacao $solicitacao)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        try {
+            $entityManager->remove($solicitacao);
+            $entityManager->flush();
+            $this->addFlash('success','Solicitação removida com sucesso!');
+        } catch (\Throwable $e) {
+            $this->addFlash('danger','Essa solicitação não pode ser atendida!');
+        }
+        return $this->redirectToRoute('solicitacoes');
     }
 }
