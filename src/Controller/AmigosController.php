@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Solicitacao;
 use App\Entity\User;
+use App\Enum\TipoSolicitacaoEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AmigosController extends AbstractController
@@ -40,12 +43,25 @@ class AmigosController extends AbstractController
 
     /**
      * @Route("/amigos/{id}", name="amigos_perfil", methods={"GET"})
+     * @param User $user
+     * @return Response
      */
     public function perfilPublico(User $user)
     {
+        /** @var User $usuario */
+        $usuarioLogado = $this->getUser();
+        $solicitacao = $this->em->getRepository(Solicitacao::class)->findOneBy([
+            'solicitado' => $user,
+            'solicitante' => $usuarioLogado,
+            'tipo' => TipoSolicitacaoEnum::AMIZADE
+        ]);
+        dump($user, $usuarioLogado, $solicitacao);
+
+
         return $this->render('amigos/amigoPerfil.html.twig', [
             'controller_name' => 'RecadosController',
             'user' => $user,
+            'solicitacao' => $solicitacao
         ]);
     }
 }

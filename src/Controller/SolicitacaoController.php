@@ -9,7 +9,11 @@ use App\Enum\TipoSolicitacaoEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 /**
  * @Route("/solicitacao")
@@ -26,9 +30,10 @@ class SolicitacaoController extends AbstractController
     /**
      * @Route("/amizade/{id}", name="solicita_amizade")
      * @param User $solicitado
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @return Response
      */
-    public function index(User $solicitado)
+    public function index(User $solicitado, Request $request)
     {
         $solicitacao = new Solicitacao();
 
@@ -39,6 +44,8 @@ class SolicitacaoController extends AbstractController
             $this->addFlash('warning', 'Não é possível enviar uma solicitação de amizade para si !');
             return $this->redirectToRoute('amigos');
         }
+        dd($request->attributes->get('_route'));
+
 
         try {
             $entityManager = $this->getDoctrine()->getManager();
@@ -50,7 +57,7 @@ class SolicitacaoController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'Solicitação enviada !');
 
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->addFlash('danger', 'Já foi enviada solicitação para esse usuário !');
             return $this->redirectToRoute('amigos');
         }
@@ -75,7 +82,7 @@ class SolicitacaoController extends AbstractController
      * @Route("/excluir_solicitacao/{id}", name="deleta_solicitacao")
      * @Security("user.getId() == solicitacao.getSolicitado().getId()")
      * @param Solicitacao $solicitacao
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function excluirSolicitacao(Solicitacao $solicitacao)
     {
@@ -85,7 +92,7 @@ class SolicitacaoController extends AbstractController
             $entityManager->remove($solicitacao);
             $entityManager->flush();
             $this->addFlash('success','Solicitação removida com sucesso!');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->addFlash('danger','Essa solicitação não pode ser atendida!');
         }
         return $this->redirectToRoute('solicitacoes');

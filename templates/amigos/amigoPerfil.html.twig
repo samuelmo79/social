@@ -45,11 +45,13 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <button type="button" class="btn btn-light btn-sm float-right ml-2" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
+                    <button type="button" class="btn btn-light btn-sm float-right ml-2" data-toggle="modal"
+                            data-target="#exampleModal" data-whatever="@mdo">
                         Deixar recado
                     </button>
-                    
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary">
@@ -65,14 +67,21 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                    </button>
                                     <button type="button" class="btn btn-primary">Enviar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="btn-group float-right" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-light btn-sm">Solicitar amizade</button>
+                        {% if solicitacao is null %}
+                            <a href="{{ path('solicita_amizade', {'id': user.id }) }}" class="btn btn-light btn-sm"><i class="fa fa-user-plus"></i> Enviar solicitação</a>
+                        {% elseif solicitacao.status == 1 and solicitacao.tipo == 'Amizade' %}
+                            <a href="#" class="btn btn-light btn-sm badge-success"><i class="fa fa-check"></i> Solicitação enviada</a>
+                        {% elseif solicitacao.status == 2 and solicitacao.tipo == 'Amizade' %}
+                            <a href="#" class="btn btn-light btn-sm"><i class="fa fa-user-friends"></i> Amigo</a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="card-footer">
@@ -107,7 +116,8 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="tab-content" id="pills-tabContent">
-                                <div class="tab-pane fade show active" id="pills-sobre" role="tabpanel" aria-labelledby="pills-sobre-tab">
+                                <div class="tab-pane fade show active" id="pills-sobre" role="tabpanel"
+                                     aria-labelledby="pills-sobre-tab">
                                     <h3 class="card-title">
                                         Informações básicas
                                     </h3>
@@ -115,24 +125,30 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Nome</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="{{ user.dadosPessoais.nome }} {{ user.dadosPessoais.sobrenome }}" disabled>
+                                                <input type="text" class="form-control"
+                                                       value="{{ user.dadosPessoais.nome }} {{ user.dadosPessoais.sobrenome }}"
+                                                       disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Data nascimento</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control"  value="{{ user.dadosPessoais.dataNascimento|date('d-m-Y') }}" disabled>
+                                                <input type="text" class="form-control"
+                                                       value="{{ user.dadosPessoais.dataNascimento|date('d-m-Y') }}"
+                                                       disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label">Sexo</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control"  value="{{ user.dadosPessoais.sexo }}" disabled>
+                                                <input type="text" class="form-control"
+                                                       value="{{ user.dadosPessoais.sexo }}" disabled>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="pills-localizacao" role="tabpanel" aria-labelledby="pills-localizacao-tab">
+                                <div class="tab-pane fade" id="pills-localizacao" role="tabpanel"
+                                     aria-labelledby="pills-localizacao-tab">
                                     <h3 class="card-title">
                                         Localização
                                     </h3>
@@ -142,30 +158,34 @@
                                                 Localização não informada
                                             </div>
                                         {% else %}
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">Bairro</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="{{ user.localizacao.bairro }}" disabled>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Bairro</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control"
+                                                           value="{{ user.localizacao.bairro }}" disabled>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">Cidade</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control"  value="{{ user.localizacao.cidade }}" disabled>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Cidade</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control"
+                                                           value="{{ user.localizacao.cidade }}" disabled>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">Estado</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control"  value="{{ user.localizacao.estado }}" disabled>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">Estado</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control"
+                                                           value="{{ user.localizacao.estado }}" disabled>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">País</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control"  value="{{ user.localizacao.pais }}" disabled>
+                                            <div class="form-group row">
+                                                <label class="col-sm-3 col-form-label">País</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control"
+                                                           value="{{ user.localizacao.pais }}" disabled>
+                                                </div>
                                             </div>
-                                        </div>
                                         {% endif %}
                                     </div>
                                 </div>
