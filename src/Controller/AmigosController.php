@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Amizade;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -46,6 +47,18 @@ class AmigosController extends AbstractController
         return $this->render('amigos/amigoPerfil.html.twig', [
             'controller_name' => 'RecadosController',
             'user' => $user,
+        ]);
+    }
+
+    /**
+     * @Route("/meus-amigos", name="meus_amigos")
+     */
+    public function meusAmigos()
+    {
+        $meusAmigos = $this->em->getRepository(Amizade::class)->findBy(['usuario' => $this->getUser()]);
+
+        return $this->render('amigos/meusAmigos.html.twig', [
+            'meusAmigos' => $meusAmigos,
         ]);
     }
 }
