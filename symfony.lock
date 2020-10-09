@@ -123,6 +123,9 @@
     "knplabs/knp-time-bundle": {
         "version": "v1.13.0"
     },
+    "mervick/emojionearea": {
+        "version": "v3.4.2"
+    },
     "monolog/monolog": {
         "version": "2.0.2"
     },
