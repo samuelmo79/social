@@ -2,6 +2,10 @@
 
 {% block title %}Início{% endblock %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('emoji/css/emojionearea.css') }}">
+{% endblock %}
+
 {% block body %}
     <div class="row mb-3">
         <div class="col-md-8">
@@ -239,21 +243,20 @@
                                             <div class="card-body">
                                                 <form method="post" action="{{ path('cadastra_comentario') }}">
                                                     <div class="form-group required">
-                                                        <div class="controls form-group d-flex w-100 ">
-                                                            <input class="input-md textinput textInput form-control"
-                                                                   id="post_comentario_comentario"
-                                                                   placeholder="Escreva um comentário"
-                                                                   type="text"
-                                                                   required="required"
-                                                                   name="comentario"/>
-                                                            <button type="submit"
-                                                                    class="btn btn-primary border-radius-0  m-0 w-25">
-                                                                <span class="text">{{ button_label|default('Comentar') }}</span>
-                                                            </button>
-                                                        </div>
+                                                        <input class="float-right post_comentario_comentario"
+                                                               id="post_comentario_comentario"
+                                                               placeholder="Escreva um comentário"
+                                                               type="text"
+                                                               required="required"
+                                                               name="comentario">
+                                                        <button type="submit" class="btn btn-success btn-sm mt-2">
+                                                            Enviar
+                                                        </button>
+                                                        <input type="hidden"
+                                                               id="postId"
+                                                               name="postId"
+                                                               value="{{ postagem.id }}">
                                                     </div>
-                                                    <input type="hidden" id="postId" name="postId"
-                                                           value="{{ postagem.id }}">
                                                 </form>
                                             </div>
                                         </div>
@@ -324,11 +327,25 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script type="text/javascript" src="{{ asset('emoji/js/emojionearea.js') }}"></script>
     <script>
         $('.custom-file-input').on('change', function () {
             var fileName = this.files[0].name;
             ;
             $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".post_comentario_comentario").emojioneArea({
+                recentEmojis : false,
+                inline : true,
+                tones: false,
+                search: false,
+                pickerPosition: "top",
+                filtersPosition: "bottom",
+                tonesStyle: "checkbox"
+            });
         });
     </script>
 {% endblock %}
