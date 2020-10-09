@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Entity\Amizade;
 use App\Entity\Solicitacao;
-use App\Entity\User;
 use App\Enum\StatusSolicitacaoEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -32,9 +31,6 @@ class AmizadeController extends AbstractController
     public function aceitaSolicitacaoAmizade(Solicitacao $solicitacao)
     {
         $entityManager = $this->getDoctrine()->getManager();
-
-        /* @var User $usuario */
-        $usuario = $this->getUser();
 
         $amizadeSolicitante = new Amizade();
         $amizadeSolicitado = new Amizade();
