@@ -1,22 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Amigos{% endblock %}
-
-{% block titulo %}
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Amigos</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Amigos</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-{% endblock %}
+{% block title %}Meus Amigos{% endblock %}
 
 {% block body %}
     <div class="row d-sm-none d-block">
@@ -33,26 +17,12 @@
     </div>
     <div class="row">
         <div class="col-sm-8">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <form method="get" action="">
-                        <div id="custom-search-input">
-                            <div class="input-group">
-                                <input type="search"
-                                       class="search-query form-control"
-                                       placeholder="Pesquisar"
-                                       name="pesquisar_amigos"
-                                       value="{{ app.request.get('pesquisar_amigos') }}">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="submit">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <h5 class="card-title">
+                <span class="text-primary">
+                    Meus amigos
+                </span>
+                <span class="small text-muted">({{ app.user.totalAmigos }} amigos)</span>
+            </h5>
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
                     <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
@@ -67,11 +37,11 @@
                 <div class="card-body table-responsive p-0">
                     <table class="table">
                         <tbody>
-                        {% for amigos in user %}
+                        {% for amigos in meusAmigos %}
                             <tr>
                                 <td>
-                                    {% if amigos.avatar == null %}
-                                        {% if amigos.dadosPessoais.sexo == 'Masculino' %}
+                                    {% if amigos.amigo.avatar == null %}
+                                        {% if amigos.amigo.dadosPessoais.sexo == 'Masculino' %}
                                             <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
                                                  src="{{ asset('imagens/perfil/avatar_homem.png') }}"
                                                  alt="Perfil"
@@ -84,31 +54,38 @@
                                         {% endif %}
                                     {% else %}
                                         <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
-                                             src="{{ asset('imagens/perfil/' ~ amigos.avatar) }}"
+                                             src="{{ asset('imagens/perfil/' ~ amigos.amigo.avatar) }}"
                                              alt="Perfil"
                                              width="50">
                                     {% endif %}
-                                    <a class="card-link" href="{{ path('amigos_perfil', {'id': amigos.id}) }}">
-                                        {{ amigos.dadosPessoais.nome }} {{ amigos.dadosPessoais.sobrenome }}<br>
+                                    <a class="card-link" href="{{ path('amigos_perfil', {'id': amigos.amigo.id}) }}">
+                                        {{ amigos.amigo.dadosPessoais.nome }} {{ amigos.amigo.dadosPessoais.sobrenome }}<br>
                                     </a>
                                     <span class="small text-muted">
                                         <i class="fas fa-shield-alt text-secondary"></i>
-                                        {{ amigos.dataCadastro|date('Y') }}
+                                        {{ amigos.amigo.dataCadastro|date('Y') }}
                                     </span>
                                 </td>
-                                <td align="left">
-                                <span class="text-muted small">
-                                    {% if amigos.localizacao == null %}
-                                        <div class="text-danger">
-                                          Localização não informada
-                                        </div>
-                                    {% else %}
-                                        {{ amigos.localizacao.bairro }}, {{ amigos.localizacao.cidade }} - {{ amigos.localizacao.pais }}
-                                    {% endif %}
-                                </span>
-                                </td>
                                 <td style="width: 28%;">
-                                    <a href="{{ path('solicita_amizade', {'id': amigos.id}) }}" class="btn btn-light btn-sm">Enviar solicitação</a>
+                                    <div class="dropdown mt-2 float-right">
+                                        <button class="btn btn-tool"
+                                                type="button"
+                                                data-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="#">
+                                                <span class="text-muted">
+                                                    Bloquear usuário
+                                                </span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <span class="text-danger">
+                                                    Denunciar
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         {% else %}
@@ -119,12 +96,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="my-3 mx-3">
-                    <span class="text-muted mr-2">Total de {{ user.getTotalItemCount }} registros</span>
-                    <div class="btn-group float-right">
-                        {{ knp_pagination_render(user) }}
-                    </div>
-                </div>
+{#                <div class="my-3 mx-3">#}
+{#                    <span class="text-muted mr-2">Total de {{ user.getTotalItemCount }} registros</span>#}
+{#                    <div class="btn-group float-right">#}
+{#                        {{ knp_pagination_render(user) }}#}
+{#                    </div>#}
+{#                </div>#}
             </div>
         </div>
         <div class="col-sm-4 d-xl-block d-none">
@@ -135,9 +112,11 @@
                 </a>
                 <a href="{{ path('meus_amigos') }}"
                    class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'meus_amigos' %} active {% endif %}">
-                    <i fla class="fa fa-users"></i> Meus amigos <span class="badge badge-primary badge-pill float-right">{{ app.user.totalAmigos }}</span>
+                    <i fla class="fa fa-users"></i> Meus amigos
+                    <span class="badge badge-light badge-pill float-right">{{ app.user.totalAmigos }}</span>
                 </a>
             </div>
         </div>
     </div>
 {% endblock %}
+

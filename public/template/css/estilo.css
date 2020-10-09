@@ -131,6 +131,12 @@ body {
     border-color: #999999;
 }
 
+.btn-rounded {
+    padding-right: 0.6em;
+    padding-left: 0.6em;
+    border-radius: 10rem;
+}
+
 .card-primary:not(.card-outline) > .card-header {
     background-color: #4682B4;
 }
