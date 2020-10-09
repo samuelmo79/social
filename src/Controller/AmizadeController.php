@@ -7,14 +7,11 @@ use App\Entity\Amizade;
 use App\Entity\Solicitacao;
 use App\Entity\User;
 use App\Enum\StatusSolicitacaoEnum;
-use App\Enum\TipoSolicitacaoEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
 
 
 class AmizadeController extends AbstractController
