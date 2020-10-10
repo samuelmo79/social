@@ -61,7 +61,7 @@ class AmigosController extends AbstractController
             'controller_name' => 'RecadosController',
             'user' => $user,
             'amizade' => $amizade,
-            'solicitacao' => $this->obtemSolicitacaoAmizade($amizade)
+            'solicitacao' => $amizade != null ? $this->obtemSolicitacaoAmizade($amizade):null
         ]);
     }
 
