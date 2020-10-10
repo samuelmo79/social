@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Amizade;
 use App\Entity\Solicitacao;
 use App\Entity\User;
 use App\Enum\TipoSolicitacaoEnum;
@@ -50,18 +51,22 @@ class AmigosController extends AbstractController
     {
         /** @var User $usuario */
         $usuarioLogado = $this->getUser();
-        $solicitacao = $this->em->getRepository(Solicitacao::class)->findOneBy([
-            'solicitado' => $user,
-            'solicitante' => $usuarioLogado,
-            'tipo' => TipoSolicitacaoEnum::AMIZADE
+        $amizade = $this->em->getRepository(Amizade::class)->findOneBy([
+            'usuario' => $user,
+            'amigo' => $usuarioLogado,
         ]);
-        dump($user, $usuarioLogado, $solicitacao);
 
 
         return $this->render('amigos/amigoPerfil.html.twig', [
             'controller_name' => 'RecadosController',
             'user' => $user,
-            'solicitacao' => $solicitacao
+            'amizade' => $amizade,
+            'solicitacao' => $this->obtemSolicitacaoAmizade($amizade)
         ]);
+    }
+
+    private function obtemSolicitacaoAmizade(Amizade $amizade)
+    {
+        return $amizade->getSolicitacao()->toArray()[0];
     }
 }
