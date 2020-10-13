@@ -52,6 +52,11 @@ class AmigosController extends AbstractController
         $solicitados = $user->getSolicitados()->toArray();
 
         $idUsuario = $this->getUser()->getId();
+
+        if ($idUsuario == $user->getId()) {
+            return $this->redirectToRoute('perfil');
+        }
+
         $solicitadosPorUsuario = array_filter($solicitados, function ($solicitados) use ($idUsuario) {
             return $solicitados->getSolicitante()->getId() == $idUsuario &&
                 $solicitados->getTipo() == TipoSolicitacaoEnum::AMIZADE;
