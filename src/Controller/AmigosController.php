@@ -57,6 +57,14 @@ class AmigosController extends AbstractController
                 $solicitados->getTipo() == TipoSolicitacaoEnum::AMIZADE;
         });
 
+        if($solicitadosPorUsuario == []) {
+            $solicitacoes = $user->getSolicitacaos()->toArray();
+            $solicitadosPorUsuario = array_filter($solicitacoes, function ($solicitacoes) use ($user) {
+                return $solicitacoes->getSolicitante()->getId() == $user->getId() &&
+                    $solicitacoes->getTipo() == TipoSolicitacaoEnum::AMIZADE;
+            });
+        }
+
         return $this->render('amigos/amigoPerfil.html.twig', [
             'controller_name' => 'RecadosController',
             'user' => $user,
