@@ -44,7 +44,6 @@ class SolicitacaoController extends AbstractController
             $this->addFlash('warning', 'Não é possível enviar uma solicitação de amizade para si !');
             return $this->redirectToRoute('amigos');
         }
-        dd($request->attributes->get('_route'));
 
 
         try {
