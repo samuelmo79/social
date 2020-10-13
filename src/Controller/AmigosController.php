@@ -59,8 +59,8 @@ class AmigosController extends AbstractController
 
         if($solicitadosPorUsuario == []) {
             $solicitacoes = $user->getSolicitacaos()->toArray();
-            $solicitadosPorUsuario = array_filter($solicitacoes, function ($solicitacoes) use ($user) {
-                return $solicitacoes->getSolicitante()->getId() == $user->getId() &&
+            $solicitadosPorUsuario = array_filter($solicitacoes, function ($solicitacoes) use ($idUsuario) {
+                return $solicitacoes->getSolicitado()->getId() == $idUsuario &&
                     $solicitacoes->getTipo() == TipoSolicitacaoEnum::AMIZADE;
             });
         }
