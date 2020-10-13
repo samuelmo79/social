@@ -49,24 +49,19 @@ class AmigosController extends AbstractController
      */
     public function perfilPublico(User $user)
     {
-        /** @var User $usuario */
-        $usuarioLogado = $this->getUser();
-        $amizade = $this->em->getRepository(Amizade::class)->findOneBy([
-            'usuario' => $user,
-            'amigo' => $usuarioLogado,
-        ]);
+        $solicitados = $user->getSolicitados()->toArray();
 
+        $idUsuario = $this->getUser()->getId();
+        $solicitadosPorUsuario = array_filter($solicitados, function ($solicitados) use ($idUsuario) {
+            return $solicitados->getSolicitante()->getId() == $idUsuario &&
+                $solicitados->getTipo() == TipoSolicitacaoEnum::AMIZADE;
+        });
 
         return $this->render('amigos/amigoPerfil.html.twig', [
             'controller_name' => 'RecadosController',
             'user' => $user,
-            'amizade' => $amizade,
-            'solicitacao' => $amizade != null ? $this->obtemSolicitacaoAmizade($amizade):null
+            'solicitacao' => $solicitadosPorUsuario != [] ? current($solicitadosPorUsuario) : null
         ]);
     }
 
-    private function obtemSolicitacaoAmizade(Amizade $amizade)
-    {
-        return $amizade->getSolicitacao()->toArray()[0];
-    }
 }
