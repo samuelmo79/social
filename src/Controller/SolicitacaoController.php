@@ -66,8 +66,12 @@ class SolicitacaoController extends AbstractController
         $solicitacoes = $this->em->getRepository(Solicitacao::class)
             ->findBy(['solicitado' => $this->getUser(), 'status' => StatusSolicitacaoEnum::PENDENTE]);
 
+        $solicitacoesEnviadas = $this->em->getRepository(Solicitacao::class)
+            ->findBy(['solicitante' => $this->getUser(), 'status' => StatusSolicitacaoEnum::PENDENTE]);
+
         return $this->render('solicitacao/index.html.twig', [
             'solicitacoes' => $solicitacoes,
+            'solicitacoesEnviadas' => $solicitacoesEnviadas,
         ]);
     }
 

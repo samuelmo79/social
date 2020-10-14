@@ -15,6 +15,9 @@
                     </div>
                 {% endfor %}
             {% endfor %}
+    
+            <!-- Início Solicitações Recebidas -->
+            <h5 class="card-title text-primary">Recebidas <span class="small text-muted">({{ app.user.totalSolicitacoes }})</span></h5>
             <div class="card">
                 <div class="card-body table-responsive p-0">
                     <table class="table">
@@ -62,6 +65,63 @@
                                 <td style="width: 28%;">
                                     <a href="{{ path('aceita_solicitacao', {'id': solicitacao.id}) }}" class="btn btn-primary btn-sm">Confirmar</a>
                                     <a href="{{ path('deleta_solicitacao', {'id': solicitacao.id}) }}" class="btn btn-danger btn-sm">Excluir</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <div class="alert alert-primary mt-4 mx-3" role="alert">
+                                Nenhum usuário encontrado
+                            </div>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Início Solicitações Enviadas -->
+            <h5 class="card-title text-primary mt-4">Enviadas <span class="small text-muted">({{ app.user.getTotalSolicitados }})</span></h5>
+            <div class="card">
+                <div class="card-body table-responsive p-0">
+                    <table class="table">
+                        <tbody>
+                        {% for solicitacao in solicitacoesEnviadas %}
+                            <tr>
+                                <td>
+                                    {% if solicitacao.solicitado.avatar == null %}
+                                        {% if solicitacao.solicitado.dadosPessoais.sexo == 'Masculino' %}
+                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                 alt="Perfil"
+                                                 width="50">
+                                        {% else %}
+                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                 alt="Perfil"
+                                                 width="50">
+                                        {% endif %}
+                                    {% else %}
+                                        <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                             src="{{ asset('imagens/perfil/' ~ solicitacao.solicitado.avatar) }}"
+                                             alt="Perfil"
+                                             width="50">
+                                    {% endif %}
+                                    <a class="card-link" href="{{ path('amigos_perfil', {'id': solicitacao.solicitado.id}) }}">
+                                        {{ solicitacao.solicitado.dadosPessoais.nome }} {{ solicitacao.solicitado.dadosPessoais.sobrenome }}<br>
+                                    </a>
+                                    <span class="small text-muted">
+                                        <i class="fas fa-shield-alt text-secondary"></i>
+                                        {{ solicitacao.solicitado.dataCadastro|date('Y') }}
+                                    </span>
+                                </td>
+                                <td align="left">
+                                <span class="text-muted small">
+                                    {% if solicitacao.solicitado.localizacao == null %}
+                                        <div class="text-danger">
+                                          Localização não informada
+                                        </div>
+                                    {% else %}
+                                        {{ solicitacao.solicitado.localizacao.bairro }}, {{ solicitacao.solicitado.localizacao.cidade }} - {{ solicitacao.solicitado.localizacao.pais }}
+                                    {% endif %}
+                                </span>
                                 </td>
                             </tr>
                         {% else %}

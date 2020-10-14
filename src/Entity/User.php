@@ -688,6 +688,17 @@ class User implements UserInterface, Serializable
         return count($solicitacoesPendentes);
     }
 
+    public function getTotalSolicitados()
+    {
+        $solicitante = $this->solicitacaos->toArray();
+        $valor = 1;
+        $solicitacoesEnviadas = array_filter($solicitante, function ($solicitante) use ($valor) {
+            return $solicitante->getStatus() == $valor;
+        });
+
+        return count($solicitacoesEnviadas);
+    }
+
     /**
      * @return Collection|Amizade[]
      */
