@@ -45,6 +45,17 @@ class SolicitacaoController extends AbstractController
             return $this->redirectToRoute('amigos');
         }
 
+        $solicitacoes = $this->getUser()->getSolicitados()->toArray();
+        $solicitacaoRecebidaPorUsuario = array_filter($solicitacoes, function ($solicitacoes) use ($solicitado) {
+            return $solicitacoes->getSolicitante()->getId() == $solicitado->getId() &&
+                $solicitacoes->getTipo() == TipoSolicitacaoEnum::AMIZADE &&
+                $solicitacoes->getStatus() == StatusSolicitacaoEnum::PENDENTE;
+        });
+
+        if ($solicitacaoRecebidaPorUsuario != []) {
+            $this->addFlash('warning', 'Já existe solicitação pendente de aceitação desse usuário !');
+            return $this->redirectToRoute('amigos');
+        }
 
         try {
             $entityManager = $this->getDoctrine()->getManager();
