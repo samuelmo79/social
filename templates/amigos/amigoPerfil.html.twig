@@ -77,8 +77,11 @@
                     <div class="btn-group float-right" role="group" aria-label="Basic example">
                         {% if solicitacao is null %}
                             <a href="{{ path('solicita_amizade', {'id': user.id }) }}" class="btn btn-light btn-sm"><i class="fa fa-user-plus"></i> Enviar solicitação</a>
-                        {% elseif solicitacao.status == 1 and solicitacao.tipo == 'Amizade' %}
+                        {% elseif solicitacao.status == 1 and solicitacao.tipo == 'Amizade' and solicitacaoRecebida == false %}
                             <a href="#" class="btn btn-light btn-sm badge-success"><i class="fa fa-check"></i> Solicitação enviada</a>
+                        {% elseif solicitacao.status == 1 and solicitacao.tipo == 'Amizade' and solicitacaoRecebida == true %}
+                            <a href="{{ path('aceita_solicitacao', {'id': solicitacao.id}) }}" class="btn btn-primary btn-sm">Aceitar Solicitacao</a>
+                            <a href="{{ path('deleta_solicitacao', {'id': solicitacao.id}) }}" class="btn btn-danger btn-sm">Excluir</a>
                         {% elseif solicitacao.status == 2 and solicitacao.tipo == 'Amizade' %}
                             <a href="#" class="btn btn-light btn-sm"><i class="fa fa-user-friends"></i> Amigo</a>
                         {% endif %}

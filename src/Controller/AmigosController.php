@@ -50,6 +50,7 @@ class AmigosController extends AbstractController
     public function perfilPublico(User $user)
     {
         $solicitados = $user->getSolicitados()->toArray();
+        $solicitacaoRecebida = false;
 
         $idUsuario = $this->getUser()->getId();
 
@@ -68,12 +69,16 @@ class AmigosController extends AbstractController
                 return $solicitacoes->getSolicitado()->getId() == $idUsuario &&
                     $solicitacoes->getTipo() == TipoSolicitacaoEnum::AMIZADE;
             });
+            if ($solicitadosPorUsuario != []) {
+                $solicitacaoRecebida = true;
+            }
         }
 
         return $this->render('amigos/amigoPerfil.html.twig', [
             'controller_name' => 'RecadosController',
             'user' => $user,
-            'solicitacao' => $solicitadosPorUsuario != [] ? current($solicitadosPorUsuario) : null
+            'solicitacao' => $solicitadosPorUsuario != [] ? current($solicitadosPorUsuario) : null,
+            'solicitacaoRecebida' => $solicitacaoRecebida
         ]);
     }
 
