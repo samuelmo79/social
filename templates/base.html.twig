@@ -189,12 +189,28 @@
             <div class="container-fluid pt-5 mt-4">
                 <div class="row">
                     <div class="col-md-3 d-xl-block d-none">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="h5">
-                                    @{{ app.user.dadosPessoais.nome }} {{ app.user.dadosPessoais.sobrenome }}
-                                </div>
-                                <div class="h7 text-muted">
+                        <div class="card profile-card-user">
+                            <div class="card-img-block bg-primary"></div>
+                            <div class="card-body pt-5">
+                                {% if app.user.avatar == null %}
+                                    {% if app.user.dadosPessoais.sexo == 'Masculino' %}
+                                        <img src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                             alt="{{ app.user.dadosPessoais.nome }}"
+                                             class="profile"/>
+                                        {% else %}
+                                        <img src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                             alt="{{ app.user.dadosPessoais.nome }}"
+                                             class="profile"/>
+                                        {% endif %}
+                                {% else %}
+                                    <img src="{{ asset('imagens/perfil/' ~ app.user.avatar) }}"
+                                         alt="{{ app.user.dadosPessoais.nome }}"
+                                         class="profile"/>
+                                {% endif %}
+                                <h5 class="card-title text-center">
+                                    {{ app.user.dadosPessoais.nome }} {{ app.user.dadosPessoais.sobrenome }}
+                                </h5>
+                                <p class="card-text text-center text-muted">
                                     {% if app.user.localizacao and
                                         app.user.localizacao.bairro and
                                         app.user.localizacao.cidade and
@@ -206,18 +222,43 @@
                                             <i class="fas fa-map-marker-alt"></i> Editar sua localização
                                         </a>
                                     {% endif %}
+                                </p>
+                                <div class="icon-block text-center">
+                                    <a href="#">
+                                        <i class="fab fa-facebook"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fab fa-google-plus"></i>
+                                    </a>
+                                </div>
+                                <div class="icon-block text-center mt-3">
+                                    <div class="row">
+                                        <div class="col">
+                                            <a href="{{ path('meus_amigos') }}" class="btn btn-primary btn-block">
+                                                <div class="h5">
+                                                <span class="timer count-title count-number"
+                                                      data-to="{{ app.user.totalAmigos }}"
+                                                      data-speed="1500"></span>
+                                                </div>
+                                                Amigos
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <button class="btn btn-success btn-block">
+                                                <div class="h5">
+                                                <span class="timer count-title count-number"
+                                                      data-to="1523"
+                                                      data-speed="1500"></span>
+                                                </div>
+                                                Fãs
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <div class="h6 text-muted">Amigos</div>
-                                    <div class="h5">
-                                        <span class="timer count-title count-number"
-                                            data-to="{{ app.user.totalAmigos }}"
-                                            data-speed="1500"></span>
-                                    </div>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                     <div class="col-md-9">
