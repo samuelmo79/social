@@ -210,8 +210,12 @@
                             </div>
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <div class="h6 text-muted">Seguidores</div>
-                                    <div class="h5">{{ app.user.totalAmigos }}</div>
+                                    <div class="h6 text-muted">Amigos</div>
+                                    <div class="h5">
+                                        <span class="timer count-title count-number"
+                                            data-to="{{ app.user.totalAmigos }}"
+                                            data-speed="1500"></span>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
