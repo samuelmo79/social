@@ -34,6 +34,71 @@ body {
 }
 
 /* -----------------------------------------------
+                   Profile Card
+ ---------------------------------------------- */
+.profile-card-user .card-img-block{
+    float:left;
+    width:100%;
+    height:80px;
+    overflow:hidden;
+}
+
+.profile-card-user .card-body{
+    position:relative;
+}
+
+.profile-card-user .profile {
+    border-radius: 50%;
+    position: absolute;
+    top: -62px;
+    left: 50%;
+    width:100px;
+    border: 3px solid rgba(255, 255, 255, 1);
+    margin-left: -50px;
+}
+
+.profile-card-user .card-img-block{
+    position:relative;
+}
+
+.profile-card-user h5{
+    font-weight:600;
+    color:#4682B4;
+}
+
+.profile-card-user .card-text{
+    font-weight:300;
+    font-size:12px;
+}
+
+.profile-card-user .icon-block{
+    float:left;
+    width:100%;
+}
+
+.profile-card-user .icon-block a{
+    text-decoration:none;
+}
+
+.profile-card-user i {
+    display: inline-block;
+    font-size: 16px;
+    color: #4682B4;
+    text-align: center;
+    border: 1px solid #4682B4;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    margin:0 5px;
+}
+
+.profile-card-user i:hover {
+    background-color:#4682B4;
+    color:#fff;
+}
+
+/* -----------------------------------------------
                     Cores
  ---------------------------------------------- */
 .bg-primary,
@@ -129,6 +194,12 @@ body {
 
 .btn-light:hover {
     border-color: #999999;
+}
+
+.btn-rounded {
+    padding-right: 0.6em;
+    padding-left: 0.6em;
+    border-radius: 10rem;
 }
 
 .card-primary:not(.card-outline) > .card-header {

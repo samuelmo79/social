@@ -82,4 +82,15 @@ class AmigosController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/meus-amigos", name="meus_amigos")
+     */
+    public function meusAmigos()
+    {
+        $meusAmigos = $this->em->getRepository(Amizade::class)->findBy(['usuario' => $this->getUser()]);
+
+        return $this->render('amigos/meusAmigos.html.twig', [
+            'meusAmigos' => $meusAmigos,
+        ]);
+    }
 }

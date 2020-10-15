@@ -699,6 +699,13 @@ class User implements UserInterface, Serializable
         return count($solicitacoesEnviadas);
     }
 
+    public function getTotalAmigos()
+    {
+        $totalAmigos = $this->amizades->toArray();
+
+        return count($totalAmigos);
+    }
+
     /**
      * @return Collection|Amizade[]
      */
