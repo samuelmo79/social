@@ -40,11 +40,21 @@ class SolicitacaoController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        if($solicitado ===  $user)  {
+        if ($solicitado === $user) {
             $this->addFlash('warning', 'Não é possível enviar uma solicitação de amizade para si !');
             return $this->redirectToRoute('amigos');
         }
 
+        $solicitacoes = $this->getUser()->getSolicitados()->toArray();
+        $solicitacaoRecebidaPorUsuario = array_filter($solicitacoes, function ($solicitacoes) use ($solicitado) {
+            return $solicitacoes->getSolicitante()->getId() == $solicitado->getId() &&
+                $solicitacoes->getTipo() == TipoSolicitacaoEnum::AMIZADE;
+        });
+
+        if ($solicitacaoRecebidaPorUsuario != []) {
+            $this->addFlash('warning', 'Já houve solicitação de amizade desse usuário !');
+            return $this->redirectToRoute('amigos');
+        }
 
         try {
             $entityManager = $this->getDoctrine()->getManager();
@@ -57,7 +67,7 @@ class SolicitacaoController extends AbstractController
             $this->addFlash('success', 'Solicitação enviada !');
 
         } catch (Throwable $e) {
-            $this->addFlash('danger', 'Já foi enviada solicitação para esse usuário !');
+            $this->addFlash('warning', 'Já foi enviada solicitação para esse usuário !');
             return $this->redirectToRoute('amigos');
         }
 
@@ -94,9 +104,9 @@ class SolicitacaoController extends AbstractController
         try {
             $entityManager->remove($solicitacao);
             $entityManager->flush();
-            $this->addFlash('success','Solicitação removida com sucesso!');
+            $this->addFlash('success', 'Solicitação removida com sucesso!');
         } catch (Throwable $e) {
-            $this->addFlash('danger','Essa solicitação não pode ser atendida!');
+            $this->addFlash('danger', 'Essa solicitação não pode ser atendida!');
         }
         return $this->redirectToRoute('solicitacoes');
     }
