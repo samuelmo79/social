@@ -8,6 +8,7 @@ use App\Entity\PostComentario;
 use App\Entity\User;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,6 +84,7 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/edita_postagem/{id}", name="edita_postagem")
+     * @Security("user.getId() == post.getAutor().getId()")
      * @param Request $request
      * @param Post $post
      * @return RedirectResponse
