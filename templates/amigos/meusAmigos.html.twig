@@ -6,11 +6,11 @@
     <div class="row d-sm-none d-block">
         <div class="col-sm-12">
             <div class="mb-3">
-                <a href="{{ path('amigos') }}" class="btn btn-secondary btn-rounded btn-sm">
-                    Encontrar amigos
-                </a>
                 <a href="{{ path('meus_amigos') }}" class="btn btn-secondary btn-rounded btn-sm">
                     Meus amigos
+                </a>
+                <a href="{{ path('amigos') }}" class="btn btn-secondary btn-rounded btn-sm">
+                    Encontrar amigos
                 </a>
             </div>
         </div>
@@ -106,14 +106,14 @@
         </div>
         <div class="col-sm-4 d-xl-block d-none">
             <div class="list-group">
-                <a href="{{ path('amigos') }}"
-                   class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'amigos' %} active {% endif %}">
-                    <i fla class="fa fa-search"></i> Encontrar amigos
-                </a>
                 <a href="{{ path('meus_amigos') }}"
                    class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'meus_amigos' %} active {% endif %}">
                     <i fla class="fa fa-users"></i> Meus amigos
                     <span class="badge badge-light badge-pill float-right">{{ app.user.totalAmigos }}</span>
+                </a>
+                <a href="{{ path('amigos') }}"
+                   class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'amigos' %} active {% endif %}">
+                    <i fla class="fa fa-search"></i> Encontrar amigos
                 </a>
             </div>
         </div>
