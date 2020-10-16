@@ -68,6 +68,37 @@
 
             <!-- Início Post -->
             {% for postagem in post %}
+                <!-- TODO: Início Edit Postagem Modal -->
+                <div class="modal fade" id="post{{ postagem.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary">
+                                <h5 class="modal-title" id="exampleModalLabel">Postagem</h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <form method="post" action="{{ path('edita_postagem', {'id' : postagem.id}) }}">
+                                        <div class="form-group required">
+                                            <textarea class="float-right post_postagem float-right form-control"
+                                                      placeholder="Edite o conteúdo da postagem" name="postagemConteudo"
+                                                      required="required" rows="5" maxlength="200">{{ postagem.conteudo }}</textarea>
+
+                                            <button type="submit" class="btn btn-success btn-sm mt-2">
+                                                Enviar
+                                            </button>
+                                            <input type="hidden"
+                                                   id="postagemId"
+                                                   name="postagemId"
+                                                   value="{{ postagem.id }}">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fim Postagem Modal -->
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="post">
@@ -99,16 +130,24 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#">
+                                            {% if postagem.autor.id == app.user.id %}
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#post{{ postagem.id }}">
+                                                    <span class="text-muted">
+                                                        <i class="fa fa-edit mr-3"></i>Editar
+                                                    </span>
+                                                </a>
+                                                <a class="dropdown-item" href="#">
+                                                    <span class="text-danger">
+                                                    <i class="fa fa-trash mr-3"></i> Deletar
+                                                    </span>
+                                                </a>
+                                            {% else %}
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#denunciar">
                                                 <span class="text-muted">
-                                                    <i class="fa fa-edit mr-3"></i>Editar
+                                                    <i class="fas fa-flag text-danger mr-2"></i> Denunciar
                                                 </span>
                                             </a>
-                                            <a class="dropdown-item" href="#">
-                                                <span class="text-danger">
-                                                <i class="fa fa-trash mr-3"></i> Deletar
-                                                </span>
-                                            </a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <a href="{{ path('amigos_perfil', {'id': postagem.autor.id}) }}" class="card-link">
@@ -331,7 +370,7 @@
     <script>
         $('.custom-file-input').on('change', function () {
             var fileName = this.files[0].name;
-            ;
+
             $(this).next('.custom-file-label').html(fileName);
         });
     </script>
@@ -343,6 +382,15 @@
                 tones: false,
                 search: false,
                 pickerPosition: "top",
+                filtersPosition: "bottom",
+                tonesStyle: "checkbox"
+            });
+            $(".post_postagem").emojioneArea({
+                recentEmojis : false,
+                inline : false,
+                tones: false,
+                search: false,
+                pickerPosition: "bottom",
                 filtersPosition: "bottom",
                 tonesStyle: "checkbox"
             });

@@ -8,9 +8,13 @@ use App\Entity\PostComentario;
 use App\Entity\User;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 class HomeController extends AbstractController
 {
@@ -24,7 +28,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/home", name="home")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return RedirectResponse|Response
      */
     public function index(Request $request)
     {
@@ -57,7 +61,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/novo_comentario", name="cadastra_comentario")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function novo_comentario(Request $request)
     {
@@ -74,6 +78,28 @@ class HomeController extends AbstractController
 
         $entityManager->persist($comentario);
         $entityManager->flush();
+
+        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/edita_postagem/{id}", name="edita_postagem")
+     * @Security("user.getId() == post.getAutor().getId()")
+     * @param Request $request
+     * @param Post $post
+     * @return RedirectResponse
+     */
+    public function editaPostagem(Request $request, Post $post)
+    {
+        $post->setConteudo($request->get('postagemConteudo'));
+
+        try {
+            $this->em->persist($post);
+            $this->em->flush();
+
+        } catch (Throwable $exception) {
+            $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
+        }
 
         return $this->redirectToRoute('home');
     }
