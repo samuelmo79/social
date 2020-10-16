@@ -101,7 +101,7 @@ class User implements UserInterface, Serializable
     private $dataUltimoAcesso;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="autor")
+     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="autor", cascade={"remove"})
      */
     private $posts;
 
