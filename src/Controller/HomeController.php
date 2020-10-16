@@ -103,4 +103,21 @@ class HomeController extends AbstractController
 
         return $this->redirectToRoute('home');
     }
+
+    /**
+     * @Route("/deleta_postagem/{id}", name="deleta_postagem")
+     * @Security("user.getId() == post.getAutor().getId()")
+     * @param Post $post
+     * @return RedirectResponse
+     */
+    public function deletaPostagem(Post $post)
+    {
+        try {
+            $this->em->remove($post);
+            $this->em->flush();
+        } catch(Throwable $exception) {
+            $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
+        }
+        return $this->redirectToRoute('home');
+    }
 }
