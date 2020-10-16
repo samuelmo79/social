@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -24,7 +25,7 @@ class PostComentario
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="postComentarios")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="postComentarios", cascade={"remove"})
      */
     private $post;
 
@@ -81,12 +82,12 @@ class PostComentario
         return $this;
     }
 
-    public function getDataComentario(): ?\DateTimeInterface
+    public function getDataComentario(): ?DateTimeInterface
     {
         return $this->dataComentario;
     }
 
-    public function setDataComentario(\DateTimeInterface $dataComentario): self
+    public function setDataComentario(DateTimeInterface $dataComentario): self
     {
         $this->dataComentario = $dataComentario;
 
