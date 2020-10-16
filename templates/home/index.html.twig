@@ -220,7 +220,7 @@
                                                             {{ comentarios.dataComentario|ago }}
                                                         </div>
                                                         <br>
-                                                        {{ comentarios.comentario }}
+                                                        {{ comentarios.comentario|length < 110 ? comentarios.comentario : comentarios.comentario|slice(0, 110) ~ '...' }}
                                                     </div>
                                                 </li>
                                             </ul>
