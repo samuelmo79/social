@@ -123,6 +123,11 @@
                                     {% endif %}
                                 </span>
                                 </td>
+                                <td align="left">
+                                    <span class="badge badge-pill badge-primary">
+                                        <i class="far fa-paper-plane"></i> {{ solicitacao.dataSolicitacao|date('d-m-Y') }}
+                                    </span>
+                                </td>
                             </tr>
                         {% else %}
                             <div class="alert alert-primary mt-4 mx-3" role="alert">
