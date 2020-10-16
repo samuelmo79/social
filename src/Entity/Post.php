@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -66,7 +70,7 @@ class Post
     private $autor;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PostComentario", mappedBy="post")
+     * @ORM\OneToMany(targetEntity="App\Entity\PostComentario", mappedBy="post", cascade={"remove"})
      */
     private $postComentarios;
 
@@ -111,8 +115,8 @@ class Post
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
      *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
-     * @throws \Exception
+     * @param File|UploadedFile|null $imageFile
+     * @throws Exception
      */
     public function setImageFile(?File $imageFile = null): void
     {
@@ -121,7 +125,7 @@ class Post
         if (null !== $imageFile) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->dataAtualizacao = new \DateTimeImmutable();
+            $this->dataAtualizacao = new DateTimeImmutable();
         }
     }
 
@@ -154,24 +158,24 @@ class Post
         return $this;
     }
 
-    public function getDataCadastro(): ?\DateTimeInterface
+    public function getDataCadastro(): ?DateTimeInterface
     {
         return $this->dataCadastro;
     }
 
-    public function setDataCadastro(\DateTimeInterface $dataCadastro): self
+    public function setDataCadastro(DateTimeInterface $dataCadastro): self
     {
         $this->dataCadastro = $dataCadastro;
 
         return $this;
     }
 
-    public function getDataAtualizacao(): ?\DateTimeInterface
+    public function getDataAtualizacao(): ?DateTimeInterface
     {
         return $this->dataAtualizacao;
     }
 
-    public function setDataAtualizacao(?\DateTimeInterface $dataAtualizacao): self
+    public function setDataAtualizacao(?DateTimeInterface $dataAtualizacao): self
     {
         $this->dataAtualizacao = $dataAtualizacao;
 
