@@ -120,4 +120,22 @@ class HomeController extends AbstractController
         }
         return $this->redirectToRoute('home');
     }
+
+    /**
+     * @Route("/deleta_comentario/{id}", name="deleta_comentario")
+     * @Security("user.getId() == postComentario.getUser().getId()")
+     * @param PostComentario $postComentario
+     * @return RedirectResponse
+     */
+    public function deletaComentario(PostComentario $postComentario)
+    {
+//        dd($postComentario);
+        try {
+            $this->em->remove($postComentario);
+            $this->em->flush();
+        } catch (Throwable $exception) {
+            $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
+        }
+        return $this->redirectToRoute('home');
+    }
 }

@@ -25,7 +25,7 @@ class PostComentario
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="postComentarios", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="postComentarios")
      */
     private $post;
 

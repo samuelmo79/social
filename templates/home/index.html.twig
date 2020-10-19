@@ -283,9 +283,9 @@
                                                                             data-target="#editComentario">
                                                                         <i class="fa fa-edit"></i>
                                                                     </button>
-                                                                    <button class="btn btn-danger btn-rounded btn-sm">
+                                                                    <a class="btn btn-danger btn-rounded btn-sm" href="{{ path('deleta_comentario', {'id' : comentarios.id }) }}">
                                                                         <i class="fa fa-trash"></i>
-                                                                    </button>
+                                                                    </a>
                                                                 </div>
                                                                 {% endif %}
                                                             </div>
