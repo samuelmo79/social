@@ -129,13 +129,34 @@ class HomeController extends AbstractController
      */
     public function deletaComentario(PostComentario $postComentario)
     {
-//        dd($postComentario);
         try {
             $this->em->remove($postComentario);
             $this->em->flush();
         } catch (Throwable $exception) {
             $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
         }
+        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/edita_comentario/{id}", name="edita_comentario")
+     * @Security("user.getId() == postComentario.getUser().getId()")
+     * @param Request $request
+     * @param PostComentario $postComentario
+     * @return RedirectResponse
+     */
+    public function editaComentario(Request $request, PostComentario $postComentario)
+    {
+        $postComentario->setComentario($request->get('comentario'));
+
+        try {
+            $this->em->persist($postComentario);
+            $this->em->flush();
+
+        } catch (Throwable $exception) {
+            $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
+        }
+
         return $this->redirectToRoute('home');
     }
 }
