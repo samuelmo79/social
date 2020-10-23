@@ -17,19 +17,19 @@ class DadosPessoaisType extends AbstractType
     {
         $builder
             ->add('nome', TextType::class, [
-                'label' => 'Nome *',
+                'label' => 'Nome',
                 'constraints' => [
                     new NotBlank(['message' => 'Este campo é obrigatório']),
                 ],
             ])
             ->add('sobrenome', TextType::class, [
-                'label' => 'Sobrenome *',
+                'label' => 'Sobrenome',
                 'constraints' => [
                     new NotBlank(['message' => 'Este campo é obrigatório']),
                 ],
             ])
             ->add('sexo', ChoiceType::class, [
-                'label' => 'Sexo *',
+                'label' => 'Sexo',
                 'choices' => [
                     'Sexo' => '',
                     'Feminino' => 'Feminino',
@@ -42,7 +42,7 @@ class DadosPessoaisType extends AbstractType
             ])
             ->add('dataNascimento', DateType::class, [
                 'widget' => 'single_text',
-                'label' => 'Data Nascimento *',
+                'label' => 'Data Nascimento',
                 'required' => true,
                 'constraints' => [
                     new NotBlank(['message' => 'Este campo é obrigatório']),
