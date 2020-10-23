@@ -190,32 +190,40 @@
                             {% endif %}
                             {% for comentarios in postagem.postComentarios|reverse|sort((a, b) => b.dataComentario <=> a.dataComentario) %}
                                 {% if loop.index <= 2 %}
-                                    <div class="card-footer card-comments">
-                                        <div class="card-comment">
-                                            {% if postagem.autor.avatar == null %}
-                                                {% if postagem.autor.dadosPessoais.sexo == 'Masculino' %}
-                                                    <img class="rounded-circle img-borda-sm"
-                                                         src="{{ asset('imagens/perfil/avatar_homem.png') }}"
-                                                         alt="Perfil">
-                                                {% else %}
-                                                    <img class="rounded-circle img-borda-sm"
-                                                         src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
-                                                         alt="Perfil">
-                                                {% endif %}
-                                            {% else %}
-                                                <img class="rounded-circle img-borda-sm"
-                                                     src="{{ asset('imagens/perfil/' ~ postagem.autor.avatar) }}"
-                                                     alt="Perfil">
-                                            {% endif %}
-
-                                            <div class="comment-text">
-                                        <span class="username">
-                                          {{ comentarios.user.dadosPessoais.nome }}
-                                          <span class="text-muted float-right">8:03 PM Today</span>
-                                        </span>
-                                                {{ comentarios.comentario|length < 110 ? comentarios.comentario : comentarios.comentario|slice(0, 110) ~ '...' }}
-                                            </div>
-
+                                    <div class="card-comments">
+                                        <div class="commentBox">
+                                            <ul class="list-unstyled">
+                                                <li>
+                                                    <div>
+                                                        {% if comentarios.user.avatar == null %}
+                                                            {% if comentarios.user.dadosPessoais.sexo == 'Masculino' %}
+                                                                <img class="rounded-circle img-borda-sm"
+                                                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                                     alt="Perfil" width="50">
+                                                            {% else %}
+                                                                <img class="rounded-circle img-borda-sm"
+                                                                     src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                                     alt="Perfil" width="50">
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <img class="rounded-circle img-borda-sm"
+                                                                 src="{{ asset('imagens/perfil/' ~ comentarios.user.avatar) }}"
+                                                                 alt="Perfil" width="50">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="profileText">
+                                                        <a href="{{ path('amigos_perfil', {'id': comentarios.user.id}) }}"
+                                                           class="card-link">
+                                                            {{ comentarios.user.dadosPessoais.nome }} {{ comentarios.user.dadosPessoais.sobrenome }}
+                                                        </a>
+                                                        <div class="badge badge-pill badge-primary text-white small float-right">
+                                                            {{ comentarios.dataComentario|ago }}
+                                                        </div>
+                                                        <br>
+                                                        {{ comentarios.comentario|length < 110 ? comentarios.comentario : comentarios.comentario|slice(0, 110) ~ '...' }}
+                                                    </div>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 {% endif %}
@@ -267,10 +275,61 @@
                                                                 </div>
                                                                 <br>
                                                                 {{ comentarios.comentario }}
+                                                                {% if comentarios.user.id == app.user.id %}
+                                                                <div class="small float-right">
+                                                                    <button type="button"
+                                                                            class="btn btn-primary btn-rounded btn-sm"
+                                                                            data-toggle="modal"
+                                                                            data-target="#editComentario{{ comentarios.id }}">
+                                                                        <i class="fa fa-edit"></i>
+                                                                    </button>
+                                                                    <a class="btn btn-danger btn-rounded btn-sm" href="{{ path('deleta_comentario', {'id' : comentarios.id }) }}">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </a>
+                                                                </div>
+                                                                {% endif %}
                                                             </div>
                                                         </li>
                                                     </ul>
                                                 </div>
+                                                <!-- Início Modal editar Comentários -->
+
+                                                <div class="modal fade"
+                                                     id="editComentario{{ comentarios.id }}"
+                                                     tabindex="-1"
+                                                     aria-labelledby="editComentarioLabel"
+                                                     aria-hidden="true">
+                                                    <div class="modal-dialog modal-xl modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="editComentarioLabel">Editar Comentário</h5>
+                                                                <button type="button"
+                                                                        class="close"
+                                                                        data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                            <form action="{{ path('edita_comentario', {'id' : comentarios.id}) }}" method="post">
+
+                                                                    <textarea id="name" class="post_comentario float-right form-control" name="comentario"  rows="5" maxlength="200">{{ comentarios.comentario }}</textarea>
+
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                                                        Cancelar
+                                                                    </button>
+                                                                    <button type="submit" class="btn btn-primary">
+                                                                        Salvar
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Fim Modal editar Comentários -->
+
                                             {% else %}
                                                 <div class="alert alert-primary" role="alert">
                                                     Nenhum comentário encontrado
@@ -303,7 +362,6 @@
                                 </div>
                             </div>
                             <!-- FIM Modal de Comentários -->
-
                         </div>
                     </div>
                 </div>
@@ -383,6 +441,15 @@
                 search: false,
                 pickerPosition: "top",
                 filtersPosition: "bottom",
+                tonesStyle: "checkbox"
+            });
+            $(".post_comentario").emojioneArea({
+                recentEmojis : false,
+                inline : false,
+                tones: false,
+                search: false,
+                pickerPosition: "bottom",
+                filtersPosition: "top",
                 tonesStyle: "checkbox"
             });
             $(".post_postagem").emojioneArea({
