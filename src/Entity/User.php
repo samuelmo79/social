@@ -160,6 +160,11 @@ class User implements UserInterface, Serializable
      */
     private $amizades;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CurtidaPost", mappedBy="usuario", orphanRemoval=true)
+     */
+    private $curtidaPosts;
+
 
     public function __construct()
     {
@@ -171,6 +176,7 @@ class User implements UserInterface, Serializable
         $this->notificacaos = new ArrayCollection();
         $this->solicitacaos = new ArrayCollection();
         $this->amizades = new ArrayCollection();
+        $this->curtidaPosts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -731,6 +737,37 @@ class User implements UserInterface, Serializable
             // set the owning side to null (unless already changed)
             if ($amizade->getUsuario() === $this) {
                 $amizade->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CurtidaPost[]
+     */
+    public function getCurtidaPosts(): Collection
+    {
+        return $this->curtidaPosts;
+    }
+
+    public function addCurtidaPost(CurtidaPost $curtidaPost): self
+    {
+        if (!$this->curtidaPosts->contains($curtidaPost)) {
+            $this->curtidaPosts[] = $curtidaPost;
+            $curtidaPost->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCurtidaPost(CurtidaPost $curtidaPost): self
+    {
+        if ($this->curtidaPosts->contains($curtidaPost)) {
+            $this->curtidaPosts->removeElement($curtidaPost);
+            // set the owning side to null (unless already changed)
+            if ($curtidaPost->getUsuario() === $this) {
+                $curtidaPost->setUsuario(null);
             }
         }
 
