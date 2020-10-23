@@ -65,15 +65,19 @@ class RegistroController extends AbstractController
         if ($token != null) {
             $em = $this->getDoctrine()->getManager();
             /** @var User $user */
-            $user = $em->getRepository(User::class)->findOneBy(['tokenPassword' => $token]);
-
-            if ($user != null) {
-                $user->setAtivo(true);
-                $user->setTokenPassword(null);
-                $em->persist($user);
-                $em->flush();
-                return $this->redirectToRoute('app_login');
+            if ($user = $em->getRepository(User::class)->findOneBy(['tokenPassword' => $token])) {
+                if ($user != null) {
+                    $user->setAtivo(true);
+                    $user->setTokenPassword(null);
+                    $em->persist($user);
+                    $em->flush();
+                    return $this->redirectToRoute('app_login');
+                }
+            }else{
+            $this->addFlash("warning", "Sua conta já foi ativada!");
+            return $this->redirectToRoute('app_login');
             }
+
         }
     }
 
