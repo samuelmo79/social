@@ -9,9 +9,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
@@ -247,6 +247,18 @@ class Post
     public function getCurtidaPosts(): Collection
     {
         return $this->curtidaPosts;
+    }
+
+    public function postagemJaFoiCurturaPorMim(User $user)
+    {
+        $curtidas = $this->getCurtidaPosts()->toArray();
+        $idUsuario = $user->getId();
+
+        $curtidasPorMim = array_filter($curtidas, function ($curtidas) use ($idUsuario) {
+            return $idUsuario == $curtidas->getUsuario()->getId();
+        });
+
+        return $curtidasPorMim == [];
     }
 
     public function addCurtidaPost(CurtidaPost $curtidaPost): self
