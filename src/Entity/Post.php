@@ -236,6 +236,11 @@ class Post
         return count($this->postComentarios);
     }
 
+    public function getTotalCurtidas()
+    {
+        return count($this->curtidaPosts);
+    }
+
     /**
      * @return Collection|CurtidaPost[]
      */
