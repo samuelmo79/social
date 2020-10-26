@@ -174,7 +174,7 @@
                             {% endif %}
                             <p>
                                 <!-- TODO Curtidas -->
-                                {% if postagem.postagemJaFoiCurturaPorMim(app.user) == false %}
+                                {% if postagem.postagemJaFoiCurtidaPorMim(app.user) == false %}
                                     <a href="{{ path('descurte_postagem', {'id' : postagem.id}) }}"
                                        class="btn btn-light btn-sm">
                                         <i class="far fa-thumbs-up"></i> <span

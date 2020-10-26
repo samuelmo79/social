@@ -249,7 +249,7 @@ class Post
         return $this->curtidaPosts;
     }
 
-    public function postagemJaFoiCurturaPorMim(User $user)
+    public function postagemJaFoiCurtidaPorMim(User $user)
     {
         $curtidas = $this->getCurtidaPosts()->toArray();
         $idUsuario = $user->getId();
