@@ -3,9 +3,21 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CurtidaPostRepository")
+ * @UniqueEntity(
+ *     fields={"usuario", "postagem"},
+ *     message="Essa postagem já foi curtida!"
+ * )
+ * @ORM\Table(name="custida_post", uniqueConstraints={
+ *     @ORM\UniqueConstraint(
+ *          name="usuario_postagem",
+ *          columns={"usuario_id","postagem_id"}
+ *
+ * )}
+ * )
  */
 class CurtidaPost
 {
