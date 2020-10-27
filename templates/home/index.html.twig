@@ -182,7 +182,7 @@
                                 {% if postagem.postagemJaFoiCurtidaPorMim(app.user) == false %}
                                     <a href="{{ path('descurte_postagem', {'id' : postagem.id}) }}"
                                        class="btn btn-outline-primary btn-sm btn-descurtir">
-                                        <i class="fas fa-thumbs-up"></i> <i class="far mr-1"></i>Descurtir
+                                        <i class="fas fa-thumbs-up"></i> <i class="far mr-1"></i>Curtir
                                     </a>
                                 {% else %}
                                     <a href="{{ path('curte_postagem', {'id' : postagem.id}) }}"
