@@ -8,6 +8,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,7 +45,7 @@ class PostController extends AbstractController
             $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
         }
 
-        return $this->redirectToRoute('home');
+        return new JsonResponse(['success' => true, 'post' => ['id' => $post->getId()]]);
     }
 
     /**
@@ -74,5 +75,5 @@ class PostController extends AbstractController
             $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
         }
 
-        return $this->redirectToRoute('home');
+        return new JsonResponse(['success' => true, 'post' => ['id' => $post->getId()]]);
     }}

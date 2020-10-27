@@ -181,12 +181,12 @@
                                 <!-- TODO Curtidas -->
                                 {% if postagem.postagemJaFoiCurtidaPorMim(app.user) == false %}
                                     <a href="{{ path('descurte_postagem', {'id' : postagem.id}) }}"
-                                       class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-thumbs-up"></i> <i class="far mr-1"></i>Curtir
+                                       class="btn btn-outline-primary btn-sm btn-descurtir">
+                                        <i class="fas fa-thumbs-up"></i> <i class="far mr-1"></i>Descurtir
                                     </a>
                                 {% else %}
                                     <a href="{{ path('curte_postagem', {'id' : postagem.id}) }}"
-                                       class="btn btn-light btn-sm">
+                                       class="btn btn-light btn-sm btn-curtir">
                                         <i class="far fa-thumbs-up"> </i> <i class="far mr-1"></i>Curtir
                                     </a>
 
@@ -475,6 +475,28 @@
                 pickerPosition: "bottom",
                 filtersPosition: "bottom",
                 tonesStyle: "checkbox"
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+        $(document).ready(function(){
+            $(".btn-curtir").click(function(ev){
+                ev.preventDefault();
+                var $this = $(this);
+                var url = $(this).prop("href");
+                $.get(url, function(response){
+                    location.reload();
+                }, 'json');
+            });
+
+            $(".btn-descurtir").click(function(ev){
+                ev.preventDefault();
+                var $this = $(this);
+                var url = $(this).prop("href");
+                $.get(url, function(response){
+                    location.reload();
+                }, 'json');
             });
         });
     </script>
