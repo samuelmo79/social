@@ -172,12 +172,27 @@
                                     <img class="img-fluid m-lg-0" src="{{ asset('imagens/post/' ~ postagem.imagem) }}">
                                 </div>
                             {% endif %}
+                            {% if postagem.getTotalCurtidas > 0 %}
+                            <p class="badge badge-light mb-sm-1">
+                                {{ postagem.getTotalCurtidas }} curtida(s)
+                            </p>
+                            {% endif %}
                             <p>
                                 <!-- TODO Curtidas -->
-                                {#                                <button type="button" class="btn btn-light btn-sm">#}
-                                {#                                    <i class="far fa-heart"></i> <span class="badge badge-light">4</span>#}
-                                {#                                </button>#}
-                                <button type="button" class="btn btn-light" data-toggle="modal"
+                                {% if postagem.postagemJaFoiCurtidaPorMim(app.user) == false %}
+                                    <a href="{{ path('descurte_postagem', {'id' : postagem.id}) }}"
+                                       class="btn btn-outline-primary btn-sm btn-descurtir">
+                                        <i class="fas fa-thumbs-up"></i> <i class="far mr-1"></i>Curtir
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('curte_postagem', {'id' : postagem.id}) }}"
+                                       class="btn btn-light btn-sm btn-curtir">
+                                        <i class="far fa-thumbs-up"> </i> <i class="far mr-1"></i>Curtir
+                                    </a>
+
+                                {% endif %}
+
+                                <button type="button" class="btn btn-light btn-sm" data-toggle="modal"
                                         data-target="#staticBackdrop_{{ postagem.id }}">
                                     <i class="far fa-comments mr-1"></i> Comentários <span
                                             class="badge badge-light">{{ postagem.getTotalComentarios }}</span>
@@ -460,6 +475,28 @@
                 pickerPosition: "bottom",
                 filtersPosition: "bottom",
                 tonesStyle: "checkbox"
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+        $(document).ready(function(){
+            $(".btn-curtir").click(function(ev){
+                ev.preventDefault();
+                var $this = $(this);
+                var url = $(this).prop("href");
+                $.get(url, function(response){
+                    location.reload();
+                }, 'json');
+            });
+
+            $(".btn-descurtir").click(function(ev){
+                ev.preventDefault();
+                var $this = $(this);
+                var url = $(this).prop("href");
+                $.get(url, function(response){
+                    location.reload();
+                }, 'json');
             });
         });
     </script>

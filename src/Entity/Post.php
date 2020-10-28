@@ -9,9 +9,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
@@ -74,9 +74,15 @@ class Post
      */
     private $postComentarios;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CurtidaPost", mappedBy="postagem", orphanRemoval=true)
+     */
+    private $curtidaPosts;
+
     public function __construct()
     {
         $this->postComentarios = new ArrayCollection();
+        $this->curtidaPosts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -228,5 +234,53 @@ class Post
     public function getTotalComentarios()
     {
         return count($this->postComentarios);
+    }
+
+    public function getTotalCurtidas()
+    {
+        return count($this->curtidaPosts);
+    }
+
+    /**
+     * @return Collection|CurtidaPost[]
+     */
+    public function getCurtidaPosts(): Collection
+    {
+        return $this->curtidaPosts;
+    }
+
+    public function postagemJaFoiCurtidaPorMim(User $user)
+    {
+        $curtidas = $this->getCurtidaPosts()->toArray();
+        $idUsuario = $user->getId();
+
+        $curtidasPorMim = array_filter($curtidas, function ($curtidas) use ($idUsuario) {
+            return $idUsuario == $curtidas->getUsuario()->getId();
+        });
+
+        return $curtidasPorMim == [];
+    }
+
+    public function addCurtidaPost(CurtidaPost $curtidaPost): self
+    {
+        if (!$this->curtidaPosts->contains($curtidaPost)) {
+            $this->curtidaPosts[] = $curtidaPost;
+            $curtidaPost->setPostagem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCurtidaPost(CurtidaPost $curtidaPost): self
+    {
+        if ($this->curtidaPosts->contains($curtidaPost)) {
+            $this->curtidaPosts->removeElement($curtidaPost);
+            // set the owning side to null (unless already changed)
+            if ($curtidaPost->getPostagem() === $this) {
+                $curtidaPost->setPostagem(null);
+            }
+        }
+
+        return $this;
     }
 }
