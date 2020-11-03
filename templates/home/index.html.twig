@@ -236,6 +236,19 @@
                                                         </div>
                                                         <br>
                                                         {{ comentarios.comentario|length < 110 ? comentarios.comentario : comentarios.comentario|slice(0, 110) ~ '...' }}
+                                                        <!-- TODO Curtida de Comentário -->
+                                                        {% if comentarios.comentarioJaFoiCurtidaPorMim(app.user) == false %}
+                                                            <br><a href="{{ path('descurte_comentario', {'id' : comentarios.id}) }}"
+                                                               class="btn btn-sm btn-descurtir">
+                                                                <i class="fas fa-thumbs-up"></i> <i class="far mr-1"></i>Curtir
+                                                            </a>
+                                                        {% else %}
+                                                            <br><a href="{{ path('curte_comentario', {'id' : comentarios.id}) }}"
+                                                               class="btn btn-sm btn-curtir">
+                                                                <i class="far fa-thumbs-up"> </i> <i class="far mr-1"></i>Curtir
+                                                            </a>
+
+                                                        {% endif %}
                                                     </div>
                                                 </li>
                                             </ul>

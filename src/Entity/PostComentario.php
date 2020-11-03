@@ -114,6 +114,18 @@ class PostComentario
         return $this->curtidaComentarios;
     }
 
+    public function comentarioJaFoiCurtidaPorMim(User $user)
+    {
+        $curtidas = $this->getCurtidaComentarios()->toArray();
+        $idUsuario = $user->getId();
+
+        $curtidasPorMim = array_filter($curtidas, function ($curtidas) use ($idUsuario) {
+            return $idUsuario == $curtidas->getUsuario()->getId();
+        });
+
+        return $curtidasPorMim == [];
+    }
+
     public function addCurtidaComentario(CurtidaComentario $curtidaComentario): self
     {
         if (!$this->curtidaComentarios->contains($curtidaComentario)) {

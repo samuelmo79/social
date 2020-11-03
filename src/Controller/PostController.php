@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\CurtidaComentario;
 use App\Entity\CurtidaPost;
 use App\Entity\Post;
+use App\Entity\PostComentario;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -74,4 +76,60 @@ class PostController extends AbstractController
         }
 
         return new JsonResponse(['success' => true, 'post' => ['id' => $post->getId()]]);
-    }}
+    }
+
+    /**
+     * @Route("/curte_comentario/{id}", name="curte_comentario")
+     * @param PostComentario $post
+     * @return RedirectResponse
+     */
+    public function curteComentario(PostComentario $post)
+    {
+        $curtidaComentario = new CurtidaComentario();
+
+        /** @var User $usuario */
+        $usuario = $this->getUser();
+        $curtidaComentario->setUsuario($usuario);
+        $curtidaComentario->setComentario($post);
+
+        try {
+            $this->em->persist($curtidaComentario);
+            $this->em->flush();
+
+        } catch (Throwable $exception) {
+            $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
+        }
+
+        return new JsonResponse(['success' => true, 'post' => ['id' => $post->getId()]]);
+    }
+
+    /**
+     * @Route("/descurte_comentario/{id}", name="descurte_comentario")
+     * @param PostComentario $post
+     * @return RedirectResponse
+     */
+    public function descurteComentario(PostComentario $post)
+    {
+        $curtidas = $post->getCurtidaComentarios()->toArray();
+
+        /** @var User $usuario */
+        $usuario = $this->getUser();
+
+        $idUsuario = $usuario->getId();
+        $idComentario = $post->getId();
+
+        $curtidaPorMim = current(array_filter($curtidas, function ($curtidas) use ($idUsuario, $idComentario) {
+            return $curtidas->getUsuario()->getId() == $idUsuario && $curtidas->getComentario()->getId() == $idComentario ;
+        }));
+
+        try {
+            $this->em->remove($curtidaPorMim);
+            $this->em->flush();
+
+        } catch (Throwable $exception) {
+            $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
+        }
+
+        return new JsonResponse(['success' => true, 'post' => ['id' => $post->getId()]]);
+    }
+}
