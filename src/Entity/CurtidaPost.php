@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     fields={"usuario", "postagem"},
  *     message="Essa postagem já foi curtida!"
  * )
- * @ORM\Table(name="custida_post", uniqueConstraints={
+ * @ORM\Table(name="curtida_post", uniqueConstraints={
  *     @ORM\UniqueConstraint(
  *          name="usuario_postagem",
  *          columns={"usuario_id","postagem_id"}
