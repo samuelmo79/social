@@ -303,6 +303,18 @@
                                                                 </div>
                                                                 <br>
                                                                 {{ comentarios.comentario }}
+                                                                {% if comentarios.comentarioJaFoiCurtidaPorMim(app.user) == false %}
+                                                                    <br><a href="{{ path('descurte_comentario', {'id' : comentarios.id}) }}"
+                                                                           class="btn btn-sm btn-descurtir">
+                                                                    <i class="fas fa-thumbs-up"></i> <i class="far mr-1"></i>Curtir
+                                                                </a>
+                                                                {% else %}
+                                                                    <br><a href="{{ path('curte_comentario', {'id' : comentarios.id}) }}"
+                                                                           class="btn btn-sm btn-curtir">
+                                                                    <i class="far fa-thumbs-up"> </i> <i class="far mr-1"></i>Curtir
+                                                                </a>
+
+                                                                {% endif %}
                                                                 {% if comentarios.user.id == app.user.id %}
                                                                 <div class="small float-right">
                                                                     <button type="button"
