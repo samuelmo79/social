@@ -37,6 +37,9 @@ class HomeController extends AbstractController
         $postagemMinhas = $this->em->getRepository(Post::class)
             ->findPostagemMinhasPublicasOuPrivadas($this->getUser()->getId());
         $post = array_merge($post, $postagemMinhas);
+        usort($post, function ($a, $b) {
+            return $a->getDataCadastro() < $b->getDataCadastro();
+        });
 
         $eventos = $this->em->getRepository(Evento::class)
             ->findBy(array(), array('dataCadastro' => 'DESC'), 3);
