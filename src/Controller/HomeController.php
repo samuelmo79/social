@@ -33,7 +33,10 @@ class HomeController extends AbstractController
     public function index(Request $request)
     {
         $post = $this->em->getRepository(Post::class)
-            ->findBy(array(), array('dataCadastro' => 'DESC'));
+            ->findPostagemAmigosPrivados($this->getUser()->getId());
+        $postagemMinhas = $this->em->getRepository(Post::class)
+            ->findPostagemMinhasPublicasOuPrivadas($this->getUser()->getId());
+        $post = array_merge($post, $postagemMinhas);
 
         $eventos = $this->em->getRepository(Evento::class)
             ->findBy(array(), array('dataCadastro' => 'DESC'), 3);

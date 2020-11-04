@@ -46,6 +46,22 @@ class PostRepository extends ServiceEntityRepository
         return $q->getQuery()->getResult();
     }
 
+    public function findPostagemMinhasPublicasOuPrivadas($id)
+    {
+        $q = $this->createQueryBuilder('p')
+            ->andWhere('p.autor = :uid');
+        $q->andWhere('p.privacidade like :amigos');
+        $q->orWhere('p.privacidade like :publico');
+        $q->orWhere('p.privacidade like :privada');
+        $q->setParameter('uid', $id);
+        $q->setParameter('amigos', 'Amigos');
+        $q->setParameter('publico', 'Publico');
+        $q->setParameter('privada', 'Privado');
+
+        return $q->getQuery()->getResult();
+
+    }
+
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */
