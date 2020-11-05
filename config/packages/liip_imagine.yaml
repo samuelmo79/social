@@ -4,10 +4,17 @@ liip_imagine:
         default:
             web_path: ~
 
+    loaders:
+        album_foto:
+            filesystem:
+                data_root:
+                    - '%kernel.project_dir%/public/imagens/album'
+
     filter_sets:
         cache: ~
 
         my_thumb:
+            data_loader: album_foto
 
             # adjust the image quality to 75%
             quality: 75
