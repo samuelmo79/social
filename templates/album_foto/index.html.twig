@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Álbum de Foto{% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-body">
+        <a href="{{ path('album_foto_new') }}" class="btn btn-success btn-sm btn-icon-split float-right">
+            <span class="icon text-white-50">
+                  <i class="fas fa-plus"></i>
+                </span>
+            <span class="text">Novo Álbum de fotos</span>
+        </a>
+        <h3 class="card-title">Álbuns</h3>
+        <div class="row mt-2">
+            {% for album_foto in album_fotos %}
+                <div class="col-sm-4 col-md-4 d-flex mt-4">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header bg-primary pt-5 pb-5">
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title mt-3">
+                                <a href="{{ path('album_foto_show', {'id': album_foto.id}) }}">
+                                    {{ album_foto.nome }}
+                                </a>
+                            </h4>
+                            <div>
+                                {% autoescape %}
+                                    {% set Album = album_foto.descricao|slice(0,50) ~ '...' %}
+                                    {{ (false ? Album : Album)|raw }}
+                                {% endautoescape %}
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small>{{ album_foto.dataCriacao ? album_foto.dataCriacao|date('Y-m-d H:i:s') : '' }}</small>
+                            <a href="{{ path('album_foto_edit', {'id': album_foto.id}) }}" class="btn btn-warning btn-sm float-right">Editar</a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-sm-12">
+                    <div class="alert alert-primary" role="alert">
+                        Nenhum evento encontrado.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
