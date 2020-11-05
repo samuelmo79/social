@@ -6,6 +6,7 @@ use App\Entity\Evento;
 use App\Entity\Post;
 use App\Entity\PostComentario;
 use App\Entity\User;
+use App\Enum\PrivacidadeEnum;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -40,7 +41,7 @@ class HomeController extends AbstractController
         $postagemPublicas = $this->em->getRepository(Post::class)
             ->findPostagemMinhasPublicasOuAmigos($this->getUser()->getId());
         $postagemPrivada = $this->em->getRepository(Post::class)
-            ->findBy(['autor' => $usuario->getId(), 'privacidade' => 'Privado']);
+            ->findBy(['autor' => $usuario->getId(), 'privacidade' => PrivacidadeEnum::PRIVADO]);
         $post = array_unique(array_merge($post, $postagemPublicas, $postagemPrivada));
 
         usort($post, function ($a, $b) {
@@ -55,7 +56,7 @@ class HomeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $cadastraPost->setAutor($this->getUser());
+            $cadastraPost->setAutor($usuario);
             $entityManager->persist($cadastraPost);
             $entityManager->flush();
 
