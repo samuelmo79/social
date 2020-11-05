@@ -15,9 +15,8 @@
         <div class="row mt-2">
             {% for album_foto in album_fotos %}
                 <div class="col-sm-4 col-md-4 d-flex mt-4">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-header bg-primary pt-5 pb-5">
-                        </div>
+                    <div class="card">
+                        <img src="{{ asset('imagens/no-image.png') }}" class="card-img-top" alt="no-image">
                         <div class="card-body">
                             <h4 class="card-title mt-3">
                                 <a href="{{ path('album_foto_show', {'id': album_foto.id}) }}">
@@ -32,7 +31,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <small>{{ album_foto.dataCriacao ? album_foto.dataCriacao|date('Y-m-d H:i:s') : '' }}</small>
+                            <small>Criado à {{ album_foto.dataCriacao|ago }}</small>
                             <a href="{{ path('album_foto_edit', {'id': album_foto.id}) }}" class="btn btn-warning btn-sm float-right">Editar</a>
                         </div>
                     </div>

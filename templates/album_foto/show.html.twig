@@ -38,18 +38,63 @@
             </div>
         </div>
         <h3 class="card-title">Álbum - {{ album_foto.nome }}</h3>
+        <small>{{ album_foto.descricao }}</small>
         <hr>
-        
-        {% for foto in album_foto.fotos %}
-            <img class="img-thumbnail" src="{{ asset('imagens/album/' ~ foto.foto) }}" width="100">
-        {% endfor %}
+        <div class="row">
+            {% for foto in album_foto.fotos %}
+                <div class="column col-sm-3 col-md-3 d-flex">
+                    <button type="button"
+                            class="btn btn-link"
+                            data-toggle="modal"
+                            data-target="#fotoModal{{ foto.id }}"
+                    >
+                        <img src="{{ asset('imagens/album/' ~ foto.foto) }}"
+                             class="img-fluid img-thumbnail cropped"
+                        >
+                    </button>
+                </div>
+                <!-- Foto Modal -->
+                <div class="modal fade"
+                     id="fotoModal{{ foto.id }}"
+                     tabindex="-1"
+                     aria-labelledby="fotoModalLabel"
+                     aria-hidden="true"
+                >
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="fotoModalLabel">
+                                    {{ foto.album.nome }}
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body bg-dark">
+                                <img class="img-fluid"
+                                     src="{{ asset('imagens/album/' ~ foto.foto) }}"
+                                     width="800"
+                                >
+                            </div>
+                            <div class="modal-footer">
+                                <small>Criado em {{ foto.dataCadastro|ago }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-md-12">
+                    <div class="alert alert-primary" role="alert">
+                        Nenhuma foto publicada
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
         <hr>
         
         <a href="{{ path('album_foto_index') }}" class="btn btn-secondary btn-sm">Voltar</a>
     
         <a href="{{ path('album_foto_edit', {'id': album_foto.id}) }}" class="btn btn-primary btn-sm">Editar</a>
-    
-        <span class="float-right">{{ include('album_foto/_delete_form.html.twig') }}</span>
     </div>
 </div>
 {% endblock %}
