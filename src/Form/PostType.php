@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Post;
+use App\Enum\PrivacidadeEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -23,9 +24,9 @@ class PostType extends AbstractType
             ])
             ->add('privacidade', ChoiceType::class, [
                 'choices' => [
-                    'Amigos' => 'Amigos',
-                    'Público' => 'Publico',
-                    'Privado' => 'Privado'
+                    'Amigos' => PrivacidadeEnum::AMIGOS,
+                    'Público' => PrivacidadeEnum::PUBLICO,
+                    'Privado' => PrivacidadeEnum::PRIVADO
                 ]
             ])
             ->add('imageFile', VichImageType::class, [

@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Enum\PrivacidadeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)
@@ -39,8 +39,8 @@ class PostRepository extends ServiceEntityRepository
             $q->expr()->in('p.autor', $subquery->getDQL())
         );
         $q->setParameter('uid',$id);
-        $q->setParameter('amigos', 'Amigos');
-        $q->setParameter('publico', 'Publico');
+        $q->setParameter('amigos', PrivacidadeEnum::AMIGOS);
+        $q->setParameter('publico', PrivacidadeEnum::PUBLICO);
 
 
         return $q->getQuery()->getResult();
@@ -53,8 +53,8 @@ class PostRepository extends ServiceEntityRepository
         $q->andWhere('p.privacidade like :amigos');
         $q->orWhere('p.privacidade like :publico');
         $q->setParameter('uid', $id);
-        $q->setParameter('amigos', 'Amigos');
-        $q->setParameter('publico', 'Publico');
+        $q->setParameter('amigos', PrivacidadeEnum::AMIGOS);
+        $q->setParameter('publico', PrivacidadeEnum::PUBLICO);
 
         return $q->getQuery()->getResult();
 
