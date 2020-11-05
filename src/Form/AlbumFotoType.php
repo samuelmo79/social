@@ -28,6 +28,14 @@ class AlbumFotoType extends AbstractType
             ->add('descricao', TextareaType::class, [
                 'label' => 'Descrição'
             ])
+            ->add('fotos', CollectionType::class, [
+                'entry_type' => FotoType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'label' => false,
+                'by_reference' => false,
+            ])
+        ;
         ;
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $form = $event->getForm();
