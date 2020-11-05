@@ -44,9 +44,7 @@ class HomeController extends AbstractController
             ->findBy(['autor' => $usuario->getId(), 'privacidade' => PrivacidadeEnum::PRIVADO]);
         $post = array_unique(array_merge($post, $postagemPublicas, $postagemPrivada));
 
-        usort($post, function ($a, $b) {
-            return $a->getDataCadastro() < $b->getDataCadastro();
-        });
+        $post = $this->getUsort($post);
         $eventos = $this->em->getRepository(Evento::class)
             ->findBy(array(), array('dataCadastro' => 'DESC'), 3);
 
@@ -170,5 +168,17 @@ class HomeController extends AbstractController
         }
 
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @param array $post
+     * @return array
+     */
+    private function getUsort(array $post): array
+    {
+        usort($post, function ($a, $b) {
+            return $a->getDataCadastro() < $b->getDataCadastro();
+        });
+        return $post;
     }
 }
