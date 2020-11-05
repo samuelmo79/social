@@ -4,14 +4,16 @@ namespace App\Enum;
 
 abstract class PrivacidadeEnum
 {
-    public const PUBLICO = 'Público';
+    public const PUBLICO = 'Publico';
     public const AMIGOS = 'Amigos';
+    public const PRIVADO = 'Privado';
 
     public static function getPrivacidade()
     {
         return [
-            self::PUBLICO => 'Público',
-            self::AMIGOS => 'Amigos'
+            self::PUBLICO => 'Publico',
+            self::AMIGOS => 'Amigos',
+            self::PRIVADO => 'Privado'
         ];
     }
 }

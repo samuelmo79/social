@@ -32,11 +32,16 @@ class HomeController extends AbstractController
      */
     public function index(Request $request)
     {
+        /** @var User $usuario */
+        $usuario = $this->getUser();
+
         $post = $this->em->getRepository(Post::class)
             ->findPostagemAmigosPrivados($this->getUser()->getId());
-        $postagemMinhas = $this->em->getRepository(Post::class)
-            ->findPostagemMinhasPublicasOuPrivadas($this->getUser()->getId());
-        $post = array_unique(array_merge($post, $postagemMinhas));
+        $postagemPublicas = $this->em->getRepository(Post::class)
+            ->findPostagemMinhasPublicasOuAmigos($this->getUser()->getId());
+        $postagemPrivada = $this->em->getRepository(Post::class)
+            ->findBy(['autor' => $usuario->getId(), 'privacidade' => 'Privado']);
+        $post = array_unique(array_merge($post, $postagemPublicas, $postagemPrivada));
 
         usort($post, function ($a, $b) {
             return $a->getDataCadastro() < $b->getDataCadastro();

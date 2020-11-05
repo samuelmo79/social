@@ -24,7 +24,8 @@ class PostType extends AbstractType
             ->add('privacidade', ChoiceType::class, [
                 'choices' => [
                     'Amigos' => 'Amigos',
-                    'Público' => 'Público',
+                    'Público' => 'Publico',
+                    'Privado' => 'Privado'
                 ]
             ])
             ->add('imageFile', VichImageType::class, [
