@@ -165,6 +165,11 @@ class User implements UserInterface, Serializable
      */
     private $curtidaPosts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CurtidaComentario", mappedBy="usuario")
+     */
+    private $curtidaComentarios;
+
 
     public function __construct()
     {
@@ -177,6 +182,7 @@ class User implements UserInterface, Serializable
         $this->solicitacaos = new ArrayCollection();
         $this->amizades = new ArrayCollection();
         $this->curtidaPosts = new ArrayCollection();
+        $this->curtidaComentarios = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -768,6 +774,37 @@ class User implements UserInterface, Serializable
             // set the owning side to null (unless already changed)
             if ($curtidaPost->getUsuario() === $this) {
                 $curtidaPost->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CurtidaComentario[]
+     */
+    public function getCurtidaComentarios(): Collection
+    {
+        return $this->curtidaComentarios;
+    }
+
+    public function addCurtidaComentario(CurtidaComentario $curtidaComentario): self
+    {
+        if (!$this->curtidaComentarios->contains($curtidaComentario)) {
+            $this->curtidaComentarios[] = $curtidaComentario;
+            $curtidaComentario->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCurtidaComentario(CurtidaComentario $curtidaComentario): self
+    {
+        if ($this->curtidaComentarios->contains($curtidaComentario)) {
+            $this->curtidaComentarios->removeElement($curtidaComentario);
+            // set the owning side to null (unless already changed)
+            if ($curtidaComentario->getUsuario() === $this) {
+                $curtidaComentario->setUsuario(null);
             }
         }
 

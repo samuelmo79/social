@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -40,6 +42,16 @@ class PostComentario
      * @Gedmo\Timestampable(on="create")
      */
     private $dataComentario;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CurtidaComentario", mappedBy="comentario")
+     */
+    private $curtidaComentarios;
+
+    public function __construct()
+    {
+        $this->curtidaComentarios = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +102,49 @@ class PostComentario
     public function setDataComentario(DateTimeInterface $dataComentario): self
     {
         $this->dataComentario = $dataComentario;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CurtidaComentario[]
+     */
+    public function getCurtidaComentarios(): Collection
+    {
+        return $this->curtidaComentarios;
+    }
+
+    public function comentarioJaFoiCurtidaPorMim(User $user)
+    {
+        $curtidas = $this->getCurtidaComentarios()->toArray();
+        $idUsuario = $user->getId();
+
+        $curtidasPorMim = array_filter($curtidas, function ($curtidas) use ($idUsuario) {
+            return $idUsuario == $curtidas->getUsuario()->getId();
+        });
+
+        return $curtidasPorMim == [];
+    }
+
+    public function addCurtidaComentario(CurtidaComentario $curtidaComentario): self
+    {
+        if (!$this->curtidaComentarios->contains($curtidaComentario)) {
+            $this->curtidaComentarios[] = $curtidaComentario;
+            $curtidaComentario->setComentario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCurtidaComentario(CurtidaComentario $curtidaComentario): self
+    {
+        if ($this->curtidaComentarios->contains($curtidaComentario)) {
+            $this->curtidaComentarios->removeElement($curtidaComentario);
+            // set the owning side to null (unless already changed)
+            if ($curtidaComentario->getComentario() === $this) {
+                $curtidaComentario->setComentario(null);
+            }
+        }
 
         return $this;
     }
