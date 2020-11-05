@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Album de Foto{% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-body">
+        <a href="#"
+           class="btn btn-success btn-sm btn-icon-split float-right"
+           data-toggle="modal"
+           data-target="#formFotoModal"
+        >
+            <span class="icon text-white-50">
+                  <i class="fas fa-plus"></i>
+                </span>
+            <span class="text">Add Foto</span>
+        </a>
+        <!-- Modal Form Foto -->
+        <div class="modal fade" id="formFotoModal" tabindex="-1" aria-labelledby="formFotoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    {{ form_start(form, {"attr": {"novalidate": "novalidate"}}) }}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="formFotoModalLabel">{{ form_label(form.imageFile) }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_widget(form.imageFile) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary">{{ button_label|default('Criar') }}</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+        <h3 class="card-title">Álbum - {{ album_foto.nome }}</h3>
+        <hr>
+        
+        {% for foto in album_foto.fotos %}
+            <img class="img-thumbnail" src="{{ asset('imagens/album/' ~ foto.foto) }}" width="100">
+        {% endfor %}
+        <hr>
+        
+        <a href="{{ path('album_foto_index') }}" class="btn btn-secondary btn-sm">Voltar</a>
+    
+        <a href="{{ path('album_foto_edit', {'id': album_foto.id}) }}" class="btn btn-primary btn-sm">Editar</a>
+    
+        <span class="float-right">{{ include('album_foto/_delete_form.html.twig') }}</span>
+    </div>
+</div>
+{% endblock %}
