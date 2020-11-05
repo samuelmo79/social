@@ -180,6 +180,11 @@ class User implements UserInterface, Serializable
      */
     private $bloqueiosRecebidos;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AlbumFoto", mappedBy="user")
+     */
+    private $albumFotos;
+
 
     public function __construct()
     {
@@ -195,6 +200,7 @@ class User implements UserInterface, Serializable
         $this->curtidaComentarios = new ArrayCollection();
         $this->bloqueiosEfetuados = new ArrayCollection();
         $this->bloqueiosRecebidos = new ArrayCollection();
+        $this->albumFotos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -906,6 +912,37 @@ class User implements UserInterface, Serializable
             // set the owning side to null (unless already changed)
             if ($bloqueiosRecebido->getUsuarioBloqueado() === $this) {
                 $bloqueiosRecebido->setUsuarioBloqueado(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AlbumFoto[]
+     */
+    public function getAlbumFotos(): Collection
+    {
+        return $this->albumFotos;
+    }
+
+    public function addAlbumFoto(AlbumFoto $albumFoto): self
+    {
+        if (!$this->albumFotos->contains($albumFoto)) {
+            $this->albumFotos[] = $albumFoto;
+            $albumFoto->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlbumFoto(AlbumFoto $albumFoto): self
+    {
+        if ($this->albumFotos->contains($albumFoto)) {
+            $this->albumFotos->removeElement($albumFoto);
+            // set the owning side to null (unless already changed)
+            if ($albumFoto->getUser() === $this) {
+                $albumFoto->setUser(null);
             }
         }
 

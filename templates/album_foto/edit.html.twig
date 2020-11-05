@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editando Álbum{% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">Editando Álbum</h3>
+
+        {{ include('album_foto/_form.html.twig', {'button_label': 'Atualizar'}) }}
+    </div>
+</div>
+{% endblock %}
