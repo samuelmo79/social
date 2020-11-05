@@ -20,7 +20,7 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function findPostagemAmigosPrivados($id)
+    public function findPostagemAmigosPublicas($id)
     {
         $subquery = $this->getEntityManager()->createQueryBuilder();
         $subquery = $subquery->select('u.id')

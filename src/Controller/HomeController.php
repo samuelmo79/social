@@ -36,13 +36,13 @@ class HomeController extends AbstractController
         /** @var User $usuario */
         $usuario = $this->getUser();
 
-        $post = $this->em->getRepository(Post::class)
-            ->findPostagemAmigosPrivados($this->getUser()->getId());
-        $postagemPublicas = $this->em->getRepository(Post::class)
+        $postagensAmigosPublicas = $this->em->getRepository(Post::class)
+            ->findPostagemAmigosPublicas($this->getUser()->getId());
+        $postagensMinhasPublicas = $this->em->getRepository(Post::class)
             ->findPostagemMinhasPublicasOuAmigos($this->getUser()->getId());
-        $postagemPrivada = $this->em->getRepository(Post::class)
+        $postagensMinhasPrivadas = $this->em->getRepository(Post::class)
             ->findBy(['autor' => $usuario->getId(), 'privacidade' => PrivacidadeEnum::PRIVADO]);
-        $post = array_unique(array_merge($post, $postagemPublicas, $postagemPrivada));
+        $post = array_unique(array_merge($postagensAmigosPublicas, $postagensMinhasPublicas, $postagensMinhasPrivadas));
 
         $post = $this->getUsort($post);
         $eventos = $this->em->getRepository(Evento::class)
