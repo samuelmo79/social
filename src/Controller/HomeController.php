@@ -6,6 +6,7 @@ use App\Entity\Evento;
 use App\Entity\Post;
 use App\Entity\PostComentario;
 use App\Entity\User;
+use App\Enum\PrivacidadeEnum;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -32,9 +33,18 @@ class HomeController extends AbstractController
      */
     public function index(Request $request)
     {
-        $post = $this->em->getRepository(Post::class)
-            ->findBy(array(), array('dataCadastro' => 'DESC'));
+        /** @var User $usuario */
+        $usuario = $this->getUser();
 
+        $postagensAmigosPublicas = $this->em->getRepository(Post::class)
+            ->findPostagemAmigosPublicas($this->getUser()->getId());
+        $postagensMinhasPublicas = $this->em->getRepository(Post::class)
+            ->findPostagemMinhasPublicasOuAmigos($this->getUser()->getId());
+        $postagensMinhasPrivadas = $this->em->getRepository(Post::class)
+            ->findBy(['autor' => $usuario->getId(), 'privacidade' => PrivacidadeEnum::PRIVADO]);
+        $post = array_unique(array_merge($postagensAmigosPublicas, $postagensMinhasPublicas, $postagensMinhasPrivadas));
+
+        $post = $this->getUsort($post);
         $eventos = $this->em->getRepository(Evento::class)
             ->findBy(array(), array('dataCadastro' => 'DESC'), 3);
 
@@ -44,7 +54,7 @@ class HomeController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $cadastraPost->setAutor($this->getUser());
+            $cadastraPost->setAutor($usuario);
             $entityManager->persist($cadastraPost);
             $entityManager->flush();
 
@@ -158,5 +168,17 @@ class HomeController extends AbstractController
         }
 
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @param array $post
+     * @return array
+     */
+    private function getUsort(array $post): array
+    {
+        usort($post, function ($a, $b) {
+            return $a->getDataCadastro() < $b->getDataCadastro();
+        });
+        return $post;
     }
 }

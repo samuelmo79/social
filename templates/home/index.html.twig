@@ -155,10 +155,12 @@
                                     </a>
                                 </span>
                                 <span class="description">
-                                    {% if postagem.privacidade == 'Público' %}
+                                    {% if postagem.privacidade == 'Publico' %}
                                         <i class="fas fa-globe-americas"></i> Público -
-                                    {% else %}
+                                    {% elseif postagem.privacidade == 'Amigos' %}
                                         <i class="fa fa-users"></i> Amigos -
+                                    {% else %}
+                                        <i class="fa fa-lock"></i> Privado -
                                     {% endif %}
                                     {{ postagem.dataCadastro|ago }}
                                 </span>
