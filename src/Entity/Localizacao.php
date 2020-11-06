@@ -41,6 +41,11 @@ class Localizacao
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="string", length=8)
+     */
+    private $cep;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -108,6 +113,18 @@ class Localizacao
         if ($user->getLocalizacao() !== $newLocalizacao) {
             $user->setLocalizacao($newLocalizacao);
         }
+
+        return $this;
+    }
+
+    public function getCep(): ?string
+    {
+        return $this->cep;
+    }
+
+    public function setCep(string $cep): self
+    {
+        $this->cep = $cep;
 
         return $this;
     }

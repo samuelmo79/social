@@ -34,6 +34,11 @@ class LocalizacaoType extends AbstractType
                     new NotBlank(['message' => 'Este campo é obrigatório']),
                 ],
             ])
+            ->add('cep', TextType::class, [
+                'constraints' => [
+                    new NotBlank(['message' => 'Este campo é obrigatório']),
+                ],
+            ])
             ->add('pais', ChoiceType::class, [
                 'choices' => array_merge($primeiroElemento, $countries),
                 'constraints' => [
