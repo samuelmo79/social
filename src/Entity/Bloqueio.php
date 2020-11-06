@@ -5,9 +5,20 @@ namespace App\Entity;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BloqueioRepository")
+ * @UniqueEntity(
+ *     fields={"usuarioBloqueador", "usuarioBloqueado"},
+ *     message="Você ja bloqueou esse usuario!"
+ * )
+ * @ORM\Table(name="bloqueio", uniqueConstraints={
+ *     @ORM\UniqueConstraint(
+ *         name="bloqueador_bloqueado",
+ *         columns={"usuario_bloqueador_id", "usuario_bloqueado_id"}
+ * )}
+ * )
  */
 class Bloqueio
 {
