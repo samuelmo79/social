@@ -89,7 +89,7 @@ class AlbumFotoController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Álbum atualizado com sucesso!');
-            return $this->redirectToRoute('album_foto_index');
+            return $this->redirectToRoute('album_foto_show', ['id' => $albumFoto->getId()]);
         }
 
         return $this->render('album_foto/edit.html.twig', [
