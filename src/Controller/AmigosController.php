@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Amizade;
 use App\Entity\Bloqueio;
+use App\Entity\Solicitacao;
 use App\Entity\User;
 use App\Enum\TipoSolicitacaoEnum;
 use Doctrine\ORM\EntityManagerInterface;
@@ -119,9 +120,19 @@ class AmigosController extends AbstractController
             'amigo' => $bloqueado
         ]);
 
+        $solicitacaoAmizadeUsuarioParaBloqueado = $this->em->getRepository(Solicitacao::class)->findOneBy([
+            'solicitante' => $usuarioLogado,
+            'solicitado' => $bloqueado
+        ]);
+
         $amizadeBloqueadoParaUsuario = $this->em->getRepository(Amizade::class)->findOneBy([
             'usuario' => $bloqueado,
             'amigo' => $usuarioLogado
+        ]);
+
+        $solicitacaoAmizadeBloqueadoParaUsuario = $this->em->getRepository(Solicitacao::class)->findOneBy([
+            'solicitante' => $bloqueado,
+            'solicitado' => $usuarioLogado
         ]);
 
         try {
@@ -130,6 +141,13 @@ class AmigosController extends AbstractController
             }
             $this->em->remove($amizadeUsuarioparaBloqueado);
             $this->em->remove($amizadeBloqueadoParaUsuario);
+
+            if($solicitacaoAmizadeBloqueadoParaUsuario != null)
+                $this->em->remove($solicitacaoAmizadeBloqueadoParaUsuario);
+
+            if($solicitacaoAmizadeUsuarioParaBloqueado != null)
+                $this->em->remove($solicitacaoAmizadeUsuarioParaBloqueado);
+
             $this->em->persist($bloqueio);
             $this->em->flush();
 
