@@ -6,10 +6,12 @@ use App\Entity\Amizade;
 use App\Entity\Bloqueio;
 use App\Entity\Solicitacao;
 use App\Entity\User;
+use App\Enum\StatusSolicitacaoEnum;
 use App\Enum\TipoSolicitacaoEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -99,6 +101,37 @@ class AmigosController extends AbstractController
         return $this->render('amigos/meusAmigos.html.twig', [
             'meusAmigos' => $meusAmigos,
         ]);
+    }
+
+    /**
+     * @Route("/nova_amizade/{id}", name="aceita_solicitacao", methods={"GET"})
+     * @Security("user.getId() == solicitacao.getSolicitado().getId()")
+     * @param Solicitacao $solicitacao
+     * @return RedirectResponse
+     */
+    public function aceitaSolicitacaoAmizade(Solicitacao $solicitacao)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $amizadeSolicitante = new Amizade();
+        $amizadeSolicitado = new Amizade();
+        $solicitacao->setStatus(StatusSolicitacaoEnum::ACEITO);
+
+        $amizadeSolicitante->setUsuario($solicitacao->getSolicitante());
+        $amizadeSolicitante->setAmigo($solicitacao->getSolicitado());
+        $amizadeSolicitante->addSolicitacao($solicitacao);
+
+        $amizadeSolicitado->setUsuario($solicitacao->getSolicitado());
+        $amizadeSolicitado->setAmigo($solicitacao->getSolicitante());
+        $amizadeSolicitado->addSolicitacao($solicitacao);
+
+        $entityManager->persist($amizadeSolicitado);
+        $entityManager->persist($amizadeSolicitante);
+        $entityManager->persist($solicitacao);
+        $entityManager->flush();
+
+        $this->addFlash('success','Solicitação de amizade aceita!');
+        return $this->redirectToRoute('solicitacoes');
     }
 
     /**
