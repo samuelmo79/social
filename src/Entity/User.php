@@ -862,6 +862,33 @@ class User implements UserInterface, Serializable
         return $this->bloqueiosRecebidos;
     }
 
+    public function recebeuBloqueioDe(User $user)
+    {
+        $idUsuario = $user->getId();
+        $listaTodosBloqueiosRecebidos = $this->getBloqueiosRecebidos()->toArray();
+
+        $bloqueiosRecebidosPorUsuario = array_filter($listaTodosBloqueiosRecebidos,
+            function ($listaTodosBloqueiosRecebidos) use ($idUsuario) {
+                return $listaTodosBloqueiosRecebidos->getUsuarioBloqueador()->getId() == $idUsuario;
+            });
+
+        return $bloqueiosRecebidosPorUsuario != [];
+
+    }
+
+    public function efetuouBloqueio(User $user)
+    {
+        $idUsuario = $user->getId();
+        $listaTodosBloqueioEfetuados = $this->getBloqueiosEfetuados()->toArray();
+
+        $bloqueiosEfetuadosParaUsuario = array_filter($listaTodosBloqueioEfetuados,
+            function ($listaTodosBloqueioEfetuados) use ($idUsuario) {
+                return $listaTodosBloqueioEfetuados->getUsuarioBloqueado()->getId() == $idUsuario;
+            });
+
+        return $bloqueiosEfetuadosParaUsuario != [];
+    }
+
     public function addBloqueiosRecebido(Bloqueio $bloqueiosRecebido): self
     {
         if (!$this->bloqueiosRecebidos->contains($bloqueiosRecebido)) {

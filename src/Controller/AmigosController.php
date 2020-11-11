@@ -61,6 +61,15 @@ class AmigosController extends AbstractController
         $solicitados = $user->getSolicitados()->toArray();
         $solicitacaoRecebida = false;
 
+        /** @var User $userLogado */
+        $userLogado = $this->getUser();
+
+        if ($user->recebeuBloqueioDe($userLogado) ||
+            $user->efetuouBloqueio($userLogado)) {
+            $this->addFlash("warning", "Esse perfil não está disponível no momento");
+            return $this->redirectToRoute("amigos");
+        }
+
         $idUsuario = $this->getUser()->getId();
 
         if ($idUsuario == $user->getId()) {
