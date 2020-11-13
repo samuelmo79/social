@@ -52,6 +52,28 @@ class AmigosController extends AbstractController
     }
 
     /**
+     * @Route("/bloqueios", name="bloqueios", methods={"GET"})
+     * @Template("amigos/bloqueio.html.twig")
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @return array
+     */
+    public function bloqueio(Request $request, PaginatorInterface $paginator)
+    {
+        /** @var User $usuario */
+        $usuario = $this->getUser();
+
+        $bloqueios = $usuario->getBloqueiosEfetuados();
+
+        $page = $request->query->getInt('page', 1);
+        $usuariosBloqueados = $paginator->paginate($bloqueios->toArray(), $page, 20);
+
+        return [
+            'usuariosBloqueados' => $usuariosBloqueados,
+        ];
+    }
+
+    /**
      * @Route("/amigos/{id}", name="amigos_perfil", methods={"GET"})
      * @param User $user
      * @return Response
@@ -141,6 +163,22 @@ class AmigosController extends AbstractController
 
         $this->addFlash('success','Solicitação de amizade aceita!');
         return $this->redirectToRoute('solicitacoes');
+    }
+
+    /**
+     * @Route("/desbloqueia-usuario/{id}", name="desbloqueia_usuario")
+     * @Security("user.getId() == bloqueio.getUsuarioBloqueador().getId()")
+     * @param Bloqueio $bloqueio
+     * @return RedirectResponse
+     */
+    public function desfazBloqueio(Bloqueio $bloqueio)
+    {
+
+        $this->em->remove($bloqueio);
+        $this->em->flush();
+
+        $this->addFlash('success','O usuário foi desbloqueado com sucesso!');
+        return $this->redirectToRoute('amigos');
     }
 
     /**
