@@ -8,6 +8,7 @@ use App\Form\AlbumFotoType;
 use App\Form\FotoType;
 use App\Repository\AlbumFotoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -110,5 +111,19 @@ class AlbumFotoController extends AbstractController
         }
 
         return $this->redirectToRoute('album_foto_index');
+    }
+
+    /**
+     * @Route("/excluir/{id}", name="excluir_foto")
+     * @param Foto $foto
+     * @return JsonResponse
+     */
+    public function excluiFoto(Foto $foto)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($foto);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true, 'foto' => ['id' => $foto->getId()]]);
     }
 }
