@@ -42,16 +42,22 @@
         <hr>
         <div class="row">
             {% for foto in album_foto.fotos %}
-                <div class="column col-sm-3 col-md-3 d-flex">
-                    <button type="button"
-                            class="btn btn-link"
-                            data-toggle="modal"
-                            data-target="#fotoModal{{ foto.id }}"
-                    >
-                        <img src="{{ asset('imagens/album/' ~ foto.foto) }}"
-                             class="img-fluid img-thumbnail cropped"
+                <div class="column col-sm-3 col-md-3 d-flex mr-3 mb-3">
+                    <div class="card">
+                        <a type="button" class="p-1"
+                           data-toggle="modal"
+                           data-target="#fotoModal{{ foto.id }}"
                         >
-                    </button>
+                            <img src="{{ asset('imagens/album/' ~ foto.foto) }}"
+                                 class="card-img-top img-thumbnail cropped"
+                            >
+                        </a>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-danger btn-sm">
+                                <i class="fa fa-trash"></i> Excluir
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <!-- Foto Modal -->
                 <div class="modal fade"
