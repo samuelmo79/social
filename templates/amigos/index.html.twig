@@ -138,6 +138,10 @@
                    class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'amigos' %} active {% endif %}">
                     <i fla class="fa fa-search"></i> Encontrar amigos
                 </a>
+                <a href="{{ path('bloqueios') }}"
+                   class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'bloqueios' %} active {% endif %}">
+                    <i fla class="fa fa-ban"></i> Bloqueios
+                </a>
             </div>
         </div>
     </div>

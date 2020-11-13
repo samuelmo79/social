@@ -45,6 +45,20 @@
                     </h5>
                 </div>
                 <div class="card-body">
+                    {% if solicitacao != null and solicitacao.status == 2 and solicitacao.tipo == 'Amizade' %}
+                        <button class="btn btn-tool dropdown float-right mt-sm-0 ml-2"
+                                type="button"
+                                data-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="{{ path('bloqueio', {'id': user.id }) }}">
+                             <span class="text-danger">
+                                Bloquear usuário
+                             </span>
+                            </a>
+                        </div>
+                    {% endif %}
                     <button type="button" class="btn btn-light btn-sm float-right ml-2" data-toggle="modal"
                             data-target="#exampleModal" data-whatever="@mdo">
                         Deixar recado

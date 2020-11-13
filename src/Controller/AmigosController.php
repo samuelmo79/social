@@ -3,16 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Amizade;
+use App\Entity\Bloqueio;
 use App\Entity\Solicitacao;
 use App\Entity\User;
+use App\Enum\StatusSolicitacaoEnum;
 use App\Enum\TipoSolicitacaoEnum;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 class AmigosController extends AbstractController
 {
@@ -26,6 +32,9 @@ class AmigosController extends AbstractController
     /**
      * @Route("/amigos", name="amigos", methods={"GET"})
      * @Template("amigos/index.html.twig")
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @return array
      */
     public function index(Request $request, PaginatorInterface $paginator)
     {
@@ -43,6 +52,28 @@ class AmigosController extends AbstractController
     }
 
     /**
+     * @Route("/bloqueios", name="bloqueios", methods={"GET"})
+     * @Template("amigos/bloqueio.html.twig")
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @return array
+     */
+    public function bloqueio(Request $request, PaginatorInterface $paginator)
+    {
+        /** @var User $usuario */
+        $usuario = $this->getUser();
+
+        $bloqueios = $usuario->getBloqueiosEfetuados();
+
+        $page = $request->query->getInt('page', 1);
+        $usuariosBloqueados = $paginator->paginate($bloqueios->toArray(), $page, 20);
+
+        return [
+            'usuariosBloqueados' => $usuariosBloqueados,
+        ];
+    }
+
+    /**
      * @Route("/amigos/{id}", name="amigos_perfil", methods={"GET"})
      * @param User $user
      * @return Response
@@ -51,6 +82,15 @@ class AmigosController extends AbstractController
     {
         $solicitados = $user->getSolicitados()->toArray();
         $solicitacaoRecebida = false;
+
+        /** @var User $userLogado */
+        $userLogado = $this->getUser();
+
+        if ($user->recebeuBloqueioDe($userLogado) ||
+            $user->efetuouBloqueio($userLogado)) {
+            $this->addFlash("warning", "Esse perfil não está disponível no momento");
+            return $this->redirectToRoute("amigos");
+        }
 
         $idUsuario = $this->getUser()->getId();
 
@@ -92,5 +132,110 @@ class AmigosController extends AbstractController
         return $this->render('amigos/meusAmigos.html.twig', [
             'meusAmigos' => $meusAmigos,
         ]);
+    }
+
+    /**
+     * @Route("/nova_amizade/{id}", name="aceita_solicitacao", methods={"GET"})
+     * @Security("user.getId() == solicitacao.getSolicitado().getId()")
+     * @param Solicitacao $solicitacao
+     * @return RedirectResponse
+     */
+    public function aceitaSolicitacaoAmizade(Solicitacao $solicitacao)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $amizadeSolicitante = new Amizade();
+        $amizadeSolicitado = new Amizade();
+        $solicitacao->setStatus(StatusSolicitacaoEnum::ACEITO);
+
+        $amizadeSolicitante->setUsuario($solicitacao->getSolicitante());
+        $amizadeSolicitante->setAmigo($solicitacao->getSolicitado());
+        $amizadeSolicitante->addSolicitacao($solicitacao);
+
+        $amizadeSolicitado->setUsuario($solicitacao->getSolicitado());
+        $amizadeSolicitado->setAmigo($solicitacao->getSolicitante());
+        $amizadeSolicitado->addSolicitacao($solicitacao);
+
+        $entityManager->persist($amizadeSolicitado);
+        $entityManager->persist($amizadeSolicitante);
+        $entityManager->persist($solicitacao);
+        $entityManager->flush();
+
+        $this->addFlash('success','Solicitação de amizade aceita!');
+        return $this->redirectToRoute('solicitacoes');
+    }
+
+    /**
+     * @Route("/desbloqueia-usuario/{id}", name="desbloqueia_usuario")
+     * @Security("user.getId() == bloqueio.getUsuarioBloqueador().getId()")
+     * @param Bloqueio $bloqueio
+     * @return RedirectResponse
+     */
+    public function desfazBloqueio(Bloqueio $bloqueio)
+    {
+
+        $this->em->remove($bloqueio);
+        $this->em->flush();
+
+        $this->addFlash('success','O usuário foi desbloqueado com sucesso!');
+        return $this->redirectToRoute('amigos');
+    }
+
+    /**
+     * @Route("/bloqueio-amigo/{id}", name="bloqueio")
+     * @param User $bloqueado
+     * @return RedirectResponse
+     */
+    public function bloqueioAmigo(User $bloqueado)
+    {
+        /** @var User $usuarioLogado */
+        $usuarioLogado = $this->getUser();
+        $bloqueio = new Bloqueio();
+
+        $bloqueio->setUsuarioBloqueador($usuarioLogado);
+        $bloqueio->setUsuarioBloqueado($bloqueado);
+
+        $amizadeUsuarioparaBloqueado = $this->em->getRepository(Amizade::class)->findOneBy([
+            'usuario' => $usuarioLogado,
+            'amigo' => $bloqueado
+        ]);
+
+        $solicitacaoAmizadeUsuarioParaBloqueado = $this->em->getRepository(Solicitacao::class)->findOneBy([
+            'solicitante' => $usuarioLogado,
+            'solicitado' => $bloqueado
+        ]);
+
+        $amizadeBloqueadoParaUsuario = $this->em->getRepository(Amizade::class)->findOneBy([
+            'usuario' => $bloqueado,
+            'amigo' => $usuarioLogado
+        ]);
+
+        $solicitacaoAmizadeBloqueadoParaUsuario = $this->em->getRepository(Solicitacao::class)->findOneBy([
+            'solicitante' => $bloqueado,
+            'solicitado' => $usuarioLogado
+        ]);
+
+        try {
+            if ($bloqueado->getId() == $usuarioLogado->getId()) {
+                throw new Exception();
+            }
+            $this->em->remove($amizadeUsuarioparaBloqueado);
+            $this->em->remove($amizadeBloqueadoParaUsuario);
+
+            if($solicitacaoAmizadeBloqueadoParaUsuario != null)
+                $this->em->remove($solicitacaoAmizadeBloqueadoParaUsuario);
+
+            if($solicitacaoAmizadeUsuarioParaBloqueado != null)
+                $this->em->remove($solicitacaoAmizadeUsuarioParaBloqueado);
+
+            $this->em->persist($bloqueio);
+            $this->em->flush();
+            $this->addFlash('success','O usuário foi bloqueado com sucesso!');
+
+        } catch (Throwable $exception) {
+            $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
+        }
+
+        return $this->redirectToRoute('amigos');
     }
 }

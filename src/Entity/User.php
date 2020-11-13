@@ -170,6 +170,16 @@ class User implements UserInterface, Serializable
      */
     private $curtidaComentarios;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Bloqueio", mappedBy="usuarioBloqueador", orphanRemoval=true)
+     */
+    private $bloqueiosEfetuados;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Bloqueio", mappedBy="usuarioBloqueado", orphanRemoval=true)
+     */
+    private $bloqueiosRecebidos;
+
 
     public function __construct()
     {
@@ -183,6 +193,8 @@ class User implements UserInterface, Serializable
         $this->amizades = new ArrayCollection();
         $this->curtidaPosts = new ArrayCollection();
         $this->curtidaComentarios = new ArrayCollection();
+        $this->bloqueiosEfetuados = new ArrayCollection();
+        $this->bloqueiosRecebidos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -805,6 +817,95 @@ class User implements UserInterface, Serializable
             // set the owning side to null (unless already changed)
             if ($curtidaComentario->getUsuario() === $this) {
                 $curtidaComentario->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Bloqueio[]
+     */
+    public function getBloqueiosEfetuados(): Collection
+    {
+        return $this->bloqueiosEfetuados;
+    }
+
+    public function addBloqueiosEfetuado(Bloqueio $bloqueiosEfetuado): self
+    {
+        if (!$this->bloqueiosEfetuados->contains($bloqueiosEfetuado)) {
+            $this->bloqueiosEfetuados[] = $bloqueiosEfetuado;
+            $bloqueiosEfetuado->setUsuarioBloqueador($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBloqueiosEfetuado(Bloqueio $bloqueiosEfetuado): self
+    {
+        if ($this->bloqueiosEfetuados->contains($bloqueiosEfetuado)) {
+            $this->bloqueiosEfetuados->removeElement($bloqueiosEfetuado);
+            // set the owning side to null (unless already changed)
+            if ($bloqueiosEfetuado->getUsuarioBloqueador() === $this) {
+                $bloqueiosEfetuado->setUsuarioBloqueador(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Bloqueio[]
+     */
+    public function getBloqueiosRecebidos(): Collection
+    {
+        return $this->bloqueiosRecebidos;
+    }
+
+    public function recebeuBloqueioDe(User $user)
+    {
+        $idUsuario = $user->getId();
+        $listaTodosBloqueiosRecebidos = $this->getBloqueiosRecebidos()->toArray();
+
+        $bloqueiosRecebidosPorUsuario = array_filter($listaTodosBloqueiosRecebidos,
+            function ($listaTodosBloqueiosRecebidos) use ($idUsuario) {
+                return $listaTodosBloqueiosRecebidos->getUsuarioBloqueador()->getId() == $idUsuario;
+            });
+
+        return $bloqueiosRecebidosPorUsuario != [];
+
+    }
+
+    public function efetuouBloqueio(User $user)
+    {
+        $idUsuario = $user->getId();
+        $listaTodosBloqueioEfetuados = $this->getBloqueiosEfetuados()->toArray();
+
+        $bloqueiosEfetuadosParaUsuario = array_filter($listaTodosBloqueioEfetuados,
+            function ($listaTodosBloqueioEfetuados) use ($idUsuario) {
+                return $listaTodosBloqueioEfetuados->getUsuarioBloqueado()->getId() == $idUsuario;
+            });
+
+        return $bloqueiosEfetuadosParaUsuario != [];
+    }
+
+    public function addBloqueiosRecebido(Bloqueio $bloqueiosRecebido): self
+    {
+        if (!$this->bloqueiosRecebidos->contains($bloqueiosRecebido)) {
+            $this->bloqueiosRecebidos[] = $bloqueiosRecebido;
+            $bloqueiosRecebido->setUsuarioBloqueado($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBloqueiosRecebido(Bloqueio $bloqueiosRecebido): self
+    {
+        if ($this->bloqueiosRecebidos->contains($bloqueiosRecebido)) {
+            $this->bloqueiosRecebidos->removeElement($bloqueiosRecebido);
+            // set the owning side to null (unless already changed)
+            if ($bloqueiosRecebido->getUsuarioBloqueado() === $this) {
+                $bloqueiosRecebido->setUsuarioBloqueado(null);
             }
         }
 
