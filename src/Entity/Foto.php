@@ -97,7 +97,7 @@ class Foto
         return $this->foto;
     }
 
-    public function setFoto(string $foto): self
+    public function setFoto(?string $foto): self
     {
         $this->foto = $foto;
 
