@@ -40,6 +40,12 @@ class SolicitacaoController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        if ($user->recebeuBloqueioDe($solicitado) ||
+            $user->efetuouBloqueio($solicitado)) {
+            $this->addFlash("warning", "Esse perfil não está disponível no momento");
+            return $this->redirectToRoute("amigos");
+        }
+
         if ($solicitado === $user) {
             $this->addFlash('warning', 'Não é possível enviar uma solicitação de amizade para si !');
             return $this->redirectToRoute('amigos');
