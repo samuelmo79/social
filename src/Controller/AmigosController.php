@@ -192,6 +192,7 @@ class AmigosController extends AbstractController
 
             $this->em->persist($bloqueio);
             $this->em->flush();
+            $this->addFlash('success','O usuário foi bloqueado com sucesso!');
 
         } catch (Throwable $exception) {
             $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
