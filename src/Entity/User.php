@@ -200,7 +200,6 @@ class User implements UserInterface, Serializable
         $this->bloqueiosEfetuados = new ArrayCollection();
         $this->bloqueiosRecebidos = new ArrayCollection();
         $this->albumFotos = new ArrayCollection();
-        $this->albumFotos = new ArrayCollection();
     }
 
     public function getId(): ?int
