@@ -7,6 +7,7 @@ use App\Entity\Foto;
 use App\Form\AlbumFotoType;
 use App\Form\FotoType;
 use App\Repository\AlbumFotoRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,6 +56,7 @@ class AlbumFotoController extends AbstractController
 
     /**
      * @Route("/{id}", name="album_foto_show", methods={"GET","POST"})
+     * @Security("user.getId() == albumFoto.getUser().getId()")
      */
     public function show(AlbumFoto $albumFoto, Request $request): Response
     {
@@ -80,6 +82,7 @@ class AlbumFotoController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="album_foto_edit", methods={"GET","POST"})
+     * @Security("user.getId() == albumFoto.getUser().getId()")
      */
     public function edit(Request $request, AlbumFoto $albumFoto): Response
     {
@@ -115,6 +118,7 @@ class AlbumFotoController extends AbstractController
 
     /**
      * @Route("/excluir/{id}", name="excluir_foto")
+     * @Security("user.getId() == foto.getAlbum().getUser().getId()")
      * @param Foto $foto
      * @return JsonResponse
      */

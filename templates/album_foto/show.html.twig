@@ -52,6 +52,7 @@
                                  class="card-img-top img-thumbnail cropped"
                             >
                         </a>
+                        {% if album_foto.user.id == app.user.id %}
                         <div class="card-footer">
                             <a href="{{ path('excluir_foto', {'id': foto.id}) }}"
                                class="btn btn-danger btn-sm btn-excluir-foto"
@@ -59,6 +60,7 @@
                                 <i class="fa fa-trash"></i> Excluir
                             </a>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
                 <!-- Foto Modal -->
