@@ -190,6 +190,51 @@ class AmigosController extends AbstractController
     {
         // TODO: implementar a lógica aqui
 
+        /** @var User $userLogado */
+        $userLogado = $this->getUser();
+        $idUsuario = $userLogado->getId();
+        $idAmigo = $amigo->getId();
+        $amizadesUsuarioAmigo = $userLogado->getAmizades()->toArray();
+        $amizadesAmigoUsuario = $amigo->getAmizades()->toArray();
+
+        // Obtém a relação de amizade
+        $amigoFiltrado = current(array_filter($amizadesUsuarioAmigo, function ($amizadesUsuarioAmigo) use ($idUsuario, $idAmigo) {
+            return $amizadesUsuarioAmigo->getUsuario()->getId() == $idUsuario &&
+                    $amizadesUsuarioAmigo->getAmigo()->getId() == $idAmigo;
+        }));
+
+        $usuarioFiltrado = current(array_filter($amizadesAmigoUsuario, function ($amizadesAmigoUsuario) use ($idUsuario, $idAmigo) {
+            return $amizadesAmigoUsuario->getUsuario()->getId() == $idAmigo &&
+                $amizadesAmigoUsuario->getAmigo()->getId() == $idUsuario;
+        }));
+
+        $solicitacaoAmizadeUsuario = $this->em->getRepository(Solicitacao::class)->findOneBy([
+            'solicitante' => $idUsuario,
+            'solicitado' => $idAmigo
+        ]);
+
+        $solicitacaoAmizadeAmigo = $this->em->getRepository(Solicitacao::class)->findOneBy([
+            'solicitante' => $idAmigo,
+            'solicitado' => $idUsuario
+        ]);
+
+        try {
+           $this->em->remove($amigoFiltrado);
+           $this->em->remove($usuarioFiltrado);
+
+           if($solicitacaoAmizadeUsuario != null)
+               $this->em->remove($solicitacaoAmizadeUsuario);
+
+           if($solicitacaoAmizadeAmigo != null)
+                $this->em->remove($solicitacaoAmizadeAmigo);
+
+            $this->em->flush();
+            $this->addFlash('success', 'Amizade desfeita !');
+
+        } catch (Throwable $exception) {
+            $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
+        }
+
         return $this->redirectToRoute('amigos');
     }
 
