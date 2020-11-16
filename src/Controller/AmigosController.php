@@ -188,7 +188,6 @@ class AmigosController extends AbstractController
      */
     public function desfazAmizade(User $amigo)
     {
-        // TODO: implementar a lógica aqui
 
         /** @var User $userLogado */
         $userLogado = $this->getUser();
