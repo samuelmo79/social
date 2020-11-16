@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\AlbumFoto;
+use App\Enum\PrivacidadeEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -27,6 +29,17 @@ class AlbumFotoType extends AbstractType
             ])
             ->add('descricao', TextareaType::class, [
                 'label' => 'Descrição'
+            ])
+            ->add('privacidade', ChoiceType::class, [
+                'placeholder' => 'Selecione',
+                'choices' => [
+                    'Amigos' => PrivacidadeEnum::AMIGOS,
+                    'Público' => PrivacidadeEnum::PUBLICO,
+                    'Privado' => PrivacidadeEnum::PRIVADO
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Este campo é obrigatório']),
+                ],
             ])
             ->add('fotos', CollectionType::class, [
                 'entry_type' => FotoType::class,

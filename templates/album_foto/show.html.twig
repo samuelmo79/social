@@ -38,7 +38,18 @@
             </div>
         </div>
         <h3 class="card-title">Álbum - {{ album_foto.nome }}</h3>
-        <small>{{ album_foto.descricao }}</small>
+        <small>
+            <span class="description">
+                {% if album_foto.privacidade == 'Publico' %}
+                    <i class="fas fa-globe-americas"></i> Público
+                {% elseif album_foto.privacidade == 'Amigos' %}
+                    <i class="fa fa-users"></i> Amigos
+                {% else %}
+                    <i class="fa fa-lock"></i> Privado
+                {% endif %}
+            </span>
+            {{ album_foto.descricao ? ' - ' ~ album_foto.descricao : '' }}
+        </small>
         <hr>
         <div class="row">
             {% for foto in album_foto.fotos %}

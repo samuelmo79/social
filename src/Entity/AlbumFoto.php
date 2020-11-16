@@ -50,6 +50,11 @@ class AlbumFoto
      */
     private $descricao;
 
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $privacidade;
+
     public function __construct()
     {
         $this->fotos = new ArrayCollection();
@@ -154,5 +159,17 @@ class AlbumFoto
     public function __toString()
     {
         return $this->nome;
+    }
+
+    public function getPrivacidade(): ?string
+    {
+        return $this->privacidade;
+    }
+
+    public function setPrivacidade(string $privacidade): self
+    {
+        $this->privacidade = $privacidade;
+
+        return $this;
     }
 }
