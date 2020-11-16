@@ -103,7 +103,7 @@ class AmigosController extends AbstractController
                 $solicitados->getTipo() == TipoSolicitacaoEnum::AMIZADE;
         });
 
-        if($solicitadosPorUsuario == []) {
+        if ($solicitadosPorUsuario == []) {
             $solicitacoes = $user->getSolicitacaos()->toArray();
             $solicitadosPorUsuario = array_filter($solicitacoes, function ($solicitacoes) use ($idUsuario) {
                 return $solicitacoes->getSolicitado()->getId() == $idUsuario &&
@@ -161,7 +161,7 @@ class AmigosController extends AbstractController
         $entityManager->persist($solicitacao);
         $entityManager->flush();
 
-        $this->addFlash('success','Solicitação de amizade aceita!');
+        $this->addFlash('success', 'Solicitação de amizade aceita!');
         return $this->redirectToRoute('solicitacoes');
     }
 
@@ -177,7 +177,7 @@ class AmigosController extends AbstractController
         $this->em->remove($bloqueio);
         $this->em->flush();
 
-        $this->addFlash('success','O usuário foi desbloqueado com sucesso!');
+        $this->addFlash('success', 'O usuário foi desbloqueado com sucesso!');
         return $this->redirectToRoute('amigos');
     }
 
@@ -196,36 +196,45 @@ class AmigosController extends AbstractController
         $amizadesUsuarioAmigo = $userLogado->getAmizades()->toArray();
         $amizadesAmigoUsuario = $amigo->getAmizades()->toArray();
 
-        // Obtém a relação de amizade
-        $amigoFiltrado = current(array_filter($amizadesUsuarioAmigo, function ($amizadesUsuarioAmigo) use ($idUsuario, $idAmigo) {
-            return $amizadesUsuarioAmigo->getUsuario()->getId() == $idUsuario &&
-                    $amizadesUsuarioAmigo->getAmigo()->getId() == $idAmigo;
-        }));
-
-        $usuarioFiltrado = current(array_filter($amizadesAmigoUsuario, function ($amizadesAmigoUsuario) use ($idUsuario, $idAmigo) {
-            return $amizadesAmigoUsuario->getUsuario()->getId() == $idAmigo &&
-                $amizadesAmigoUsuario->getAmigo()->getId() == $idUsuario;
-        }));
-
-        $solicitacaoAmizadeUsuario = $this->em->getRepository(Solicitacao::class)->findOneBy([
-            'solicitante' => $idUsuario,
-            'solicitado' => $idAmigo
-        ]);
-
-        $solicitacaoAmizadeAmigo = $this->em->getRepository(Solicitacao::class)->findOneBy([
-            'solicitante' => $idAmigo,
-            'solicitado' => $idUsuario
-        ]);
-
         try {
-           $this->em->remove($amigoFiltrado);
-           $this->em->remove($usuarioFiltrado);
+            // Obtém a relação de amizade
+            $amigoFiltrado = current(array_filter($amizadesUsuarioAmigo,
+                function ($amizadesUsuarioAmigo) use ($idUsuario, $idAmigo) {
+                    return $amizadesUsuarioAmigo->getUsuario()->getId() == $idUsuario &&
+                        $amizadesUsuarioAmigo->getAmigo()->getId() == $idAmigo;
+                }));
 
-           if($solicitacaoAmizadeUsuario != null)
-               $this->em->remove($solicitacaoAmizadeUsuario);
+            $usuarioFiltrado = current(array_filter($amizadesAmigoUsuario,
+                function ($amizadesAmigoUsuario) use ($idUsuario, $idAmigo) {
+                    return $amizadesAmigoUsuario->getUsuario()->getId() == $idAmigo &&
+                        $amizadesAmigoUsuario->getAmigo()->getId() == $idUsuario;
+                }));
 
-           if($solicitacaoAmizadeAmigo != null)
+            $solicitacaoAmizadeUsuario = $this->em->getRepository(Solicitacao::class)->findOneBy([
+                'solicitante' => $idUsuario,
+                'solicitado' => $idAmigo
+            ]);
+
+            $solicitacaoAmizadeAmigo = $this->em->getRepository(Solicitacao::class)->findOneBy([
+                'solicitante' => $idAmigo,
+                'solicitado' => $idUsuario
+            ]);
+
+
+            if ($amigoFiltrado == [] || $usuarioFiltrado == []) {
+                throw new Exception();
+            }
+
+            $this->em->remove($amigoFiltrado);
+            $this->em->remove($usuarioFiltrado);
+
+            if ($solicitacaoAmizadeUsuario != null) {
+                $this->em->remove($solicitacaoAmizadeUsuario);
+            }
+
+            if ($solicitacaoAmizadeAmigo != null) {
                 $this->em->remove($solicitacaoAmizadeAmigo);
+            }
 
             $this->em->flush();
             $this->addFlash('success', 'Amizade desfeita !');
@@ -278,15 +287,17 @@ class AmigosController extends AbstractController
             $this->em->remove($amizadeUsuarioparaBloqueado);
             $this->em->remove($amizadeBloqueadoParaUsuario);
 
-            if($solicitacaoAmizadeBloqueadoParaUsuario != null)
+            if ($solicitacaoAmizadeBloqueadoParaUsuario != null) {
                 $this->em->remove($solicitacaoAmizadeBloqueadoParaUsuario);
+            }
 
-            if($solicitacaoAmizadeUsuarioParaBloqueado != null)
+            if ($solicitacaoAmizadeUsuarioParaBloqueado != null) {
                 $this->em->remove($solicitacaoAmizadeUsuarioParaBloqueado);
+            }
 
             $this->em->persist($bloqueio);
             $this->em->flush();
-            $this->addFlash('success','O usuário foi bloqueado com sucesso!');
+            $this->addFlash('success', 'O usuário foi bloqueado com sucesso!');
 
         } catch (Throwable $exception) {
             $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
