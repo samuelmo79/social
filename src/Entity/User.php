@@ -185,12 +185,6 @@ class User implements UserInterface, Serializable
      */
     private $albumFotos;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AlbumFoto", mappedBy="user")
-     */
-    private $albumFotos;
-
-
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -954,36 +948,4 @@ class User implements UserInterface, Serializable
 
         return $this;
     }
-
-    /**
-     * @return Collection|AlbumFoto[]
-     */
-    public function getAlbumFotos(): Collection
-    {
-        return $this->albumFotos;
-    }
-
-    public function addAlbumFoto(AlbumFoto $albumFoto): self
-    {
-        if (!$this->albumFotos->contains($albumFoto)) {
-            $this->albumFotos[] = $albumFoto;
-            $albumFoto->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAlbumFoto(AlbumFoto $albumFoto): self
-    {
-        if ($this->albumFotos->contains($albumFoto)) {
-            $this->albumFotos->removeElement($albumFoto);
-            // set the owning side to null (unless already changed)
-            if ($albumFoto->getUser() === $this) {
-                $albumFoto->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
 }
