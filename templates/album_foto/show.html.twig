@@ -27,11 +27,11 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        {{ form_widget(form.imageFile) }}
+                        {{ form_widget(form.imageFile, {'attr': {'class': 'custom-file-input'}}) }}
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                        <button class="btn btn-primary">{{ button_label|default('Criar') }}</button>
+                        <button class="btn btn-primary">{{ button_label|default('Enviar') }}</button>
                     </div>
                     {{ form_end(form) }}
                 </div>
@@ -53,7 +53,9 @@
                             >
                         </a>
                         <div class="card-footer">
-                            <a href="{{ path('excluir_foto', {'id': foto.id}) }}" class="btn btn-danger btn-sm">
+                            <a href="{{ path('excluir_foto', {'id': foto.id}) }}"
+                               class="btn btn-danger btn-sm btn-excluir-foto"
+                            >
                                 <i class="fa fa-trash"></i> Excluir
                             </a>
                         </div>
@@ -103,4 +105,31 @@
         <a href="{{ path('album_foto_edit', {'id': album_foto.id}) }}" class="btn btn-primary btn-sm">Editar</a>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+        $(document).ready(function(){
+            $(".btn-excluir-foto").click(function(ev){
+                ev.preventDefault();
+                var $this = $(this);
+                var url = $(this).prop("href");
+                $.get(url, function(response){
+                    Swal.fire({title: "Excluido", text: "Está foto foi excluída", icon:
+                            "success"}).then(function(){
+                            location.reload();
+                        }
+                    )
+                }, 'json');
+            });
+        });
+    </script>
+    <script>
+        $('.custom-file-input').on('change', function () {
+            var fileName = this.files[0].name;
+
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
 {% endblock %}
