@@ -117,6 +117,21 @@ class AlbumFotoController extends AbstractController
     }
 
     /**
+     * @Route("/excluir-album/{id}", name="excluir_album")
+     * @Security("user.getId() == albumFoto.getUser().getId()")
+     * @param AlbumFoto $albumFoto
+     * @return JsonResponse
+     */
+    public function excluiAlbumFoto(AlbumFoto $albumFoto)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($albumFoto);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true, 'album_foto' => ['id' => $albumFoto->getId()]]);
+    }
+
+    /**
      * @Route("/excluir/{id}", name="excluir_foto")
      * @Security("user.getId() == foto.getAlbum().getUser().getId()")
      * @param Foto $foto

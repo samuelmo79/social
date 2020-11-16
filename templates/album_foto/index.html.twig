@@ -32,7 +32,18 @@
                         </div>
                         <div class="card-footer">
                             <small>Criado à {{ album_foto.dataCriacao|ago }}</small>
-                            <a href="{{ path('album_foto_edit', {'id': album_foto.id}) }}" class="btn btn-warning btn-sm float-right">Editar</a>
+                            <div class="float-right">
+                                <a href="{{ path('album_foto_edit', {'id': album_foto.id}) }}"
+                                   class="btn btn-warning btn-sm"
+                                >
+                                    Editar
+                                </a>
+                                <a href="{{ path('excluir_album', {'id': album_foto.id}) }}"
+                                   class="btn btn-danger btn-sm btn-excluir-album"
+                                >
+                                    Excluir
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -46,4 +57,24 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+        $(document).ready(function(){
+            $(".btn-excluir-album").click(function(ev){
+                ev.preventDefault();
+                var $this = $(this);
+                var url = $(this).prop("href");
+                $.get(url, function(response){
+                    Swal.fire({title: "Excluido", text: "Este álbum e suas fotos foram excluídos", icon:
+                            "success"}).then(function(){
+                            location.reload();
+                        }
+                    )
+                }, 'json');
+            });
+        });
+    </script>
 {% endblock %}

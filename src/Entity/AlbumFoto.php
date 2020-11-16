@@ -30,7 +30,7 @@ class AlbumFoto
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Foto", mappedBy="album")
+     * @ORM\OneToMany(targetEntity="App\Entity\Foto", mappedBy="album", cascade={"REMOVE"})
      */
     private $fotos;
 
