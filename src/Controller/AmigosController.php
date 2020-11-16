@@ -182,6 +182,18 @@ class AmigosController extends AbstractController
     }
 
     /**
+     * @Route("/desfaz-amizade/{id}", name="desfaz_amizade")
+     * @param User $amigo
+     * @return RedirectResponse
+     */
+    public function desfazAmizade(User $amigo)
+    {
+        // TODO: implementar a lógica aqui
+
+        return $this->redirectToRoute('amigos');
+    }
+
+    /**
      * @Route("/bloqueio-amigo/{id}", name="bloqueio")
      * @param User $bloqueado
      * @return RedirectResponse
