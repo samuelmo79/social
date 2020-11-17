@@ -42,6 +42,11 @@
                         Amigos
                     </a>
                 </li>
+                <li class="navlink-item {% if app.request.attributes.get('_route') == 'album_foto_index' %} active {% endif %}">
+                    <a class="navlink-link" href="{{ path('album_foto_index') }}">
+                        Fotos
+                    </a>
+                </li>
                 <li class="navlink-item {% if app.request.attributes.get('_route') == 'solicitacoes' %} active {% endif %}">
                     <a class="navlink-link" href="{{ path('solicitacoes') }}">
                         Solicitações <span class="badge badge-light">{{ app.user.totalSolicitacoes }}</span>

@@ -108,6 +108,9 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.42"
     },
+    "imagine/imagine": {
+        "version": "1.2.4"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -122,6 +125,19 @@
     },
     "knplabs/knp-time-bundle": {
         "version": "v1.13.0"
+    },
+    "liip/imagine-bundle": {
+        "version": "1.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.8",
+            "ref": "5a5bdc2d0e2533ed6935d5ae562f2b318a8fc1ee"
+        },
+        "files": [
+            "config/packages/liip_imagine.yaml",
+            "config/routes/liip_imagine.yaml"
+        ]
     },
     "mervick/emojionearea": {
         "version": "v3.4.2"
@@ -498,6 +514,9 @@
             "config/packages/swiftmailer.yaml",
             "config/packages/test/swiftmailer.yaml"
         ]
+    },
+    "symfony/templating": {
+        "version": "v5.0.11"
     },
     "symfony/test-pack": {
         "version": "v1.0.6"

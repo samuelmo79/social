@@ -1,0 +1,5 @@
+{{ form_start(form, {"attr": {"novalidate": "novalidate"}}) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-primary btn-sm">{{ button_label|default('Criar') }}</button>
+    <a href="{{ path('album_foto_index') }}" class="btn btn-secondary btn-sm">Voltar</a>
+{{ form_end(form) }}

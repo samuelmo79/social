@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Álbum de Foto{% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-body">
+        <a href="#"
+           class="btn btn-success btn-sm btn-icon-split float-right"
+           data-toggle="modal"
+           data-target="#formFotoModal"
+        >
+            <span class="icon text-white-50">
+                  <i class="fas fa-plus"></i>
+                </span>
+            <span class="text">Add Foto</span>
+        </a>
+        <!-- Modal Form Foto -->
+        <div class="modal fade" id="formFotoModal" tabindex="-1" aria-labelledby="formFotoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    {{ form_start(form, {"attr": {"novalidate": "novalidate"}}) }}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="formFotoModalLabel">{{ form_label(form.imageFile) }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form_widget(form.imageFile, {'attr': {'class': 'custom-file-input'}}) }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary">{{ button_label|default('Enviar') }}</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+        <h3 class="card-title">Álbum - {{ album_foto.nome }}</h3>
+        <small>
+            <span class="description">
+                {% if album_foto.privacidade == 'Publico' %}
+                    <i class="fas fa-globe-americas"></i> Público
+                {% elseif album_foto.privacidade == 'Amigos' %}
+                    <i class="fa fa-users"></i> Amigos
+                {% else %}
+                    <i class="fa fa-lock"></i> Privado
+                {% endif %}
+            </span>
+            {{ album_foto.descricao ? ' - ' ~ album_foto.descricao : '' }}
+        </small>
+        <hr>
+        <div class="row">
+            {% for foto in album_foto.fotos %}
+                <div class="column col-sm-3 col-md-3 d-flex mr-3 mb-3">
+                    <div class="card">
+                        <a type="button" class="p-1"
+                           data-toggle="modal"
+                           data-target="#fotoModal{{ foto.id }}"
+                        >
+                            <img src="{{ asset('imagens/album/' ~ foto.foto) }}"
+                                 class="card-img-top img-thumbnail cropped"
+                            >
+                        </a>
+                        {% if album_foto.user.id == app.user.id %}
+                        <div class="card-footer">
+                            <a href="{{ path('excluir_foto', {'id': foto.id}) }}"
+                               class="btn btn-danger btn-sm btn-excluir-foto"
+                            >
+                                <i class="fa fa-trash"></i> Excluir
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- Foto Modal -->
+                <div class="modal fade"
+                     id="fotoModal{{ foto.id }}"
+                     tabindex="-1"
+                     aria-labelledby="fotoModalLabel"
+                     aria-hidden="true"
+                >
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="fotoModalLabel">
+                                    {{ foto.album.nome }}
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body bg-dark">
+                                <img class="img-fluid"
+                                     src="{{ asset('imagens/album/' ~ foto.foto) }}"
+                                     width="800"
+                                >
+                            </div>
+                            <div class="modal-footer">
+                                <small>Criado em {{ foto.dataCadastro|ago }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-md-12">
+                    <div class="alert alert-primary" role="alert">
+                        Nenhuma foto publicada
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <hr>
+        
+        <a href="{{ path('album_foto_index') }}" class="btn btn-secondary btn-sm">Voltar</a>
+    
+        <a href="{{ path('album_foto_edit', {'id': album_foto.id}) }}" class="btn btn-primary btn-sm">Editar</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+        $(document).ready(function(){
+            $(".btn-excluir-foto").click(function(ev){
+                ev.preventDefault();
+                Swal.fire({
+                    title: 'Você está certo disso?',
+                    text: "Você não será capaz de reverter está operação!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sim, deletar foto!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var $this = $(this);
+                        var url = $(this).prop("href");
+                        $.get(url, function(response){
+                            Swal.fire({title: "Excluído", text: "A foto foi excluída com sucesso!", icon:
+                                    "success"}).then(function(){
+                                    location.reload();
+                                }
+                            )
+                        }, 'json');
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $('.custom-file-input').on('change', function () {
+            var fileName = this.files[0].name;
+
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+{% endblock %}
