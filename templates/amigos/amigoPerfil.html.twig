@@ -93,7 +93,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="#" class="btn btn-light btn-sm"><i class="fas fa-rss"></i> Seguir</a>
+                    <a href="{{ path('seguir_usuario', {'id': user.id }) }}" class="btn btn-light btn-sm"><i class="fas fa-rss"></i> Seguir</a>
                     <div class="btn-group float-right" role="group" aria-label="Basic example">
                         {% if solicitacao is null %}
                             <a href="{{ path('solicita_amizade', {'id': user.id }) }}" class="btn btn-light btn-sm"><i class="fa fa-user-plus"></i> Enviar solicitação</a>

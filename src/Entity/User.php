@@ -185,6 +185,16 @@ class User implements UserInterface, Serializable
      */
     private $albumFotos;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Seguidor", mappedBy="usuarioSeguidor")
+     */
+    private $seguidors;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Seguidor", mappedBy="usuarioSeguido")
+     */
+    private $seguindo;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -200,6 +210,8 @@ class User implements UserInterface, Serializable
         $this->bloqueiosEfetuados = new ArrayCollection();
         $this->bloqueiosRecebidos = new ArrayCollection();
         $this->albumFotos = new ArrayCollection();
+        $this->seguidors = new ArrayCollection();
+        $this->seguindo = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -942,6 +954,68 @@ class User implements UserInterface, Serializable
             // set the owning side to null (unless already changed)
             if ($albumFoto->getUser() === $this) {
                 $albumFoto->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Seguidor[]
+     */
+    public function getSeguidors(): Collection
+    {
+        return $this->seguidors;
+    }
+
+    public function addSeguidor(Seguidor $seguidor): self
+    {
+        if (!$this->seguidors->contains($seguidor)) {
+            $this->seguidors[] = $seguidor;
+            $seguidor->setUsuarioSeguidor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeguidor(Seguidor $seguidor): self
+    {
+        if ($this->seguidors->contains($seguidor)) {
+            $this->seguidors->removeElement($seguidor);
+            // set the owning side to null (unless already changed)
+            if ($seguidor->getUsuarioSeguidor() === $this) {
+                $seguidor->setUsuarioSeguidor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Seguidor[]
+     */
+    public function getSeguindo(): Collection
+    {
+        return $this->seguindo;
+    }
+
+    public function addSeguindo(Seguidor $seguindo): self
+    {
+        if (!$this->seguindo->contains($seguindo)) {
+            $this->seguindo[] = $seguindo;
+            $seguindo->setUsuarioSeguido($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeguindo(Seguidor $seguindo): self
+    {
+        if ($this->seguindo->contains($seguindo)) {
+            $this->seguindo->removeElement($seguindo);
+            // set the owning side to null (unless already changed)
+            if ($seguindo->getUsuarioSeguido() === $this) {
+                $seguindo->setUsuarioSeguido(null);
             }
         }
 
