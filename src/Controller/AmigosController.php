@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\AlbumFoto;
 use App\Entity\Amizade;
 use App\Entity\Bloqueio;
 use App\Entity\Solicitacao;
@@ -114,11 +115,24 @@ class AmigosController extends AbstractController
             }
         }
 
+
+        //Exibindo fotos do perfil público
+        $entityManager = $this->getDoctrine()->getManager();
+        $amizade = $entityManager->getRepository(Amizade::class)
+            ->findOneBy(['usuario' => $userLogado, 'amigo' => $user]);
+
+        $arrayFotos = $entityManager->getRepository(AlbumFoto::class)->getQueryFotosPublico($user);
+
+        if ($amizade != []) {
+            $fotoAmigo = $entityManager->getRepository(AlbumFoto::class)->getQueryFotosAmigos($user);
+            $arrayFotos = array_unique(array_merge($arrayFotos, $fotoAmigo));
+        }
+
         return $this->render('amigos/amigoPerfil.html.twig', [
-            'controller_name' => 'RecadosController',
             'user' => $user,
             'solicitacao' => $solicitadosPorUsuario != [] ? current($solicitadosPorUsuario) : null,
-            'solicitacaoRecebida' => $solicitacaoRecebida
+            'solicitacaoRecebida' => $solicitacaoRecebida,
+            'fotos' => $arrayFotos,
         ]);
     }
 

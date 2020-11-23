@@ -130,6 +130,17 @@
                                 Localização
                             </a>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link"
+                               id="pills-foto-tab"
+                               data-toggle="pill"
+                               href="#pills-foto"
+                               role="tab"
+                               aria-controls="pills-foto"
+                               aria-selected="false">
+                                Fotos
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -209,6 +220,26 @@
                                                 </div>
                                             </div>
                                         {% endif %}
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="pills-foto" role="tabpanel"
+                                     aria-labelledby="pills-foto-tab">
+                                    <h3 class="card-title">
+                                        Fotos
+                                    </h3>
+                                    <div class="card-body">
+                                        {% for foto in fotos %}
+                                            {% for foto_publica in foto.fotos %}
+                                                <img src="{{ asset('imagens/album/' ~ foto_publica.foto) }}"
+                                                     class="img-thumbnail cropped mb-2 mr-2"
+                                                     width="100"
+                                                >
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="alert alert-primary" role="alert">
+                                                Nenhuma foto publicada
+                                            </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>
