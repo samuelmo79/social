@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\AlbumFoto;
 use App\Entity\Amizade;
 use App\Entity\Bloqueio;
 use App\Entity\Solicitacao;
@@ -103,7 +104,7 @@ class AmigosController extends AbstractController
                 $solicitados->getTipo() == TipoSolicitacaoEnum::AMIZADE;
         });
 
-        if($solicitadosPorUsuario == []) {
+        if ($solicitadosPorUsuario == []) {
             $solicitacoes = $user->getSolicitacaos()->toArray();
             $solicitadosPorUsuario = array_filter($solicitacoes, function ($solicitacoes) use ($idUsuario) {
                 return $solicitacoes->getSolicitado()->getId() == $idUsuario &&
@@ -114,11 +115,24 @@ class AmigosController extends AbstractController
             }
         }
 
+
+        //Exibindo fotos do perfil público
+        $entityManager = $this->getDoctrine()->getManager();
+        $amizade = $entityManager->getRepository(Amizade::class)
+            ->findOneBy(['usuario' => $userLogado, 'amigo' => $user]);
+
+        $arrayFotos = $entityManager->getRepository(AlbumFoto::class)->getQueryFotosPublico($user);
+
+        if ($amizade != []) {
+            $fotoAmigo = $entityManager->getRepository(AlbumFoto::class)->getQueryFotosAmigos($user);
+            $arrayFotos = array_unique(array_merge($arrayFotos, $fotoAmigo));
+        }
+
         return $this->render('amigos/amigoPerfil.html.twig', [
-            'controller_name' => 'RecadosController',
             'user' => $user,
             'solicitacao' => $solicitadosPorUsuario != [] ? current($solicitadosPorUsuario) : null,
-            'solicitacaoRecebida' => $solicitacaoRecebida
+            'solicitacaoRecebida' => $solicitacaoRecebida,
+            'fotos' => $arrayFotos,
         ]);
     }
 
@@ -161,7 +175,7 @@ class AmigosController extends AbstractController
         $entityManager->persist($solicitacao);
         $entityManager->flush();
 
-        $this->addFlash('success','Solicitação de amizade aceita!');
+        $this->addFlash('success', 'Solicitação de amizade aceita!');
         return $this->redirectToRoute('solicitacoes');
     }
 
@@ -177,7 +191,7 @@ class AmigosController extends AbstractController
         $this->em->remove($bloqueio);
         $this->em->flush();
 
-        $this->addFlash('success','O usuário foi desbloqueado com sucesso!');
+        $this->addFlash('success', 'O usuário foi desbloqueado com sucesso!');
         return $this->redirectToRoute('amigos');
     }
 
@@ -222,15 +236,17 @@ class AmigosController extends AbstractController
             $this->em->remove($amizadeUsuarioparaBloqueado);
             $this->em->remove($amizadeBloqueadoParaUsuario);
 
-            if($solicitacaoAmizadeBloqueadoParaUsuario != null)
+            if ($solicitacaoAmizadeBloqueadoParaUsuario != null) {
                 $this->em->remove($solicitacaoAmizadeBloqueadoParaUsuario);
+            }
 
-            if($solicitacaoAmizadeUsuarioParaBloqueado != null)
+            if ($solicitacaoAmizadeUsuarioParaBloqueado != null) {
                 $this->em->remove($solicitacaoAmizadeUsuarioParaBloqueado);
+            }
 
             $this->em->persist($bloqueio);
             $this->em->flush();
-            $this->addFlash('success','O usuário foi bloqueado com sucesso!');
+            $this->addFlash('success', 'O usuário foi bloqueado com sucesso!');
 
         } catch (Throwable $exception) {
             $this->addFlash('warning', 'Sua solicitação não pode ser processada !');

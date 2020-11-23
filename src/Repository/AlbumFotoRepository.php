@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\AlbumFoto;
+use App\Enum\PrivacidadeEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -17,6 +18,41 @@ class AlbumFotoRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, AlbumFoto::class);
+    }
+
+    public function getQueryFotosPublico($id)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.user = :id')
+            ->andWhere('p.privacidade = :privacidade')
+            ->setParameter('id', $id)
+            ->setParameter('privacidade', PrivacidadeEnum::PUBLICO)
+            ->orderBy('p.dataCriacao', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function getQueryFotosAmigos($id)
+    {
+        $subquery = $this->getEntityManager()->createQueryBuilder();
+        $subquery = $subquery->select('u.id')
+            ->from('App:User', 'u')
+            ->from('App:Amizade', 'a')
+            ->andWhere('u.id = a.amigo')
+            ->andWhere('u.id = :uid')
+            ->setParameter('uid', $id);
+
+        $q = $this->createQueryBuilder('p');
+
+        $q->andWhere('p.privacidade = :amigos');
+        $q->andWhere(
+            $q->expr()->in('p.user', $subquery->getDQL())
+        );
+        $q->setParameter('uid',$id);
+        $q->setParameter('amigos', PrivacidadeEnum::AMIGOS);
+
+        return $q->getQuery()->getResult();
     }
 
     // /**
