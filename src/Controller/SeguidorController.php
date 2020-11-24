@@ -53,7 +53,35 @@ class SeguidorController extends AbstractController
             $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
         }
 
-        return $this->redirectToRoute('');
+        return $this->redirectToRoute('amigos_perfil', ['id' => $user->getId()]);
     }
+
+    /**
+     * @Route("/unfollow/{id}", name="deseguir_usuario", methods={"GET"})
+     * @param User $user
+     * @return Response
+     */
+    public function unfollow(User $user)
+    {
+        /** @var User $usuarioLogado */
+        $usuarioLogado = $this->getUser();
+        $seguidor = $this->em->getRepository(Seguidor::class)->findOneBy(
+            [
+                'usuarioSeguidor' => $usuarioLogado,
+                'usuarioSeguido' => $user
+            ]);
+
+        try {
+
+            $this->em->remove($seguidor);
+            $this->em->flush();
+
+        } catch (Throwable $exception) {
+            $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
+        }
+
+        return $this->redirectToRoute('amigos_perfil', ['id' => $user->getId()]);
+    }
+
 
 }

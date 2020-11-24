@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\AlbumFoto;
 use App\Entity\Amizade;
 use App\Entity\Bloqueio;
+use App\Entity\Seguidor;
 use App\Entity\Solicitacao;
 use App\Entity\User;
 use App\Enum\StatusSolicitacaoEnum;
@@ -87,6 +88,11 @@ class AmigosController extends AbstractController
         /** @var User $userLogado */
         $userLogado = $this->getUser();
 
+        $seguidor = $this->em->getRepository(Seguidor::class)->findOneBy([
+            'usuarioSeguidor' => $userLogado,
+            'usuarioSeguido' => $user
+        ]);
+
         if ($user->recebeuBloqueioDe($userLogado) ||
             $user->efetuouBloqueio($userLogado)) {
             $this->addFlash("warning", "Esse perfil não está disponível no momento");
@@ -129,9 +135,11 @@ class AmigosController extends AbstractController
         }
 
         return $this->render('amigos/amigoPerfil.html.twig', [
+            'controller_name' => 'RecadosController',
             'user' => $user,
             'solicitacao' => $solicitadosPorUsuario != [] ? current($solicitadosPorUsuario) : null,
             'solicitacaoRecebida' => $solicitacaoRecebida,
+            'seguidor' => $seguidor,
             'fotos' => $arrayFotos,
         ]);
     }
