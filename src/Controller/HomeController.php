@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Evento;
 use App\Entity\Post;
 use App\Entity\PostComentario;
+use App\Entity\Seguidor;
 use App\Entity\User;
 use App\Enum\PrivacidadeEnum;
 use App\Form\PostType;
@@ -36,13 +37,17 @@ class HomeController extends AbstractController
         /** @var User $usuario */
         $usuario = $this->getUser();
 
+        $postagensSeguidores = $this->em->getRepository(Post::class)
+            ->findPostagemSeguidos($this->getUser()->getId());
+
         $postagensAmigosPublicas = $this->em->getRepository(Post::class)
             ->findPostagemAmigosPublicas($this->getUser()->getId());
         $postagensMinhasPublicas = $this->em->getRepository(Post::class)
             ->findPostagemMinhasPublicasOuAmigos($this->getUser()->getId());
         $postagensMinhasPrivadas = $this->em->getRepository(Post::class)
             ->findBy(['autor' => $usuario->getId(), 'privacidade' => PrivacidadeEnum::PRIVADO]);
-        $post = array_unique(array_merge($postagensAmigosPublicas, $postagensMinhasPublicas, $postagensMinhasPrivadas));
+        $post = array_unique(array_merge($postagensAmigosPublicas, $postagensMinhasPublicas, $postagensMinhasPrivadas,
+            $postagensSeguidores));
 
         $post = $this->getUsort($post);
         $eventos = $this->em->getRepository(Evento::class)
