@@ -93,14 +93,25 @@
                             </div>
                         </div>
                     </div>
+                    {% if seguidor is null %}
+                        <a href="{{ path('seguir_usuario', {'id': user.id }) }}" class="btn-seguir btn btn-light btn-sm"><i
+                                    class="fas fa-rss"></i> Seguir</a>
+                    {% else %}
+                        <a href="{{ path('deseguir_usuario', {'id': user.id }) }}" class="btn-seguir btn btn-info btn-sm"><i
+                                    class="fas fa-rss"></i> Seguindo</a>
+                    {% endif %}
                     <div class="btn-group float-right" role="group" aria-label="Basic example">
                         {% if solicitacao is null %}
-                            <a href="{{ path('solicita_amizade', {'id': user.id }) }}" class="btn btn-light btn-sm"><i class="fa fa-user-plus"></i> Enviar solicitação</a>
+                            <a href="{{ path('solicita_amizade', {'id': user.id }) }}" class="btn btn-light btn-sm"><i
+                                        class="fa fa-user-plus"></i> Enviar solicitação</a>
                         {% elseif solicitacao.status == 1 and solicitacao.tipo == 'Amizade' and solicitacaoRecebida == false %}
-                            <a href="#" class="btn btn-light btn-sm badge-success"><i class="fa fa-check"></i> Solicitação enviada</a>
+                            <a href="#" class="btn btn-light btn-sm badge-success"><i class="fa fa-check"></i>
+                                Solicitação enviada</a>
                         {% elseif solicitacao.status == 1 and solicitacao.tipo == 'Amizade' and solicitacaoRecebida == true %}
-                            <a href="{{ path('aceita_solicitacao', {'id': solicitacao.id}) }}" class="btn btn-primary btn-sm">Aceitar Solicitacao</a>
-                            <a href="{{ path('deleta_solicitacao', {'id': solicitacao.id}) }}" class="btn btn-danger btn-sm">Excluir</a>
+                            <a href="{{ path('aceita_solicitacao', {'id': solicitacao.id}) }}"
+                               class="btn btn-primary btn-sm">Aceitar Solicitacao</a>
+                            <a href="{{ path('deleta_solicitacao', {'id': solicitacao.id}) }}"
+                               class="btn btn-danger btn-sm">Excluir</a>
                         {% elseif solicitacao.status == 2 and solicitacao.tipo == 'Amizade' %}
                             <a href="#" class="btn btn-light btn-sm"><i class="fa fa-user-friends"></i> Amigo</a>
                         {% endif %}
@@ -249,4 +260,20 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+        $(document).ready(function(){
+            $(".btn-seguir").click(function(ev){
+                ev.preventDefault();
+                var $this = $(this);
+                var url = $(this).prop("href");
+                $.get(url, function(response){
+                    location.reload();
+                }, 'json');
+            });
+
+        });
+    </script>
 {% endblock %}
