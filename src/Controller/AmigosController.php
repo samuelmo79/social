@@ -135,7 +135,6 @@ class AmigosController extends AbstractController
         }
 
         return $this->render('amigos/amigoPerfil.html.twig', [
-            'controller_name' => 'RecadosController',
             'user' => $user,
             'solicitacao' => $solicitadosPorUsuario != [] ? current($solicitadosPorUsuario) : null,
             'solicitacaoRecebida' => $solicitacaoRecebida,
