@@ -42,11 +42,17 @@ class HomeController extends AbstractController
 
         $postagensAmigosPublicas = $this->em->getRepository(Post::class)
             ->findPostagemAmigosPublicas($this->getUser()->getId());
+
         $postagensMinhasPublicas = $this->em->getRepository(Post::class)
-            ->findPostagemMinhasPublicasOuAmigos($this->getUser()->getId());
+            ->findBy(['autor'=>$this->getUser()->getId(),'privacidade'=>PrivacidadeEnum::PUBLICO]);
+
+        $postagensMinhasAmigos = $this->em->getRepository(Post::class)
+            ->findBy(['autor'=>$this->getUser()->getId(),'privacidade'=>PrivacidadeEnum::AMIGOS]);
+
         $postagensMinhasPrivadas = $this->em->getRepository(Post::class)
             ->findBy(['autor' => $usuario->getId(), 'privacidade' => PrivacidadeEnum::PRIVADO]);
-        $post = array_unique(array_merge($postagensAmigosPublicas, $postagensMinhasPublicas, $postagensMinhasPrivadas,
+        $post = array_unique(array_merge($postagensAmigosPublicas, $postagensMinhasPublicas, $postagensMinhasAmigos,
+            $postagensMinhasPrivadas,
             $postagensSeguidores));
 
         $post = $this->getUsort($post);

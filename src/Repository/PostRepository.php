@@ -71,20 +71,6 @@ class PostRepository extends ServiceEntityRepository
 
     }
 
-    public function findPostagemMinhasPublicasOuAmigos($id)
-    {
-        $q = $this->createQueryBuilder('p')
-            ->andWhere('p.autor = :uid');
-        $q->andWhere('p.privacidade like :amigos');
-        $q->orWhere('p.privacidade like :publico');
-        $q->setParameter('uid', $id);
-        $q->setParameter('amigos', PrivacidadeEnum::AMIGOS);
-        $q->setParameter('publico', PrivacidadeEnum::PUBLICO);
-
-        return $q->getQuery()->getResult();
-
-    }
-
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */
