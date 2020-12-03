@@ -94,10 +94,12 @@
                         </div>
                     </div>
                     {% if seguidor is null %}
-                        <a href="{{ path('seguir_usuario', {'id': user.id }) }}" class="btn-seguir btn btn-light btn-sm"><i
+                        <a href="{{ path('seguir_usuario', {'id': user.id }) }}"
+                           class="btn-seguir btn btn-light btn-sm"><i
                                     class="fas fa-rss"></i> Seguir</a>
                     {% else %}
-                        <a href="{{ path('deseguir_usuario', {'id': user.id }) }}" class="btn-seguir btn btn-info btn-sm"><i
+                        <a href="{{ path('deseguir_usuario', {'id': user.id }) }}"
+                           class="btn-seguir btn btn-info btn-sm"><i
                                     class="fas fa-rss"></i> Seguindo</a>
                     {% endif %}
                     <div class="btn-group float-right" role="group" aria-label="Basic example">
@@ -150,6 +152,17 @@
                                aria-controls="pills-foto"
                                aria-selected="false">
                                 Fotos
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link"
+                               id="pills-seguidores-tab"
+                               data-toggle="pill"
+                               href="#pills-seguidores"
+                               role="tab"
+                               aria-controls="pills-seguidores"
+                               aria-selected="false">
+                                Seguidores
                             </a>
                         </li>
                     </ul>
@@ -253,6 +266,36 @@
                                         {% endfor %}
                                     </div>
                                 </div>
+                                <div class="tab-pane fade" id="pills-seguidores" role="tabpanel"
+                                     aria-labelledby="pills-seguidores-tab">
+                                    <h5 class="card-title">
+                                        Área seguidores
+                                    </h5>
+                                    <div class="card-body table-responsive p-0">
+                                        {% for s in segueUser %}
+                                                {{ dump(s.usuarioSeguidor) }}
+                                        {% endfor %}
+                                        <table class="table">
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <hr>
+                                    <h5 class="card-title">
+                                        Área seguido
+                                    </h5>
+
+                                    <div class="card-body table-responsive p-0">
+                                        {% for s in seguidoresUser %}
+                                            {{ dump(s.usuarioSeguido) }}
+                                        {% endfor %}
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -264,12 +307,12 @@
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script>
-        $(document).ready(function(){
-            $(".btn-seguir").click(function(ev){
+        $(document).ready(function () {
+            $(".btn-seguir").click(function (ev) {
                 ev.preventDefault();
                 var $this = $(this);
                 var url = $(this).prop("href");
-                $.get(url, function(response){
+                $.get(url, function (response) {
                     location.reload();
                 }, 'json');
             });

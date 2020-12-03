@@ -93,6 +93,14 @@ class AmigosController extends AbstractController
             'usuarioSeguido' => $user
         ]);
 
+        $seguidoresUser = $this->em->getRepository(Seguidor::class)->findBy([
+            'usuarioSeguidor' => $user,
+        ]);
+
+        $segueUser = $this->em->getRepository(Seguidor::class)->findBy([
+            'usuarioSeguido' => $user,
+        ]);
+
         if ($user->recebeuBloqueioDe($userLogado) ||
             $user->efetuouBloqueio($userLogado)) {
             $this->addFlash("warning", "Esse perfil não está disponível no momento");
@@ -139,6 +147,8 @@ class AmigosController extends AbstractController
             'solicitacao' => $solicitadosPorUsuario != [] ? current($solicitadosPorUsuario) : null,
             'solicitacaoRecebida' => $solicitacaoRecebida,
             'seguidor' => $seguidor,
+            'seguidoresUser' => $seguidoresUser,
+            'segueUser' => $segueUser,
             'fotos' => $arrayFotos,
         ]);
     }
