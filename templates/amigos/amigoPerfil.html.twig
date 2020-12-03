@@ -269,31 +269,99 @@
                                 <div class="tab-pane fade" id="pills-seguidores" role="tabpanel"
                                      aria-labelledby="pills-seguidores-tab">
                                     <h5 class="card-title">
-                                        Área seguidores
+                                        Meus seguidores
                                     </h5>
                                     <div class="card-body table-responsive p-0">
-                                        {% for s in segueUser %}
-                                                {{ dump(s.usuarioSeguidor) }}
-                                        {% endfor %}
                                         <table class="table">
                                             <tbody>
-                                            <tr>
-                                                <td>
-                                                </td>
-                                            </tr>
+                                            {% for s in segueUser %}
+                                                <tr>
+                                                    <td>
+                                                        {% if s.usuarioSeguidor.avatar == null %}
+                                                            {% if s.usuarioSeguidor.dadosPessoais.sexo == 'Masculino' %}
+                                                                <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                                     alt="Perfil"
+                                                                     width="50">
+                                                            {% else %}
+                                                                <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                                     src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                                     alt="Perfil"
+                                                                     width="50">
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                                 src="{{ asset('imagens/perfil/' ~ s.usuarioSeguidor.avatar) }}"
+                                                                 alt="Perfil"
+                                                                 width="50">
+                                                        {% endif %}
+                                                        <a class="card-link"
+                                                           href="{{ path('amigos_perfil', {'id': s.usuarioSeguidor.id}) }}">
+                                                            {{ s.usuarioSeguidor.dadosPessoais.nome }} {{ s.usuarioSeguidor.dadosPessoais.sobrenome }}
+                                                            <br>
+                                                        </a>
+                                                        <span class="small text-muted">
+                                        <i class="fas fa-shield-alt text-secondary"></i>
+                                        {{ s.usuarioSeguidor.dataCadastro|date('Y') }}
+                                    </span>
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <div class="alert alert-primary mt-4 mx-3" role="alert">
+                                                    Nenhum usuário encontrado
+                                                </div>
+                                            {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
                                     <hr>
                                     <h5 class="card-title">
-                                        Área seguido
+                                        Seguindo
                                     </h5>
-
                                     <div class="card-body table-responsive p-0">
-                                        {% for s in seguidoresUser %}
-                                            {{ dump(s.usuarioSeguido) }}
-                                        {% endfor %}
+                                        <table class="table">
+                                            <tbody>
+                                            {% for s in seguidoresUser %}
+                                                <tr>
+                                                    <td>
+                                                        {% if s.usuarioSeguido.avatar == null %}
+                                                            {% if s.usuarioSeguido.dadosPessoais.sexo == 'Masculino' %}
+                                                                <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                                     src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                                     alt="Perfil"
+                                                                     width="50">
+                                                            {% else %}
+                                                                <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                                     src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                                     alt="Perfil"
+                                                                     width="50">
+                                                            {% endif %}
+                                                        {% else %}
+                                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                                 src="{{ asset('imagens/perfil/' ~ s.usuarioSeguido.avatar) }}"
+                                                                 alt="Perfil"
+                                                                 width="50">
+                                                        {% endif %}
+                                                        <a class="card-link"
+                                                           href="{{ path('amigos_perfil', {'id': s.usuarioSeguido.id}) }}">
+                                                            {{ s.usuarioSeguido.dadosPessoais.nome }} {{ s.usuarioSeguido.dadosPessoais.sobrenome }}
+                                                            <br>
+                                                        </a>
+                                                        <span class="small text-muted">
+                                        <i class="fas fa-shield-alt text-secondary"></i>
+                                        {{ s.usuarioSeguido.dataCadastro|date('Y') }}
+                                    </span>
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <div class="alert alert-primary mt-4 mx-3" role="alert">
+                                                    Nenhum usuário encontrado
+                                                </div>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </div>
+
 
                                 </div>
                             </div>
