@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista de usuários bloqueados{% endblock %}
+
+{% block body %}
+    <div class="row d-sm-none d-block">
+        <div class="col-sm-12">
+            <div class="mb-3">
+                <a href="{{ path('meus_amigos') }}" class="btn btn-secondary btn-rounded btn-sm">
+                    Meus amigos
+                </a>
+                <a href="{{ path('amigos') }}" class="btn btn-secondary btn-rounded btn-sm">
+                    Encontrar amigos
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <h5 class="card-title">
+                <span class="text-primary">
+                    Meus Seguidores ({{ seguidores|length }})
+                </span>
+            </h5>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <div class="card">
+                <div class="card-body table-responsive p-0">
+                    <table class="table">
+                        <tbody>
+                        {% for seguidor in seguidores %}
+                            <tr>
+                                <td>
+                                    {% if seguidor.usuarioSeguidor.avatar == null %}
+                                        {% if seguidor.usuarioSeguidor.dadosPessoais.sexo == 'Masculino' %}
+                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                 alt="Perfil"
+                                                 width="50">
+                                        {% else %}
+                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                 alt="Perfil"
+                                                 width="50">
+                                        {% endif %}
+                                    {% else %}
+                                        <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                             src="{{ asset('imagens/perfil/' ~ seguidor.usuarioSeguidor.avatar) }}"
+                                             alt="Perfil"
+                                             width="50">
+                                    {% endif %}
+                                    <a class="card-link" href="{{ path('amigos_perfil', {'id': seguidor.usuarioSeguidor.id}) }}">
+                                        {{ seguidor.usuarioSeguidor.dadosPessoais.nome }} {{ seguidor.usuarioSeguidor.dadosPessoais.sobrenome }}<br>
+                                    </a>
+                                    <span class="small text-muted">
+                                        <i class="fas fa-shield-alt text-secondary"></i>
+                                        {{ seguidor.usuarioSeguidor.dataCadastro|date('Y') }}
+                                    </span>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <div class="alert alert-primary mt-4 mx-3" role="alert">
+                                Nenhum usuário encontrado
+                            </div>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        {{ include('amigos/menu.html.twig') }}
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <h5 class="card-title">
+                <span class="text-primary">
+                    Seguindo ({{ seguidos|length }})
+                </span>
+            </h5>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <div class="card">
+                <div class="card-body table-responsive p-0">
+                    <table class="table">
+                        <tbody>
+                        {% for seguido in seguidos %}
+                            <tr>
+                                <td>
+                                    {% if seguido.usuarioSeguido.avatar == null %}
+                                        {% if seguido.usuarioSeguido.dadosPessoais.sexo == 'Masculino' %}
+                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                 src="{{ asset('imagens/perfil/avatar_homem.png') }}"
+                                                 alt="Perfil"
+                                                 width="50">
+                                        {% else %}
+                                            <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                                 src="{{ asset('imagens/perfil/avatar_mulher.png') }}"
+                                                 alt="Perfil"
+                                                 width="50">
+                                        {% endif %}
+                                    {% else %}
+                                        <img class="img-fluid img-thumbnail rounded-circle float-left mr-2"
+                                             src="{{ asset('imagens/perfil/' ~ seguido.usuarioSeguido.avatar) }}"
+                                             alt="Perfil"
+                                             width="50">
+                                    {% endif %}
+                                    <a class="card-link" href="{{ path('amigos_perfil', {'id': seguido.usuarioSeguido.id}) }}">
+                                        {{ seguido.usuarioSeguido.dadosPessoais.nome }} {{ seguido.usuarioSeguido.dadosPessoais.sobrenome }}<br>
+                                    </a>
+                                    <span class="small text-muted">
+                                        <i class="fas fa-shield-alt text-secondary"></i>
+                                        {{ seguido.usuarioSeguido.dataCadastro|date('Y') }}
+                                    </span>
+                                </td>
+
+                            </tr>
+                        {% else %}
+                            <div class="alert alert-primary mt-4 mx-3" role="alert">
+                                Nenhum usuário encontrado
+                            </div>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
