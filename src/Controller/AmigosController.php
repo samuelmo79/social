@@ -76,6 +76,30 @@ class AmigosController extends AbstractController
     }
 
     /**
+     * @Route("/seguidores", name="seguidores", methods={"GET"})
+     * @Template("amigos/seguidores.html.twig")
+     * @return array
+     */
+    public function seguidores()
+    {
+        $usuario = $this->getUser();
+
+        $meusSeguidores = $this->em->getRepository(Seguidor::class)->findBy([
+            'usuarioSeguido' => $usuario
+        ]);
+
+        $seguindo = $this->em->getRepository(Seguidor::class)->findBy([
+           'usuarioSeguidor' => $usuario
+        ]);
+
+        return [
+            'seguidores' => $meusSeguidores,
+            'seguidos' => $seguindo
+        ];
+
+    }
+
+    /**
      * @Route("/amigos/{id}", name="amigos_perfil", methods={"GET"})
      * @param User $user
      * @return Response
@@ -91,6 +115,14 @@ class AmigosController extends AbstractController
         $seguidor = $this->em->getRepository(Seguidor::class)->findOneBy([
             'usuarioSeguidor' => $userLogado,
             'usuarioSeguido' => $user
+        ]);
+
+        $seguidoresUser = $this->em->getRepository(Seguidor::class)->findBy([
+            'usuarioSeguidor' => $user,
+        ]);
+
+        $segueUser = $this->em->getRepository(Seguidor::class)->findBy([
+            'usuarioSeguido' => $user,
         ]);
 
         if ($user->recebeuBloqueioDe($userLogado) ||
@@ -139,6 +171,8 @@ class AmigosController extends AbstractController
             'solicitacao' => $solicitadosPorUsuario != [] ? current($solicitadosPorUsuario) : null,
             'solicitacaoRecebida' => $solicitacaoRecebida,
             'seguidor' => $seguidor,
+            'seguidoresUser' => $seguidoresUser,
+            'segueUser' => $segueUser,
             'fotos' => $arrayFotos,
         ]);
     }

@@ -1,0 +1,21 @@
+<div class="col-sm-4 d-xl-block d-none">
+    <div class="list-group">
+        <a href="{{ path('meus_amigos') }}"
+           class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'meus_amigos' %} active {% endif %}">
+            <i fla class="fa fa-users"></i> Meus amigos
+            <span class="badge badge-light badge-pill float-right">{{ app.user.totalAmigos }}</span>
+        </a>
+        <a href="{{ path('amigos') }}"
+           class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'amigos' %} active {% endif %}">
+            <i fla class="fa fa-search"></i> Encontrar amigos
+        </a>
+        <a href="{{ path('seguidores') }}"
+           class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'seguidores' %} active {% endif %}">
+            <i fla class="fa fa-rss"></i> Seguidores
+        </a>
+        <a href="{{ path('bloqueios') }}"
+           class="list-group-item list-group-item-action {% if app.request.attributes.get('_route') == 'bloqueios' %} active {% endif %}">
+            <i fla class="fa fa-ban"></i> Bloqueios
+        </a>
+    </div>
+</div>
