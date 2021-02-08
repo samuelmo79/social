@@ -41,7 +41,8 @@ class PostType extends AbstractType
                 ]
             ])
             ->add('video', FileType::class, [
-                'label' => 'Vídeo MP4'
+                'label' => 'Vídeo MP4',
+                'required' => false
             ])
         ;
     }

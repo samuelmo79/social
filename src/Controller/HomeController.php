@@ -69,10 +69,10 @@ class HomeController extends AbstractController
             $cadastraPost->setAutor($usuario);
             /** @var UploadedFile $video */
             $video = $form->get('video')->getData();
-            dump($video);
-            $nomeArquivo = sha1(random_bytes(14)).'.'.$video->guessExtension();
+            $nomeArquivo = $video != null ? sha1(random_bytes(14)).'.'.$video->guessExtension() : null;
             try {
-                $video->move($this->getParameter('videos_diretorio'), $nomeArquivo);
+                if($video != null)
+                    $video->move($this->getParameter('videos_diretorio'), $nomeArquivo);
             } catch (Exception $fe) {
                 dd($fe);
                 $this->addFlash('error',sprintf('Erro: %s', $fe->getMessage()));
