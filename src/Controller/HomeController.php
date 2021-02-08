@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -145,10 +146,20 @@ class HomeController extends AbstractController
      */
     public function deletaPostagem(Post $post)
     {
+        $filesystem = new Filesystem();
+
         try {
+            if($post->getVideo() != null) {
+                $dirname = $this->getCaminhoDiretorioUpload() . "/" . $post->getVideo();
+                if ($filesystem->exists($dirname)) {
+                    $filesystem->remove($dirname);
+                }
+            }
+
             $this->em->remove($post);
             $this->em->flush();
         } catch(Throwable $exception) {
+            dd($exception);
             $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
         }
         return $this->redirectToRoute('home');
@@ -204,4 +215,10 @@ class HomeController extends AbstractController
         });
         return $post;
     }
+
+    private function getCaminhoDiretorioUpload()
+    {
+        return $this->getParameter('videos_diretorio');
+    }
+
 }
