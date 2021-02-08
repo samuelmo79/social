@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Enum\PrivacidadeEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -38,6 +39,9 @@ class PostType extends AbstractType
                 'attr' => [
                     'lang' => "pt_BR"
                 ]
+            ])
+            ->add('video', FileType::class, [
+                'label' => 'Vídeo MP4'
             ])
         ;
     }

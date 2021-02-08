@@ -169,6 +169,14 @@
                             <p class="card-text">
                                 {{ postagem.conteudo }}
                             </p>
+                            <p class="card-text">
+                                <video width="320" height="240" controls="controls" autoplay="autoplay">
+                                    <source src="/video/{{ postagem.video }}" type="video/mp4">
+                                    <object data="" width="320" height="240">
+                                        <embed width="320" height="240" src="/video/{{ postagem.video }}">
+                                    </object>
+                                </video>
+                            </p>
                             {% if postagem.imagem is not null %}
                                 <div class="img-container mb-3">
                                     <img class="img-fluid m-lg-0" src="{{ asset('imagens/post/' ~ postagem.imagem) }}">

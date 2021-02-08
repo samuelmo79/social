@@ -11,6 +11,7 @@ use Exception;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -49,6 +50,11 @@ class Post
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\File(
+     *     maxSize="10240k",
+     *     mimeTypes={"video/mp4"},
+     *     mimeTypesMessage="Insira um video valido"
+     * )
      */
     private $video;
 

@@ -5,13 +5,14 @@ namespace App\Controller;
 use App\Entity\Evento;
 use App\Entity\Post;
 use App\Entity\PostComentario;
-use App\Entity\Seguidor;
 use App\Entity\User;
 use App\Enum\PrivacidadeEnum;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,6 +67,17 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $cadastraPost->setAutor($usuario);
+            /** @var UploadedFile $video */
+            $video = $form->get('video')->getData();
+            dump($video);
+            $nomeArquivo = sha1(random_bytes(14)).'.'.$video->guessExtension();
+            try {
+                $video->move($this->getParameter('videos_diretorio'), $nomeArquivo);
+            } catch (Exception $fe) {
+                dd($fe);
+                $this->addFlash('error',sprintf('Erro: %s', $fe->getMessage()));
+            }
+            $cadastraPost->setVideo($nomeArquivo);
             $entityManager->persist($cadastraPost);
             $entityManager->flush();
 
