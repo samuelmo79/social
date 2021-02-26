@@ -75,7 +75,6 @@ class HomeController extends AbstractController
                 if($video != null)
                     $video->move($this->getParameter('videos_diretorio'), $nomeArquivo);
             } catch (Exception $fe) {
-                dd($fe);
                 $this->addFlash('error',sprintf('Erro: %s', $fe->getMessage()));
             }
             $cadastraPost->setVideo($nomeArquivo);
@@ -159,7 +158,6 @@ class HomeController extends AbstractController
             $this->em->remove($post);
             $this->em->flush();
         } catch(Throwable $exception) {
-            dd($exception);
             $this->addFlash('warning', 'Sua solicitação não pode ser processada !');
         }
         return $this->redirectToRoute('home');
