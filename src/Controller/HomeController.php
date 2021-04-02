@@ -5,13 +5,15 @@ namespace App\Controller;
 use App\Entity\Evento;
 use App\Entity\Post;
 use App\Entity\PostComentario;
-use App\Entity\Seguidor;
 use App\Entity\User;
 use App\Enum\PrivacidadeEnum;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,6 +68,16 @@ class HomeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $cadastraPost->setAutor($usuario);
+            /** @var UploadedFile $video */
+            $video = $form->get('video')->getData();
+            $nomeArquivo = $video != null ? sha1(random_bytes(14)).'.'.$video->guessExtension() : null;
+            try {
+                if($video != null)
+                    $video->move($this->getParameter('videos_diretorio'), $nomeArquivo);
+            } catch (Exception $fe) {
+                $this->addFlash('error',sprintf('Erro: %s', $fe->getMessage()));
+            }
+            $cadastraPost->setVideo($nomeArquivo);
             $entityManager->persist($cadastraPost);
             $entityManager->flush();
 
@@ -133,7 +145,16 @@ class HomeController extends AbstractController
      */
     public function deletaPostagem(Post $post)
     {
+        $filesystem = new Filesystem();
+
         try {
+            if($post->getVideo() != null) {
+                $dirname = $this->getCaminhoDiretorioUpload() . "/" . $post->getVideo();
+                if ($filesystem->exists($dirname)) {
+                    $filesystem->remove($dirname);
+                }
+            }
+
             $this->em->remove($post);
             $this->em->flush();
         } catch(Throwable $exception) {
@@ -192,4 +213,10 @@ class HomeController extends AbstractController
         });
         return $post;
     }
+
+    private function getCaminhoDiretorioUpload()
+    {
+        return $this->getParameter('videos_diretorio');
+    }
+
 }
